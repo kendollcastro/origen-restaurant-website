@@ -1,0 +1,14 @@
+---
+import Photo from './Photo.astro';
+interface Props { crumb: string; script: string; title: string; lead?: string; photo: string; caps?: boolean; }
+const { crumb, script, title, lead, photo, caps = true } = Astro.props;
+---
+<Photo label={photo} class="hero hero-sm">
+  <div class="inner overlay">
+    <nav class="breadcrumb" aria-label="Ruta"><a href="/">Inicio</a> <span aria-hidden="true">/</span> {crumb}</nav>
+    <span class="script script-lg">{script}</span>
+    <h1 class={caps ? 'caps' : 'display'} style={caps ? 'font-size: clamp(36px, 6vw, 64px);' : ''}>{title}</h1>
+    {lead && <p class="lead" style="max-width: 640px;">{lead}</p>}
+    <slot />
+  </div>
+</Photo>

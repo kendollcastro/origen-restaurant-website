@@ -1,0 +1,89 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Photo from '../components/Photo.astro';
+import { site } from '../data/site';
+
+const tipos = [
+  ['Grupos de tour', 'grupo de tour', 'Trabajamos con tour operadores de Jacó. Almuerzos y cenas para grupos con menú fijo y servicio ágil.'],
+  ['Cumpleaños y aniversarios', 'cumpleaños', 'Mesas privadas o el salón completo, con decoración y pastel coordinados [confirmar].'],
+  ['Empresas', 'cena corporativa', 'Cenas de equipo, fiestas de fin de año y reuniones con menú cerrado y factura electrónica.'],
+  ['Bodas y ensayos', 'boda', 'Cenas de ensayo y recepciones íntimas a pasos de la playa de Jacó.'],
+];
+---
+<Base
+  title="Eventos y grupos en Jacó · Origen — hasta 120 invitados"
+  description={`Celebra en Origen, Jacó: grupos de tour, cumpleaños, cenas de empresa y bodas. Capacidad para ${site.capacity} invitados y menú a la medida. Cotiza por WhatsApp.`}
+>
+  <PageHero crumb="Eventos" script="Celebra en Jacó" title="Eventos y grupos" photo="mesa larga montada para evento"
+    lead={`Capacidad para hasta ${site.capacity} invitados, menú a la medida y un equipo con experiencia en grupos y tours.`}>
+    <a href="#cotizar" class="btn btn-primary" style="margin-top: 12px;">Cotizar mi evento</a>
+  </PageHero>
+
+  <section class="container section stack" style="gap: 48px;" aria-labelledby="tipos-t">
+    <h2 id="tipos-t" class="display" style="text-align: center;">¿Qué celebramos contigo?</h2>
+    <div class="grid" style="--min: 260px;">
+      {tipos.map(([t, photo, d]) => (
+        <article class="stack" style="gap: 14px;">
+          <Photo label={photo} height="300px" />
+          <h3 style="font-family: var(--serif); font-weight: 600; font-size: 30px; line-height: 1.1;">{t}</h3>
+          <p style="color: var(--soft);">{d}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="light">
+    <div class="container grid" style="--min: 220px; --gap: 32px; padding-block: 80px; text-align: center;">
+      {[
+        [String(site.capacity), 'invitados de capacidad'],
+        ['11–10', 'abierto de 11 am a 10 pm'],
+        ['[ ]', 'menús para grupos [confirmar]'],
+      ].map(([n, l]) => (
+        <div class="stack" style="gap: 4px;">
+          <span style="font-family: var(--serif); font-weight: 600; font-size: 64px; line-height: 1;">{n}</span>
+          <span class="label" style="color: var(--ink-muted);">{l}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="cotizar" class="container section row" style="align-items: flex-start;" aria-labelledby="cot-t">
+    <div class="stack" style="flex: 1 1 380px; gap: 14px;">
+      <span class="script">Hablemos</span>
+      <h2 id="cot-t" class="display">Cotiza tu evento</h2>
+      <p class="lead">Cuéntanos la fecha y el número de personas. Te respondemos por WhatsApp o correo con una propuesta de menú.</p>
+      <p class="muted" style="font-size: 14px;">WhatsApp {site.phone}<br />{site.email}</p>
+    </div>
+    <form id="event-form" class="form" style="flex: 2 1 560px;" data-wa={site.whatsapp}>
+      <div class="field"><label for="e-n">Nombre</label><input id="e-n" name="nombre" type="text" autocomplete="name" required /></div>
+      <div class="field"><label for="e-w">WhatsApp</label><input id="e-w" name="tel" type="tel" autocomplete="tel" /></div>
+      <div class="field">
+        <label for="e-t">Tipo de evento</label>
+        <select id="e-t" name="tipo"><option>Grupo de tour</option><option>Cumpleaños / aniversario</option><option>Empresa</option><option>Boda / ensayo</option><option>Otro</option></select>
+      </div>
+      <div class="field"><label for="e-p">Número de invitados</label><input id="e-p" name="invitados" type="number" min="1" max={site.capacity} required /></div>
+      <div class="field"><label for="e-d">Fecha</label><input id="e-d" name="fecha" type="date" required /></div>
+      <div class="field"><label for="e-e">Correo</label><input id="e-e" name="correo" type="email" autocomplete="email" /></div>
+      <div class="field full"><label for="e-m">Detalles</label><textarea id="e-m" name="detalles" rows="4"></textarea></div>
+      <button type="submit" class="btn btn-primary full" style="height: 54px;">Enviar solicitud</button>
+    </form>
+  </section>
+</Base>
+
+<script>
+  const form = document.getElementById('event-form') as HTMLFormElement | null;
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const msg = [
+      'Hola Origen, quisiera cotizar un evento:',
+      `• Nombre: ${d.get('nombre')}`,
+      `• Tipo: ${d.get('tipo')}`,
+      `• Invitados: ${d.get('invitados')}`,
+      `• Fecha: ${d.get('fecha')}`,
+      d.get('detalles') ? `• Detalles: ${d.get('detalles')}` : '',
+    ].filter(Boolean).join('\n');
+    window.open(`https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+  });
+</script>

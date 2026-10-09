@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import ReserveForm from '../components/ReserveForm.astro';
+import { site } from '../data/site';
+import { faqs } from '../data/faq';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+<Base
+  title="Reservas y contacto · Origen Jacó — Dirección, horario y preguntas frecuentes"
+  description={`Reserva en Origen, Jacó, por WhatsApp. Dirección, horario (${site.hours.label}), cómo llegar y respuestas a las preguntas más frecuentes.`}
+  schema={faqSchema}
+>
+  <section class="container stack" style="padding-block: 88px 40px; gap: 12px;">
+    <nav class="breadcrumb" aria-label="Ruta"><a href="/">Inicio</a> <span aria-hidden="true">/</span> Contacto</nav>
+    <span class="script" style="font-size: 40px;">Te esperamos</span>
+    <h1 class="display" style="font-size: clamp(44px, 6vw, 72px);">Reservas y contacto</h1>
+  </section>
+
+  <section id="reservar" class="container row" style="padding-bottom: 100px; align-items: flex-start; gap: 48px; scroll-margin-top: 24px;">
+    <div class="stack" style="flex: 1 1 380px; gap: 28px;">
+      <address class="stack" style="font-style: normal; gap: 4px;">
+        <h2 class="label">Dirección</h2>
+        <p style="font-size: 18px;">{site.fullName}<br />{site.address.street}<br />Jacó, Garabito, Puntarenas, Costa Rica</p>
+        <span>
+          <a href={site.mapsUrl} class="link-caps" target="_blank" rel="noopener">Google Maps</a> ·
+          <a href={site.wazeUrl} class="link-caps" target="_blank" rel="noopener">Waze</a>
+        </span>
+      </address>
+      <div class="stack" style="gap: 4px;">
+        <h2 class="label">Horario</h2>
+        <p style="font-size: 18px;">{site.hours.days}<br />{site.hours.label}</p>
+      </div>
+      <div class="stack" style="gap: 4px;">
+        <h2 class="label">Contacto</h2>
+        <p style="font-size: 18px;">
+          <a href={`https://wa.me/${site.whatsapp}`}>WhatsApp {site.phone}</a><br />
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+      </div>
+    </div>
+    <div style="flex: 1 1 520px;">
+      <ReserveForm variant="card" id="c" />
+      <p class="dim" style="margin-top: 12px;">Para grupos de más de 12 personas, visita <a href="/eventos/">Eventos y grupos</a>.</p>
+    </div>
+  </section>
+
+  <!-- TODO: reemplazar por el iframe de Google Maps de la ficha de Origen -->
+  <div id="mapa" class="ph" style="height: 420px;"><span class="ph-label">Mapa · Google Maps embebido con el pin de Origen</span></div>
+
+  <section class="light" aria-labelledby="faq-t">
+    <div class="container section stack" style="max-width: 920px; gap: 32px;">
+      <div class="center" style="gap: 6px; text-align: center;">
+        <span class="script">Antes de venir</span>
+        <h2 id="faq-t" class="display">Preguntas frecuentes</h2>
+      </div>
+      <div class="faq">
+        {faqs.map((f) => (
+          <details>
+            <summary><h3>{f.q}</h3><span class="pm" aria-hidden="true">+</span></summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

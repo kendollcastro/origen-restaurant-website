@@ -1,0 +1,46 @@
+---
+// Formulario de reserva que abre WhatsApp con el mensaje armado.
+import { site } from '../data/site';
+interface Props { variant?: 'bar' | 'card'; id?: string; }
+const { variant = 'bar', id = 'r' } = Astro.props;
+---
+<form class={`form reserve-form ${variant === 'card' ? 'card-form' : ''}`} data-wa={site.whatsapp} aria-label="Reservar mesa">
+  {variant === 'card' && <h2 class="display full" style="font-size: 36px;">Reserva tu mesa</h2>}
+  {variant === 'card' && (
+    <div class="field">
+      <label for={`${id}-n`}>Nombre</label>
+      <input id={`${id}-n`} name="nombre" type="text" autocomplete="name" required />
+    </div>
+  )}
+  <div class="field">
+    <label for={`${id}-p`}>Personas</label>
+    <select id={`${id}-p`} name="personas">
+      <option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>8</option><option>10+</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for={`${id}-d`}>Fecha</label>
+    <input id={`${id}-d`} name="fecha" type="date" required />
+  </div>
+  <div class="field">
+    <label for={`${id}-h`}>Hora</label>
+    <input id={`${id}-h`} name="hora" type="time" value="19:00" min="11:00" max="21:30" required />
+  </div>
+  <button type="submit" class={`btn btn-primary ${variant === 'card' ? 'full' : ''}`} style="height: 50px;">
+    {variant === 'card' ? 'Reservar por WhatsApp' : 'Confirmar reserva'}
+  </button>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('.reserve-form').forEach((form) => {
+    const date = form.querySelector<HTMLInputElement>('input[type="date"]');
+    if (date) date.min = new Date().toISOString().slice(0, 10);
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const d = new FormData(form);
+      const nombre = d.get('nombre') ? `Soy ${d.get('nombre')}. ` : '';
+      const msg = `Hola Origen, ${nombre}quisiera reservar una mesa para ${d.get('personas')} personas el ${d.get('fecha')} a las ${d.get('hora')}.`;
+      window.open(`https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+    });
+  });
+</script>

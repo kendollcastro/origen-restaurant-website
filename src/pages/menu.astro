@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import DishList from '../components/DishList.astro';
+import { menu } from '../data/menu';
+import { site } from '../data/site';
+
+// JSON-LD del menú (solo platos confirmados)
+const menuSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Menu',
+  '@id': `${site.url}/menu/#menu`,
+  name: `Menú de ${site.fullName}`,
+  inLanguage: 'es',
+  hasMenuSection: menu
+    .map((c) => ({
+      '@type': 'MenuSection',
+      name: c.title,
+      hasMenuItem: c.dishes
+        .filter((d) => !d.name.startsWith('['))
+        .map((d) => ({
+          '@type': 'MenuItem',
+          name: d.name,
+          ...(d.desc ? { description: d.desc } : {}),
+          ...(d.price ? { offers: { '@type': 'Offer', price: d.price, priceCurrency: 'CRC' } } : {}),
+        })),
+    }))
+    .filter((s) => s.hasMenuItem.length),
+};
+---
+<Base
+  title="Menú · Origen Jacó — Mariscos, ceviches y cortes a la parrilla"
+  description="Menú de Origen en Jacó: Ceviche Diablo, Perlas del Pacífico, crema de langosta, Lomito, New York y Rib Eye a la parrilla, menú de niños y postres. Precios con IVA."
+  schema={menuSchema}
+>
+  <PageHero
+    crumb="Menú" script="Nuestro" title="Menú" photo="mesa con platos variados"
+    lead="Mariscos frescos del Pacífico, cortes a la parrilla y cocina costarricense en Jacó. Precios con IVA incluido."
+  />
+
+  <nav class="cat-nav" aria-label="Categorías del menú">
+    <div class="container">
+      {menu.map((c) => <a href={`#${c.id}`}>{c.title}</a>)}
+    </div>
+  </nav>
+
+  <div class="container menu-cats" style="padding-block: 88px 120px;">
+    {menu.map((c) => (
+      <section id={c.id} class="stack" style="gap: 6px;" aria-labelledby={`h-${c.id}`}>
+        <span class="script" style="font-size: 24px;">{c.kicker}</span>
+        <h2 id={`h-${c.id}`} class="display" style="font-size: 46px; margin-bottom: 6px;">{c.title}</h2>
+        {c.note && <p class="dim">{c.note}</p>}
+        <DishList dishes={c.dishes} />
+      </section>
+    ))}
+  </div>
+
+  <section class="light">
+    <div class="container" style="padding-block: 80px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">
+      <div class="stack" style="flex: 1 1 520px; gap: 8px;">
+        <h2 class="display" style="font-size: 44px;">¿Listo para probarlo?</h2>
+        <p>Abierto de {site.hours.label}. Reserva por WhatsApp o llega directo.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+        <a href="/contacto/#reservar" class="btn btn-dark">Reservar mesa</a>
+        <a href="/menu-origen.pdf" class="btn btn-ghost">Descargar menú PDF</a>
+      </div>
+    </div>
+  </section>
+</Base>

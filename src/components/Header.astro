@@ -1,0 +1,27 @@
+---
+import { nav, site } from '../data/site';
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="logo" aria-label={`${site.name} — inicio`}>
+      <b>ORIGEN</b>
+      <small>{site.tagline}</small>
+    </a>
+    <nav class="main-nav" aria-label="Principal">
+      {nav.map((item) => (
+        <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
+    <div class="header-actions">
+      <div class="lang" aria-label="Idioma">
+        <a href={path} aria-current="true" hreflang="es">ES</a>
+        <span aria-hidden="true">/</span>
+        <!-- TODO: cambiar a <a href={`/en${path}`} hreflang="en"> cuando exista la versión en inglés -->
+        <span title="Próximamente" style="color: var(--muted); padding: 12px 6px;">EN</span>
+      </div>
+      <a href="/contacto/#reservar" class="btn btn-primary">Reservar mesa</a>
+    </div>
+  </div>
+</header>
