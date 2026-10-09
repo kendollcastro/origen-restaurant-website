@@ -7,11 +7,23 @@ Sitio de **Origen. Mar, tierra y fuego** (restaurante de mariscos y parrilla en 
 ```bash
 npm install
 npm run dev       # http://localhost:4321
+npm run check     # astro check (tipos + sintaxis Astro)
 npm run build     # genera /dist
 npm run preview   # sirve /dist en local
 ```
 
-Requiere Node 18.17+ (recomendado Node 20 o 22).
+**Node 22 LTS** (ver `.nvmrc`; con `nvm use` toma esa versión). `package.json` fija `engines.node: ">=20 <24"` — no usar Node 23 (no LTS) para evitar "pasa en mi máquina".
+
+## Gate de verificación (obligatorio tras cada tarea)
+
+```bash
+npm ci && npm run check && npm run build && node scripts/check-placeholders.mjs
+```
+
+1. `npm ci` — instala exactamente lo del lockfile.
+2. `npm run check` — `astro check`: errores de tipos y de sintaxis en 0.
+3. `npm run build` — build estático en `dist/`.
+4. `node scripts/check-placeholders.mjs` — gate de placeholders (`\[[^\]]+\]` en `dist/`). **Próximo:** este script **aún no existe**; está pendiente como **T-04** (@qa-tester). Hasta entonces, el paso 4 no se puede ejecutar.
 
 ## Estructura
 
