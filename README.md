@@ -17,13 +17,13 @@ npm run preview   # sirve /dist en local
 ## Gate de verificación (obligatorio tras cada tarea)
 
 ```bash
-npm ci && npm run check && npm run build && node scripts/check-placeholders.mjs
+npm ci && npm run check && npm run build && npm run gate
 ```
 
 1. `npm ci` — instala exactamente lo del lockfile.
 2. `npm run check` — `astro check`: errores de tipos y de sintaxis en 0.
 3. `npm run build` — build estático en `dist/`.
-4. `node scripts/check-placeholders.mjs` — gate de placeholders (`\[[^\]]+\]` en `dist/`). **Próximo:** este script **aún no existe**; está pendiente como **T-04** (@qa-tester). Hasta entonces, el paso 4 no se puede ejecutar.
+4. `npm run gate` — gate de placeholders (`\[[^\]]+\]` en texto visible de `dist/` y en JSON-LD; no cuenta JS inline ni CSS). **Nota:** hoy el gate **falla a propósito** mientras queden placeholders (T-17); debe quedar en 0 antes de go-live (DoD §7.1-2, junto con `TODO`, `ph-label` y `0000`).
 
 ## Estructura
 
