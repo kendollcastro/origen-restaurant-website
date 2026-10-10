@@ -55,7 +55,7 @@ h1, h2, h3, p { margin: 0; }
 .stack { display: flex; flex-direction: column; gap: 16px; }
 .row { display: flex; flex-wrap: wrap; gap: 64px; align-items: center; }
 .row > * { flex: 1 1 420px; min-width: 0; }
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(var(--min, 260px), 1fr)); gap: var(--gap, 20px); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(var(--min, 260px), 100%), 1fr)); gap: var(--gap, 20px); }
 
 /* Tipografía */
 .script { font-family: var(--serif); font-style: italic; font-weight: 500; color: var(--accent); font-size: 30px; line-height: 1; }
@@ -81,7 +81,7 @@ h1, h2, h3, p { margin: 0; }
 .btn-ghost:hover { background: var(--cream); color: var(--ink); }
 .light .btn-ghost { border-color: var(--ink); color: var(--ink); }
 .light .btn-dark { background: var(--ink); color: var(--cream); }
-.link-caps { font-size: 12px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; text-decoration: none; padding: 10px 0; display: inline-block; }
+.link-caps { font-size: 12px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
 .light .link-caps { color: var(--accent-ink); border-bottom: 1px solid var(--accent-ink); }
 .btns { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
 
@@ -101,11 +101,18 @@ h1, h2, h3, p { margin: 0; }
 .logo b { font-family: var(--serif); font-weight: 600; font-size: 34px; letter-spacing: .16em; }
 .logo small { font-size: 10px; letter-spacing: .38em; text-transform: uppercase; color: var(--accent); margin-top: 6px; }
 .main-nav { display: flex; flex-wrap: wrap; gap: 6px 28px; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; font-weight: 400; }
-.main-nav a { color: var(--cream); text-decoration: none; padding: 10px 0; }
+.main-nav a { color: var(--cream); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0; }
 .main-nav a[aria-current="page"], .main-nav a:hover { color: var(--accent); }
 .header-actions { display: flex; align-items: center; gap: 14px; }
+.nav-toggle {
+  display: none; align-items: center; justify-content: center;
+  width: 44px; height: 44px; padding: 0; touch-action: manipulation;
+  background: transparent; border: 1px solid var(--border); color: var(--cream); cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.nav-toggle:hover { color: var(--accent); border-color: var(--accent); }
 .lang { display: flex; align-items: center; font-size: 12px; letter-spacing: .12em; }
-.lang a { color: var(--muted); text-decoration: none; padding: 12px 6px; }
+.lang a { color: var(--muted); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0 6px; }
 .lang a[aria-current="true"] { color: var(--cream); font-weight: 600; }
 .lang span { color: #6E665B; }
 
@@ -116,7 +123,7 @@ h1, h2, h3, p { margin: 0; }
 .hero-title { font-family: var(--serif); font-weight: 600; font-size: clamp(64px, 11vw, 148px); line-height: .9; letter-spacing: .12em; }
 .hero-sub { font-size: 14px; letter-spacing: .42em; text-transform: uppercase; font-weight: 400; }
 .breadcrumb { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-.breadcrumb a { color: var(--muted); text-decoration: none; }
+.breadcrumb a { color: var(--muted); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
 
 /* Formularios */
 .form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; align-items: end; }
@@ -147,7 +154,7 @@ h1, h2, h3, p { margin: 0; }
 .dish-desc { font-size: 15px; color: var(--muted); }
 .cat-nav { position: sticky; top: 0; z-index: 5; background: var(--surface); border-bottom: 1px solid rgba(242,235,221,.08); }
 .cat-nav .container { display: flex; flex-wrap: wrap; gap: 4px 26px; padding-block: 8px; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; font-weight: 500; }
-.cat-nav a { color: var(--soft); text-decoration: none; padding: 12px 0; }
+.cat-nav a { color: var(--soft); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0; }
 .cat-nav a:hover { color: var(--accent); }
 .menu-cats { display: flex; flex-wrap: wrap; gap: 72px 80px; }
 .menu-cats > section { flex: 1 1 520px; min-width: 0; scroll-margin-top: 80px; }
@@ -181,12 +188,33 @@ h1, h2, h3, p { margin: 0; }
 .social a { width: 44px; height: 44px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--cream); }
 .footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--dim); border-top: 1px solid rgba(242,235,221,.08); padding-block: 24px; margin-top: 56px; }
 .footer-bottom nav { display: flex; flex-wrap: wrap; gap: 4px 22px; }
-.footer-bottom a { color: var(--muted); text-decoration: none; }
+.footer-bottom a { color: var(--muted); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; }
+
+@media (max-width: 760px) {
+  .site-header .container { gap: 12px 16px; padding-block: 14px; }
+  .logo b { font-size: 28px; }
+  .logo small { font-size: 9px; letter-spacing: .3em; }
+  .header-actions { gap: 8px; }
+  .site-header .btn { padding: 0 16px; font-size: 11px; }
+  .js .nav-toggle { display: inline-flex; }
+  .js .main-nav { display: none; }
+  .js .site-header.is-open .main-nav {
+    display: flex; flex-direction: column; align-items: stretch; gap: 0;
+    flex: 1 0 100%; order: 3; margin-top: 4px; padding: 2px 0;
+    background: var(--surface); border: 1px solid var(--line); position: relative; z-index: 1;
+  }
+  .js .main-nav a { min-height: 48px; padding: 0 16px; border-bottom: 1px solid var(--line); }
+  .js .main-nav a:last-child { border-bottom: 0; }
+}
 
 @media (max-width: 640px) {
   .section { padding-block: 72px; }
   .hero { min-height: 600px; padding: 88px 20px; }
   .element { height: 420px; }
+}
+
+@media (max-width: 400px) {
+  .caps { letter-spacing: .1em; }
 }
 
 @media (prefers-reduced-motion: reduce) {
