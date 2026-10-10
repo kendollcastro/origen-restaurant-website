@@ -179,7 +179,7 @@ Tras cada tarea: gate (§2.4) + `git commit` convencional + marcar la casilla en
 
 ### F7 — QA, performance y deploy/DNS (≈24,5 h)
 
-- [ ] **T-45** · **F7** · **@frontend-dev** — Página `404.astro` con copy propio, `prefers-reduced-motion` completo en transiciones (`.btn`, `.pm`) y presupuesto de assets (JS < 50 KB, imágenes < 300 KB c/u) · **archivos:** `src/pages/404.astro`, `src/styles/global.css` · **CA:** 404 sirve con status real en preview; 0 errores de consola; reduced-motion respetado · **est:** 2 h
+- [x] **T-45** · **F7** · **@frontend-dev** — Página `404.astro` con copy propio, `prefers-reduced-motion` completo en transiciones (`.btn`, `.pm`) y presupuesto de assets (JS < 50 KB, imágenes < 300 KB c/u) · **archivos:** `src/pages/404.astro`, `src/styles/global.css` · **CA:** 404 sirve con status real en preview; 0 errores de consola; reduced-motion respetado · **est:** 2 h
 - [ ] **T-46** · **F7** · **@qa-tester** — Batería completa: `check` + `build` + gate de placeholders + Playwright (smoke, a11y, forms, seo, i18n, media) en chromium y mobile + link check + validación JSON-LD · **archivos:** `tests/e2e/*.spec.ts`, `scripts/check-placeholders.mjs`, `docs/QA-REPORT.md` · **CA:** los 10 criterios globales (§2.4) en verde, con evidencia (reporte HTML, capturas) · **est:** 4 h
 - [ ] **T-47** · **F7** · **@qa-tester** — Lighthouse CI: `lighthouserc.json` con asserts (perf ≥90 mobile / ≥95 desktop, a11y ≥95, SEO ≥95, BP ≥95) en las 5 URLs y comparación contra el baseline de T-08 · **archivos:** `lighthouserc.json`, `.github/workflows/ci.yml` · **CA:** `lhci autorun` en verde en desktop y mobile, sin regresión vs baseline · **est:** 2 h
 - [ ] **T-48** · **F7** · **@seo-geo** — Checklist on-page pre-deploy: titles, metas, h1, canonical, JSON-LD, OG debugger, hreflang, alt, enlaces internos, viewport + alta en Search Console · **archivos:** checklist en `docs/` · **CA:** 0 errores críticos; Lighthouse SEO ≥ 95 en móvil; checklist íntegramente marcado · **est:** 3 h
@@ -328,12 +328,12 @@ Una fase se cierra cuando **todas** sus casillas están `[x]`, el gate global pa
 
 | Fase | Estado | Commits | Notas |
 |---|---|---|---|
-| F1 | 🟡 4/13 (T-01…T-04) | `chore:` 307e795 · `build:` 13932ba · `refactor:` fbd28ab · `docs:` 9c024fa, d60a22b · `ci:` fc557e8 | Gate `check + build` en verde; `npm run gate` **falla a propósito** (123 placeholders) → cierra **R-56**; CI quedará en rojo hasta T-17 |
+| F1 | 🟡 4/13 (T-01…T-04) | `chore:` 307e795 · `build:` 13932ba · `refactor:` fbd28ab · `docs:` 9c024fa, d60a22b · `ci:` fc557e8 | Gate `check + build` en verde; `npm run gate` **falla a propósito** (128 placeholders desde T-45) → cierra **R-56**; CI quedará en rojo hasta T-17 |
 | F2 | ⬜ no iniciada | — | Bloqueada parcialmente por P-07…P-15 |
 | F3 | ⬜ no iniciada | — | Bloqueada por P-16…P-18 |
 | F4 | ⬜ no iniciada | — | Bloqueada por P-01…P-06, P-12, P-13 |
 | F5 | ⬜ no iniciada | — | Bloqueada por P-22 |
 | F6 | ⬜ no iniciada | — | — |
-| F7 | ⬜ no iniciada | — | ⚠️ T-52/T-53 requieren aprobación explícita |
+| F7 | 🟡 1/10 (T-45) | `feat:` 888a662 | 404 sirve con **status real 404** en `preview`; reduced-motion completo; JS 0 B · imágenes 246 B · los 5 placeholders de `dist/404.html` son heredados de `Base.astro`/`Footer.astro` (T-17) | ⚠️ T-52/T-53 requieren aprobación explícita |
 
 > **Recordatorio operativo**: antes de `git push`, cualquier deploy o cambio de DNS → **avisar al usuario y esperar confirmación**.
