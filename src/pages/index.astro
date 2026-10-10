@@ -4,9 +4,17 @@ import Photo from '../components/Photo.astro';
 import ReserveForm from '../components/ReserveForm.astro';
 import DishList from '../components/DishList.astro';
 import { site, waLink } from '../data/site';
-import { menu } from '../data/menu';
+import { menu, type Category } from '../data/menu';
 
-const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => menu.find((c) => c.id === id)!);
+const categoryById = (id: string): Category => {
+  const category = menu.find((c) => c.id === id);
+  if (!category) {
+    throw new Error(`Categoría "${id}" no encontrada en src/data/menu.ts`);
+  }
+  return category;
+};
+
+const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => categoryById(id));
 ---
 <Base title="Origen Jacó · Restaurante de mariscos y parrilla en Jacó, Costa Rica">
 
@@ -192,7 +200,8 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => menu.f
       const on = t === tab;
       t.setAttribute('aria-selected', String(on));
       t.tabIndex = on ? 0 : -1;
-      const panel = document.getElementById(t.getAttribute('aria-controls')!);
+      const controlsId = t.getAttribute('aria-controls');
+      const panel = controlsId ? document.getElementById(controlsId) : null;
       if (panel) panel.hidden = !on;
     });
   };
