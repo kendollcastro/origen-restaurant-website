@@ -31,3 +31,38 @@ test.describe('a11y (axe)', () => {
     });
   }
 });
+
+test.describe('skip link', () => {
+  for (const route of ROUTES) {
+    test(`${route} visible con Tab, dentro del viewport y con foco en #contenido`, async ({ page }) => {
+      await page.goto(route);
+      await page.keyboard.press('Tab');
+
+      const skip = page.locator('a.skip-link');
+      await expect(skip).toBeFocused();
+      await expect(skip).toContainText('Saltar al contenido');
+
+      const box = await skip.boundingBox();
+      const viewport = page.viewportSize();
+      expect(box).not.toBeNull();
+      expect(viewport).not.toBeNull();
+      expect(box!.width).toBeGreaterThan(50);
+      expect(box!.height).toBeGreaterThan(20);
+      expect(box!.x).toBeGreaterThanOrEqual(0);
+      expect(box!.y).toBeGreaterThanOrEqual(0);
+      expect(box!.x + box!.width).toBeLessThanOrEqual(viewport!.width);
+      expect(box!.y + box!.height).toBeLessThanOrEqual(viewport!.height);
+
+      const outline = await skip.evaluate((el) => {
+        const cs = getComputedStyle(el);
+        return { style: cs.outlineStyle, width: cs.outlineWidth, color: cs.outlineColor };
+      });
+      expect(outline.style).toBe('solid');
+      expect(parseFloat(outline.width)).toBeGreaterThanOrEqual(2);
+      expect(outline.color).not.toBe('rgba(0, 0, 0, 0)');
+
+      await page.keyboard.press('Enter');
+      await expect(page.locator('#contenido')).toBeFocused();
+    });
+  }
+});

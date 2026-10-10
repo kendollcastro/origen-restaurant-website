@@ -80,9 +80,9 @@ const ld = [restaurant, ...(schema ? (Array.isArray(schema) ? schema : [schema])
   <script type="application/ld+json" set:html={JSON.stringify(ld)} />
 </head>
 <body>
-  <a href="#contenido" class="sr-only">Saltar al contenido</a>
+  <a href="#contenido" class="sr-only skip-link">Saltar al contenido</a>
   <Header />
-  <main id="contenido">
+  <main id="contenido" tabindex="-1">
     <slot />
   </main>
   <Footer />
