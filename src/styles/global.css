@@ -180,3 +180,12 @@ h1, h2, h3, p { margin: 0; }
   .hero { min-height: 600px; padding: 88px 20px; }
   .element { height: 420px; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
