@@ -2,8 +2,9 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Photo from '../components/Photo.astro';
-import { site } from '../data/site';
+import { site, waLink } from '../data/site';
 
+const waHref = waLink('Hola Origen, quisiera cotizar un evento.');
 const tipos = [
   ['Grupos de tour', 'grupo de tour', 'Trabajamos con tour operadores de Jacó. Almuerzos y cenas para grupos con menú fijo y servicio ágil.'],
   ['Cumpleaños y aniversarios', 'cumpleaños', 'Mesas privadas o el salón completo, con decoración y pastel coordinados [confirmar].'],
@@ -55,7 +56,7 @@ const tipos = [
       <p class="lead">Cuéntanos la fecha y el número de personas. Te respondemos por WhatsApp o correo con una propuesta de menú.</p>
       <p class="muted" style="font-size: 14px;">WhatsApp {site.phone}<br />{site.email}</p>
     </div>
-    <form id="event-form" class="form" style="flex: 2 1 560px;" data-wa={site.whatsapp}>
+    <form id="event-form" class="form" style="flex: 2 1 560px;" data-wa={site.whatsapp} action={waHref} method="get" target="_blank">
       <div class="field"><label for="e-n">Nombre</label><input id="e-n" name="nombre" type="text" autocomplete="name" required /></div>
       <div class="field"><label for="e-w">WhatsApp</label><input id="e-w" name="tel" type="tel" autocomplete="tel" /></div>
       <div class="field">
@@ -67,11 +68,26 @@ const tipos = [
       <div class="field"><label for="e-e">Correo</label><input id="e-e" name="correo" type="email" autocomplete="email" /></div>
       <div class="field full"><label for="e-m">Detalles</label><textarea id="e-m" name="detalles" rows="4"></textarea></div>
       <button type="submit" class="btn btn-primary full" style="height: 54px;">Enviar solicitud</button>
+      <noscript class="full">
+        <p class="dim">Sin JavaScript no enviamos la solicitud: <a href={waHref}>escríbenos por WhatsApp</a> con el tipo de evento, la fecha y el número de invitados.</p>
+      </noscript>
     </form>
   </section>
 </Base>
 
 <script>
+  const hoyEnCR = () => {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Costa_Rica',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(new Date());
+    const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
+    return `${get('year')}-${get('month')}-${get('day')}`;
+  };
+  const date = document.getElementById('e-d') as HTMLInputElement | null;
+  if (date) date.min = hoyEnCR();
   const form = document.getElementById('event-form') as HTMLFormElement | null;
   form?.addEventListener('submit', (e) => {
     e.preventDefault();

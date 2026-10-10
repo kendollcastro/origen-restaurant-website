@@ -113,12 +113,20 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
             <button type="button" class="tab" role="tab" id={`tab-${c.id}`} aria-controls={`panel-${c.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{c.title}</button>
           ))}
         </div>
-        {featured.map((c, i) => (
-          <div role="tabpanel" id={`panel-${c.id}`} aria-labelledby={`tab-${c.id}`} hidden={i !== 0}>
+        {featured.map((c) => (
+          <div role="tabpanel" id={`panel-${c.id}`} aria-labelledby={`tab-${c.id}`}>
+            <h3 class="panel-title label">{c.title}</h3>
             {c.note && <p class="dim" style="margin-bottom: 4px;">{c.note}</p>}
             <DishList dishes={c.dishes} headingTag="span" />
           </div>
         ))}
+        <script is:inline>
+          document.querySelectorAll('[role="tab"]').forEach((tab) => {
+            const id = tab.getAttribute('aria-controls');
+            const panel = id ? document.getElementById(id) : null;
+            if (panel) panel.hidden = tab.getAttribute('aria-selected') !== 'true';
+          });
+        </script>
         <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
           <a href="/menu/" class="btn btn-ghost">Ver menú completo</a>
           <span class="dim">También: mariscos, pastas, arroces, hamburguesas y coctelería · Precios con IVA incluido</span>
@@ -205,6 +213,8 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
       if (panel) panel.hidden = !on;
     });
   };
+  const initial = tabs.find((t) => t.getAttribute('aria-selected') === 'true') ?? tabs[0];
+  if (initial) select(initial);
   tabs.forEach((t, i) => {
     t.addEventListener('click', () => select(t));
     t.addEventListener('keydown', (e) => {

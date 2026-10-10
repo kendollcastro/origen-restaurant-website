@@ -145,6 +145,8 @@ h1, h2, h3, p { margin: 0; }
   cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--cream);
 }
 .tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+html:not(.js) .tabs { display: none; }
+.js .panel-title { display: none; }
 .dishes { list-style: none; margin: 0; padding: 0; }
 .dish { padding: 16px 0; border-bottom: 1px solid rgba(242,235,221,.1); display: flex; flex-direction: column; gap: 3px; }
 .dish-head { display: flex; align-items: baseline; gap: 14px; }
