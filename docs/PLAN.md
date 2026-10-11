@@ -189,6 +189,7 @@ Tras cada tarea: gate (§2.4) + `git commit` convencional + marcar la casilla en
 - [ ] **T-52** · **F7** · **@devops** — Provisionar proyecto en Vercel con `vercel.json` (headers de seguridad + cache), `.vercel/` en `.gitignore`, remote del repo y **solo deploy de preview** · **archivos:** `vercel.json`, `.gitignore`, remote · **CA:** preview URL accesible para el equipo; cabeceras visibles; nada en producción sin aprobación registrada · **est:** 2 h · **bloqueo:** P-19 · **⚠️ requiere aprobación**
 - [ ] **T-53** · **F7** · **@devops** — Go-live DNS: apex→www con 301, HTTPS forzado, `site`/`robots`/`sitemap` con dominio real, runbook documentado · **archivos:** `vercel.json`, `astro.config.mjs`, `public/robots.txt`, `docs/RUNBOOK-DNS.md` · **CA:** `https://www.origenjaco.com` responde 200 con certificado válido; sin `www` redirige 301; runbook para futuros cambios · **est:** 1,5 h · **bloqueo:** P-01 · **⚠️ requiere aprobación explícita (DNS)**
 - [ ] **T-54** · **F7** · **@qa-tester** — Smoke de producción: 5 rutas 200, canonical/og-image/PDF, sitemap y robots accesibles, gate de placeholders en vivo, alta final en Search Console + Rich Results · **archivos:** `docs/QA-REPORT.md` · **CA:** todo en verde sobre el dominio real; registro de la evidencia · **est:** 1,5 h · **bloqueo:** T-53
+- [x] **T-55** · **F8 · seguridad** · **@devops** — Actualizar `astro@5.18.2` → `7.3.8` para cerrar las **9 vulnerabilidades críticas** (XSS, RCE via AVIF, SSRF) del rango `<=7.2.7`; verificar compatibilidad de `@astrojs/sitemap`/`@astrojs/check` y `engines.node` (≥22.12) · **archivos:** `package.json`, `package-lock.json`, `astro.config.mjs` (si cambia API) · **CA:** `npm audit` sin vulnerabilidades en el árbol de **runtime** (`astro`); `check`/`build`/`gate`/Playwright en verde con las 11 páginas y 336 tests; resto de hallazgos de `audit` son transitivas dev-only de `@lhci/cli` (documentadas) · **est:** 2,5 h
 
 ### Resumen de esfuerzo
 
@@ -201,7 +202,8 @@ Tras cada tarea: gate (§2.4) + `git commit` convencional + marcar la casilla en
 | F5 | Versión inglesa + hreflang | T-35…T-39 | 18,5 h |
 | F6 | GEO / IA | T-40…T-44 | 12,5 h |
 | F7 | QA, performance y deploy/DNS | T-45…T-54 | 24,5 h |
-| **Total** | **54 tareas** | | **≈122,5 h** |
+| F8 | Seguridad de dependencias | T-55 | 2,5 h |
+| **Total** | **55 tareas** | | **≈125 h** |
 
 > F2, F3 y F4 tienen bloqueos de cliente: hasta que lleguen los insumos, el avance real se concentra en F1, F5–F7 (salvo copy EN) y en el QA.
 
@@ -335,5 +337,6 @@ Una fase se cierra cuando **todas** sus casillas están `[x]`, el gate global pa
 | F5 | 🟡 1/5 (T-35) | `feat:` b085221 | T-36 bloqueada por P-22; `/en/` provisional con `noindex` y fuera del sitemap; **244 tests** |
 | F6 | 🟡 3/5 (T-40, T-42, T-44) | `feat(seo):` 80a11e9 · `fix:` 8379db0 · `docs:` 9cc329c | JSON-LD validado local (11/11); contenido extraíble verificado; revisión GEO en `QA-REPORT.md`; Rich Results/dominio pendientes (P-01) |
 | F7 | 🟡 6/10 (T-45…T-48, T-50, T-51) | `feat:` 888a662 · `docs:` 13c3acd, ca840ba, 2818cdb · `ci:` 1cd25f9 · `test:` 4f024ea | QA UX multi-dispositivo (0 trampas, 0 contraste, 0 desbordes 360/768/1440, LCP lab 532 ms, forms WhatsApp interceptados) → **336 tests** | ⚠️ T-52/T-53 requieren aprobación explícita |
+| F8 | ✅ 1/1 (T-55) | `chore:` 9421d0d | `astro@7.3.8` (cerradas 9 críticas XSS/RCE/SSRF); `@astrojs/sitemap@3.7.4`, `engines.node ≥22.12 <24`; check/build/gate/336 tests en verde; `audit` restante = devDeps `@lhci/cli` solo | — |
 
 > **Recordatorio operativo**: antes de `git push`, cualquier deploy o cambio de DNS → **avisar al usuario y esperar confirmación**.
