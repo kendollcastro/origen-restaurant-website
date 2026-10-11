@@ -167,3 +167,16 @@ Regla madre: **ocultar > inventar**. Ningún texto entre corchetes (`[₡ precio
 ### Cómo reutilizarla (para T-17)
 
 Al sanear FAQ, `/nosotros/`, `/eventos/` y el JSON-LD, usa el mismo criterio: envolver cada bloque en una condición de dato real (`isReal(...)`) y, si falta, **no emitir el bloque**, en lugar de imprimir el corchete. Los arrays `reviews`/`partners` y `mapsEmbedUrl` de `index.astro` quedan vacíos a propósito: T-31/T-32 solo los llenan y la sección se muestra sola.
+
+---
+
+## 7. Guía de `alt` para fotos
+
+> Referencia de campo: `docs/SHOTLIST.md` (T-25) lista cada `<Photo>` del sitio con su `alt` propuesto, ratio, prioridad y `loading`. Reglas mínimas:
+
+- **Describir lo que se ve, concreto** — ingrediente, corte, escena; en voz de marca (§2: tuteo, concreción, orgullo local sin superlativos). Nada de "Imagen de…" ni keyword-stuffing.
+- **8–12 palabras** (~60–120 caracteres). Si el texto visible del mismo componente ya dice el plato, la imagen es decorativa (`alt=""`), p. ej. tarjetas Mar/Tierra/Fuego (`index.astro:102`).
+- **Personas**: nombre y rol ("la chef Zugetcy Leitón"), como en esta sección 3.
+- **No inventar**: plato, ingrediente o composición sin confirmar se documentan como pendiente en la shot list y **no** se publican en el `alt` (regla madre §6: ocultar > inventar).
+- **SEO/GEO**: el `alt` alimenta la indexación de imágenes (SEO on-page) y, en GEO, da a las respuestas de IA objetos reales y citables (platos del menú real, "parrilla", "mariscos del Pacífico"); el relleno de keywords no mejora el ranking.
+- **Héroe**: solo la portada (`index.astro:27`) es `loading="eager"` + `fetchpriority="high"`; el resto `lazy` (ver SHOTLIST §1; `Photo.astro:16` hoy fija `lazy` para todas y T-26 añadirá el flag).

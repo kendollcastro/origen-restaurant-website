@@ -24,12 +24,12 @@ const chefFrase = ''; // cita literal de la chef sobre su cocina
         <p class="lead">Nuestro nombre lo dice todo: volver al origen de cada ingrediente. Mariscos del Pacífico de proveedores locales, frutas y verduras costarricenses, y la parrilla como protagonista.</p>
         {isReal(duenos) && <p class="lead">{duenos}</p>}
       </div>
-      <Photo label="fachada / salón" height="520px" style="background-color:#2A2520" />
+      <Photo label="fachada / salón" alt="La fachada de Origen y el salón que abre a la calle de Jacó." height="520px" style="background-color:#2A2520" />
     </div>
   </section>
 
   <section class="container section row" style="flex-wrap: wrap-reverse;" aria-labelledby="chef-t">
-    <Photo label={`retrato chef ${site.chef}`} height="560px" />
+    <Photo label={`retrato chef ${site.chef}`} alt={`La chef ${site.chef}, jefa de cocina de Origen.`} height="560px" />
     <div class="stack">
       <span class="script">En la cocina</span>
       <h2 id="chef-t" class="display" style="font-size: 52px;">Chef {site.chef}</h2>
@@ -48,12 +48,12 @@ const chefFrase = ''; // cita literal de la chef sobre su cocina
       </div>
       <div class="grid" style="--min: 240px; --gap: 24px;">
         {[
-          [site.chef, 'Chef ejecutiva', 'foto'],
-          [site.manager, 'Gerente general', 'foto'],
-          ['Cocina y salón', 'El equipo de siempre', 'foto grupal'],
-        ].map(([name, role, photo]) => (
+          [site.chef, 'Chef ejecutiva', 'foto', `La chef ${site.chef}, chef ejecutiva de Origen.`],
+          [site.manager, 'Gerente general', 'foto', `Retrato de ${site.manager}, gerente general de Origen.`],
+          ['Cocina y salón', 'El equipo de siempre', 'foto grupal', 'El equipo de cocina y de salón de Origen.'],
+        ].map(([name, role, photo, alt]) => (
           <div class="stack" style="gap: 12px;">
-            <Photo label={photo} height="320px" />
+            <Photo label={photo} alt={alt} height="320px" />
             <h3 style="font-family: var(--serif); font-weight: 600; font-size: 26px;">{name}</h3>
             <span class="label">{role}</span>
           </div>

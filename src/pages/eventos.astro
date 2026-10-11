@@ -8,10 +8,10 @@ const waHref = waLink('Hola Origen, quisiera cotizar un evento.');
 const hour12 = (t: string) => Number(t.slice(0, 2)) % 12 || 12;
 const period = (t: string) => (Number(t.slice(0, 2)) >= 12 ? 'pm' : 'am');
 const tipos = [
-  ['Grupos de tour', 'grupo de tour', 'Trabajamos con tour operadores de Jacó. Almuerzos y cenas para grupos con menú fijo y servicio ágil.'],
-  ['Cumpleaños y aniversarios', 'cumpleaños', 'Mesas privadas o el salón completo.'],
-  ['Empresas', 'cena corporativa', 'Cenas de equipo, fiestas de fin de año y reuniones con menú cerrado y factura electrónica.'],
-  ['Bodas y ensayos', 'boda', 'Cenas de ensayo y recepciones íntimas a pasos de la playa de Jacó.'],
+  ['Grupos de tour', 'grupo de tour', 'Trabajamos con tour operadores de Jacó. Almuerzos y cenas para grupos con menú fijo y servicio ágil.', 'Mesa puesta para un grupo de tour en Origen.'],
+  ['Cumpleaños y aniversarios', 'cumpleaños', 'Mesas privadas o el salón completo.', 'Celebración de cumpleaños en el salón de Origen.'],
+  ['Empresas', 'cena corporativa', 'Cenas de equipo, fiestas de fin de año y reuniones con menú cerrado y factura electrónica.', 'Cena de equipo servida en el salón de Origen.'],
+  ['Bodas y ensayos', 'boda', 'Cenas de ensayo y recepciones íntimas a pasos de la playa de Jacó.', 'Cena de ensayo de boda, a pasos de la playa de Jacó.'],
 ];
 ---
 <Base
@@ -26,9 +26,9 @@ const tipos = [
   <section class="container section stack" style="gap: 48px;" aria-labelledby="tipos-t">
     <h2 id="tipos-t" class="display" style="text-align: center;">¿Qué celebramos contigo?</h2>
     <div class="grid" style="--min: 260px;">
-      {tipos.map(([t, photo, d]) => (
+      {tipos.map(([t, photo, d, alt]) => (
         <article class="stack" style="gap: 14px;">
-          <Photo label={photo} height="300px" />
+          <Photo label={photo} alt={alt} height="300px" />
           <h3 style="font-family: var(--serif); font-weight: 600; font-size: 30px; line-height: 1.1;">{t}</h3>
           <p style="color: var(--soft);">{d}</p>
         </article>
