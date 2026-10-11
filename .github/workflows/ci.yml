@@ -40,3 +40,48 @@ jobs:
         if: hashFiles('tests/**/*.spec.ts') != ''
       - run: npx playwright test
         if: hashFiles('tests/**/*.spec.ts') != ''
+
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - name: Serve build con astro preview (127.0.0.1:4173)
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 &
+          echo $! > "$RUNNER_TEMP/origen-preview.pid"
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null 2>&1; then
+              echo "astro preview listo tras ${i}s"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "::error::astro preview no respondió en 60s en 127.0.0.1:4173"
+          exit 1
+      - name: Lighthouse CI — mobile (perf ≥90/a11y ≥95/SEO ≥95/BP ≥95 × 5 URLs)
+        run: |
+          export CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
+          npx lhci autorun --config=lighthouserc.json
+        env:
+          CI: true
+      - name: Lighthouse CI — desktop (perf ≥95/a11y ≥95/SEO ≥95/BP ≥95 × 5 URLs)
+        run: |
+          export CHROME_PATH="$(node -e "console.log(require('playwright').chromium.executablePath())")"
+          npx lhci autorun --config=lighthouserc.desktop.json
+        env:
+          CI: true
+      - name: Limpieza — matar astro preview
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/origen-preview.pid" ]; then
+            kill "$(cat "$RUNNER_TEMP/origen-preview.pid")" 2>/dev/null || true
+            rm -f "$RUNNER_TEMP/origen-preview.pid"
+          fi
+          lsof -ti:4173 2>/dev/null | xargs kill 2>/dev/null || true
