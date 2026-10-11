@@ -1,5 +1,6 @@
 ---
 // Placeholder de foto. Cuando tengas la imagen, pasa `src` y `alt` y se muestra la foto.
+// Sin `src` se reserva el bloque (textura) pero sin texto de placeholder: política §6.
 // Recomendado: guardar fotos en src/assets y migrar a <Image /> de astro:assets.
 interface Props {
   label: string;
@@ -9,9 +10,9 @@ interface Props {
   class?: string;
   style?: string;
 }
-const { label, src, alt = '', height, class: cls = '', style = '' } = Astro.props;
+const { src, alt = '', height, class: cls = '', style = '' } = Astro.props;
 ---
 <div class={`ph ${cls}`} style={`${height ? `height:${height};` : ''}${style}`}>
-  {src ? <img src={src} alt={alt} loading="lazy" decoding="async" /> : <span class="ph-label">Foto · {label}</span>}
+  {src && <img src={src} alt={alt} loading="lazy" decoding="async" />}
   <slot />
 </div>

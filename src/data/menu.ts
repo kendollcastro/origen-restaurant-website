@@ -1,11 +1,15 @@
 // Menú de Origen. price: número en colones con IVA incluido (null = pendiente).
 export type Dish = { name: string; desc?: string; price?: number | null };
-export type Category = { id: string; kicker: string; title: string; note?: string; dishes: Dish[] };
+export type Category = { id: string; kicker: string; title: string; note?: string; dishes: Dish[]; pending?: boolean };
 
+// Un plato solo es publicable si tiene nombre real (sin corchetes ni vacío).
+export const hasDish = (d: Dish): boolean => d.name.trim() !== '' && !d.name.startsWith('[');
+
+// Categorías sin datos confirmados: se marcan `pending` y no se publican (política §6).
 const pending = (n: number): Dish[] =>
-  Array.from({ length: n }, () => ({ name: '[Nombre del plato]', desc: '[Descripción por confirmar]' }));
+  Array.from({ length: n }, () => ({ name: '', desc: '' }));
 
-export const menu: Category[] = [
+const catalog: Category[] = [
   {
     id: 'entradas', kicker: 'Para empezar', title: 'Entradas',
     dishes: [
@@ -29,9 +33,9 @@ export const menu: Category[] = [
       { name: 'Rib Eye', desc: 'A la parrilla, con chimichurri ahumado.' },
     ],
   },
-  { id: 'mariscos', kicker: 'Mar', title: 'Mariscos', dishes: pending(4) },
-  { id: 'pastas', kicker: 'De la casa', title: 'Pastas y arroces', dishes: pending(3) },
-  { id: 'hamburguesas', kicker: 'Para compartir', title: 'Hamburguesas', dishes: pending(2) },
+  { id: 'mariscos', kicker: 'Mar', title: 'Mariscos', pending: true, dishes: pending(4) },
+  { id: 'pastas', kicker: 'De la casa', title: 'Pastas y arroces', pending: true, dishes: pending(3) },
+  { id: 'hamburguesas', kicker: 'Para compartir', title: 'Hamburguesas', pending: true, dishes: pending(2) },
   {
     id: 'ninos', kicker: 'Los pequeños', title: 'Menú de niños',
     dishes: [
@@ -48,8 +52,11 @@ export const menu: Category[] = [
       { name: 'Crepas', desc: 'Con Nutella.' },
     ],
   },
-  { id: 'cocteles', kicker: 'Barra', title: 'Coctelería y mocktails', dishes: pending(3) },
+  { id: 'cocteles', kicker: 'Barra', title: 'Coctelería y mocktails', pending: true, dishes: pending(3) },
 ];
 
+// Solo se publican las categorías con contenido real; las `pending` esperan a T-20.
+export const menu: Category[] = catalog.filter((c) => !c.pending);
+
 export const formatPrice = (p?: number | null) =>
-  p ? `₡${p.toLocaleString('es-CR')}` : '[₡ precio]';
+  p ? `₡${p.toLocaleString('es-CR')}` : '';

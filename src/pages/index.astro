@@ -5,6 +5,12 @@ import ReserveForm from '../components/ReserveForm.astro';
 import DishList from '../components/DishList.astro';
 import { site, waLink } from '../data/site';
 import { menu, type Category } from '../data/menu';
+import { isPlaceholder } from '../data/placeholders';
+
+// Datos aún no entregados por el cliente: al llegar (T-31/T-32) se llenan aquí y la sección aparece.
+const reviews: { platform: string; stars: number; quote: string; author: string }[] = [];
+const partners: { name: string; logo: string }[] = [];
+const mapsEmbedUrl = '';
 
 const categoryById = (id: string): Category => {
   const category = menu.find((c) => c.id === id);
@@ -51,7 +57,10 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
     <div class="center" style="gap: 10px;">
       <span class="script" style="font-size: 24px;">Encuéntranos</span>
       <h2 class="display" style="font-size: 40px;">Ubicación</h2>
-      <p class="lead">{site.address.street}<br />Jacó, Garabito, Puntarenas</p>
+      <p class="lead">
+        {!isPlaceholder(site.address.street) && <>{site.address.street}<br /></>}
+        Jacó, Garabito, Puntarenas
+      </p>
       <a href="/contacto/" class="link-caps">Cómo llegar</a>
     </div>
   </section>
@@ -167,38 +176,42 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
     </section>
   </Photo>
 
-  <section class="light" aria-labelledby="rev-t">
-    <div class="container section stack" style="gap: 72px;">
-      <div class="row" style="gap: 48px;">
-        <div class="stack" style="flex: 1 1 340px; gap: 10px;">
-          <span class="script" style="font-size: 26px;">Lo que dicen</span>
-          <h2 id="rev-t" class="display">Nuestros invitados</h2>
-          <p>Reseñas verificadas de Google y TripAdvisor.</p>
-        </div>
-        <div class="grid" style="flex: 2 1 560px; --min: 260px; --gap: 16px;">
-          <!-- TODO: reemplazar por reseñas reales o un widget de Google/TripAdvisor -->
-          <figure class="review">
-            <span class="label" style="color: var(--ink-muted);">Google · [estrellas]</span>
-            <blockquote>[Insertar reseña real de un cliente]</blockquote>
-            <figcaption>[Nombre del cliente]</figcaption>
-          </figure>
-          <figure class="review">
-            <span class="label" style="color: var(--ink-muted);">TripAdvisor · [estrellas]</span>
-            <blockquote>[Insertar reseña real de un cliente]</blockquote>
-            <figcaption>[Nombre del cliente]</figcaption>
-          </figure>
-        </div>
+  {(reviews.length > 0 || partners.length > 0) && (
+    <section class="light" aria-label="Reseñas y aliados">
+      <div class="container section stack" style="gap: 72px;">
+        {reviews.length > 0 && (
+          <div class="row" style="gap: 48px;">
+            <div class="stack" style="flex: 1 1 340px; gap: 10px;">
+              <span class="script" style="font-size: 26px;">Lo que dicen</span>
+              <h2 class="display">Nuestros invitados</h2>
+              <p>Reseñas verificadas de Google y TripAdvisor.</p>
+            </div>
+            <div class="grid" style="flex: 2 1 560px; --min: 260px; --gap: 16px;">
+              {reviews.map((r) => (
+                <figure class="review">
+                  <span class="label" style="color: var(--ink-muted);">{r.platform} · {'★'.repeat(r.stars)}</span>
+                  <blockquote>{r.quote}</blockquote>
+                  <figcaption>{r.author}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        )}
+        {partners.length > 0 && (
+          <div class="center" style="gap: 24px; border-top: 1px solid #DDD3C2; padding-top: 56px;">
+            <h2 class="label" style="color: var(--ink-muted); text-align: center;">Recomendados por tour operadores, hoteles y Airbnbs de Jacó</h2>
+            <div class="grid" style="--min: 150px; --gap: 12px; width: 100%;">
+              {partners.map((p) => <div class="partner"><img src={p.logo} alt={p.name} loading="lazy" decoding="async" /></div>)}
+            </div>
+          </div>
+        )}
       </div>
-      <div class="center" style="gap: 24px; border-top: 1px solid #DDD3C2; padding-top: 56px;">
-        <h2 class="label" style="color: var(--ink-muted); text-align: center;">Recomendados por tour operadores, hoteles y Airbnbs de Jacó</h2>
-        <div class="grid" style="--min: 150px; --gap: 12px; width: 100%;">
-          {Array.from({ length: 6 }).map(() => <div class="partner">[Logo aliado]</div>)}
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
+  )}
 
-  <div class="ph" style="height: 240px;"><span class="ph-label">Mapa · Google Maps embebido</span></div>
+  {mapsEmbedUrl && (
+    <iframe src={mapsEmbedUrl} title="Ubicación de Origen en Jacó, Costa Rica" loading="lazy" style="width: 100%; height: 240px; border: 0; display: block;" />
+  )}
 </Base>
 
 <script>

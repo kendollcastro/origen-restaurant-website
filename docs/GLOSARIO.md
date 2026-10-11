@@ -147,3 +147,23 @@ Auditoría grep en `src/**`. No se refactoriza aquí (T-16/T-23/T-24 harán la m
 - `index.astro:164` dice **"Cotizar evento"** vs. `eventos.astro:21` **"Cotizar mi evento"**.
 - `index.astro:165` dice **"Hablar por WhatsApp"**; el canónico del plan es **"Cotizar por WhatsApp"**.
 - `ReserveForm.astro:31` (variante bar) dice **"Confirmar reserva"** aunque solo abre WhatsApp.
+
+---
+
+## 6. Política de placeholders
+
+Regla madre: **ocultar > inventar**. Ningún texto entre corchetes (`[₡ precio]`, `[Logo aliado]`, `[Dirección exacta]`…), ninguna etiqueta `ph-label` y ningún `TODO`/`0000` debe llegar a producción. Si el dato no está confirmado, el hueco se **oculta**, no se rellena. La implementa el gate `npm run gate` (`scripts/check-placeholders.mjs`) y, en código, `src/data/placeholders.ts` (`isPlaceholder`/`isReal`) y `src/data/menu.ts` (`hasDish`, categorías `pending`).
+
+| Tipo de hueco | Comportamiento | Por qué | Quién lo desbloquea |
+|---|---|---|---|
+| **Reseñas** (Google/TripAdvisor) | Ocultar la sección entera mientras no haya cita real con texto, autor, estrellas y permiso | No se pueden inventar citas ni ratings (R-01); 0 reseñas no debe dejar la franja a medias | Cliente **P-12** → T-32 |
+| **Aliados / logos** | Ocultar la franja entera mientras no haya ≥3 logos con `alt` y permiso | `[Logo aliado]` es andamiaje, no un logo; la rejilla vacía se lee como página sin terminar | Cliente **P-13** → T-32 |
+| **Mapa / ubicación** | No renderizar el embed; conservar el bloque con la parte real (Jacó, Garabito, Puntarenas) y el CTA "Cómo llegar". Ocultar solo la línea de dirección si `site.address.street` sigue en corchetes | Un iframe sin pin real no aporta; la localidad ya es utilizable y evita una caja vacía | Cliente **P-05** → T-31 (iframe) · **P-02** → T-18/T-31 |
+| **Precios `[₡ precio]`** | Ocultar el precio y los puntos guía; el plato se muestra con nombre y descripción | El precio no está confirmado (P-07); inventarlo es R-01 y rompe la confianza | Cliente **P-07** → T-18/T-19 |
+| **Platos `pending()`** | Marcar la categoría como `pending` y no publicarla (ni su lista); al llegar nombre real vuelve a aparecer | "[Nombre del plato]" no es copy y una lista vacía no debe renderizarse | Cliente **P-08** → T-20 |
+| **Fotos sin `src`** (`Photo`) | Reservar el bloque (textura) para no romper el layout, pero **sin** texto `ph-label` visible | "Foto · …" es andamiaje interno; nunca es copy público | Cliente **P-16** → T-27/T-28 |
+| **NAP / FAQ** (`[...]`, `TODO`, `0000` en `site.ts`) | No publicar: se oculta el fragmento o la sección hasta el dato real | Datos ficticios indexados dañan SEO local y confianza (R-01/R-02) | Cliente **P-01–P-05** → T-18 (datos) · **T-17** (limpieza en HTML/JSON-LD) |
+
+### Cómo reutilizarla (para T-17)
+
+Al sanear FAQ, `/nosotros/`, `/eventos/` y el JSON-LD, usa el mismo criterio: envolver cada bloque en una condición de dato real (`isReal(...)`) y, si falta, **no emitir el bloque**, en lugar de imprimir el corchete. Los arrays `reviews`/`partners` y `mapsEmbedUrl` de `index.astro` quedan vacíos a propósito: T-31/T-32 solo los llenan y la sección se muestra sola.
