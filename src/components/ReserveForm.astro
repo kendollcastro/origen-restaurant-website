@@ -58,7 +58,7 @@ const waHref = waLink('Hola Origen, quisiera reservar una mesa.');
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const d = new FormData(form);
-      const nombre = d.get('nombre') ? `Soy ${d.get('nombre')}. ` : '';
+      const nombre = d.get('nombre') ? `Soy ${d.get('nombre')}, ` : '';
       const msg = `Hola Origen, ${nombre}quisiera reservar una mesa para ${d.get('personas')} personas el ${d.get('fecha')} a las ${d.get('hora')}.`;
       window.open(`https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
     });

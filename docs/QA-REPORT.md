@@ -433,3 +433,158 @@ en `/en/`, provisional P-22).
   datos pendientes del cliente, no defectos de copy (coincide con la tabulación de T-46 §T46.6).
 - **Docs-higiene:** el bloque «Inconsistencias de CTA» de `GLOSARIO §5` está obsoleto (ya corregido en
   código por T-23/T-24); anotarlo para la próxima revisión del glosario (fuera del alcance editable de T-50).
+
+---
+
+# QA UX multi-dispositivo (T-51 · F7)
+
+> **Tarea:** T-51 · F7 · @ux-designer
+> **Fecha de ejecución:** **2026-10-11**
+> **Spec nuevo:** `tests/e2e/ux.spec.ts` (46 tests · 92 runs × chromium + Pixel 5)
+> **Alcance:** teclado, contraste (axe + medición de colores reales), responsive 360/768/1440 (6 rutas),
+> LCP lab 4G (referencia; las fotos reales llegan en T-26), 0 errores de consola y entrega de ambos
+> formularios a WhatsApp (interceptando `window.open`, sin enviar a un humano; `site.whatsapp` sigue
+> placeholder `50600000000`, P-03).
+> **Entorno:** Node 23.7.0 · `npm run preview` en `:4321` · Playwright `chromium` + `Pixel 5`.
+> **Ediciones de código:** 1 fix mínimo en `ReserveForm.astro:61` (gramática del mensaje); `global.css` **sin cambios**
+> (0 violaciones de contraste reales, justificado en §T51.2).
+
+## T51.1 (a) Teclado — 0 trampas de foco
+
+Método: recorrido con `Tab` en las 6 rutas ES a 360 px (y `/` a 1440 px) con un walker que detecta
+estancamiento (un mismo elemento reteniendo el foco >6 saltos sin avanzar ni envolver al `BODY`).
+
+| Ruta | Skip-link 1º | EN en el orden de Tab | Trampas | Menú móvil teclado | Forms alcanzables |
+|---|---|---|---|---|---|
+| `/` | ✅ | ✅ `@/en/` | 0 | ✅ | ✅ (bar form) |
+| `/menu/` | ✅ | ✅ | 0 | ✅ | n/a |
+| `/nosotros/` | ✅ | ✅ | 0 | ✅ | n/a |
+| `/eventos/` | ✅ | ✅ | 0 | ✅ | ✅ (cotización) |
+| `/contacto/` | ✅ | ✅ | 0 | ✅ | ✅ (card form) |
+| `/404.html` | ✅ | ✅ | 0 | ✅ | n/a |
+| `/` (1440px desktop) | ✅ | ✅ | 0 | n/a | ✅ |
+
+- **Menú móvil (360 px):** `Enter` en `nav-toggle` abre (`aria-expanded="true"`, nav visible); **`Shift+Tab`
+  entra directo a los enlaces del nav** (el nav está antes del toggler en el DOM; con `Tab` hacia adelante
+  se alcanzan tras los controles de `.header-actions` y el wrap del documento — en ningún caso queda el foco
+  atrapado); `Escape` cierra y **devuelve el foco al toggler** (§T-10, re-verificado).
+- **Foco visible (anillo ≥3:1):** `:focus-visible` con outline de 2 px → `--accent` sobre fondos oscuros
+  **6,75:1** (bg) / **6,49:1** (surface), y `--accent-ink` sobre crema **5,04:1** (§T51.2). Verificado por
+  test en un enlace del nav (oscuro) y un enlace de la sección `.light`.
+- **Resultado CA:** 0 bloqueos con teclado en las 6 rutas. Sin corrección necesaria.
+
+## T51.2 (b) Contraste — axe 0 violaciones; medición de colores reales; sin fix de CSS
+
+**axe (`@axe-core/playwright`, reglas por defecto) en las 5 ES → `color-contrast`: 0 violaciones en todas.**
+
+| Ruta | color-contrast (violaciones) | serious/critical | incomplete (no computable, `.ph`) |
+|---|---|---|---|
+| `/` | **0** | 0 | `.hero`, `.element` ×3, banner evento (texto sobre `background-image`) |
+| `/menu/` | **0** | 0 | `.breadcrumb`, `.script-lg`, `h1`, `.lead` (hero `.ph`) |
+| `/nosotros/` | **0** | 0 | idem hero `.ph` |
+| `/eventos/` | **0** | 0 | idem hero `.ph` |
+| `/contacto/` | **0** | 0 | solo `.ph-label` (bloque mapa) |
+| `/404.html` | **0** | 0 | — |
+
+**Medición real (luminancia relativa, WCAG 2.1) de los pares en producción:**
+
+| Par | Ratio | AA (4,5 texto / 3 grande) |
+|---|---|---|
+| `.script` `--accent` `#D9844A` sobre `.ph` `#221F1B` (hero/tarjetas) | **5,74:1** (5,28 con el overlay 3,5 %) | ✅ (coincide con el 5,7:1 de T-46) |
+| `h1`/`.btn-ghost` `--cream` sobre `.ph` | 13,83:1 | ✅ |
+| `.ph-label` `--muted` sobre `.ph` | 6,27:1 (5,77 overlay) | ✅ |
+| `.btn-primary` (`--on-accent` sobre `--accent`) | 6,67:1 (hover 10,97:1) | ✅ |
+| `.light .script` `--accent-ink` `#9A4F1E` sobre crema `#F2EBDD` | **5,04:1** | ✅ |
+| `.light .lead` `--ink-soft` sobre crema | 9,80:1 | ✅ |
+| Anillo de foco dark `--accent` sobre `--bg`/`--surface` | 6,75:1 / 6,49:1 | ✅ (≥3:1) |
+| Anillo de foco light `--accent-ink` sobre crema | 5,04:1 | ✅ (≥3:1) |
+| Footer `--soft` sobre `--footer` | 13,00:1 | ✅ |
+| `.label`/`.field label` `--muted` sobre `--bg` | 7,37:1 | ✅ |
+| `.dim` sobre `--bg` | 5,43:1 | ✅ |
+| `.dish-price` `--accent` sobre `--bg` (menú / tabs) | 6,75:1 | ✅ |
+
+**Par latente (NO ocurre hoy):** `.dish-price` (`--accent`) sobre **crema** daría 2,41:1, pero hoy **no se
+renderiza ningún `.dish-price` sobre sección `.light`** (sin precios reales, P-07; en el menú y en los tabs
+de `/` el fondo es `--bg`, donde es 6,75:1). No es una violación real → **no se tocó `global.css`** (regla
+«mínimo cambio y solo violación real»). Al llegar precios (T-19) mantendrá fondo oscuro; anotado como
+guard-rail si algún día se usa `.dish-price` en `.light`.
+
+## T51.3 (c) Responsive 360/768/1440 — 0 desbordes
+
+6 rutas × 3 viewports (Playwright `setViewportSize`): `scrollWidth ≤ clientWidth`, CTAs `.btn` visibles y
+dentro del viewport, formularios sin salirse, sin elementos con `right > clientWidth`. **Todo en verde.**
+
+| Ruta | 360×740 | 768×1024 | 1440×900 |
+|---|---|---|---|
+| `/` | ✅ (scrollW 360/360) | ✅ | ✅ |
+| `/menu/` | ✅ | ✅ | ✅ |
+| `/nosotros/` | ✅ | ✅ | ✅ |
+| `/eventos/` | ✅ | ✅ | ✅ |
+| `/contacto/` | ✅ | ✅ | ✅ |
+| `/404.html` | ✅ | ✅ | ✅ |
+
+- Tarjetas **mar/tierra/fuego** (`.element`): 3/3 visibles y sin desborde en los 3 anchos (altura 420 px a ≤640 px, 560 px en ≥641 px).
+- Menú móvil usable a 360 (re-verificado §T51.1); header con `Reservar mesa` + toggler + switcher dentro de 360 px.
+- Grid de platos y footer: sin `right > clientWidth` en 768 ni 1440.
+- **Resultado CA:** sin scroll horizontal en las 6 rutas; CTAs y forms visibles.
+
+## T51.4 (d) LCP lab 4G + consola
+
+**LCP del build actual (home, 390×844), 4G simulado** (CDP: latencia 150 ms · 1,6 Mbps · CPU 4×),
+medido con `PerformanceObserver` (los entries LCP no se exponen vía `getEntriesByType`):
+
+| Modelo | LCP | FCP | Elemento LCP |
+|---|---|---|---|
+| sin throttle | 316 ms | 316 ms | `P.lead` del héroe (texto) |
+| **4G simulado (lab)** | **532 ms** | 532 ms | `P.lead` del héroe |
+
+Página completa = 1 CSS de Astro (~3 KB) + CSS de fuentes Google (1 KB); sin imágenes (`.ph` con
+`background-image`, P-16). **Referencia lab ≪ 2,5 s; el CA final se valida con fotos reales en T-26 y en
+producción con T-49.** El spec `ux.spec.ts` deja la medición anotada como referencia y fallaría si pasara
+de 2,5 s.
+
+**Consola:** `page.on('console'/'pageerror')` = `[]` en las 6 rutas (0 errores; refuerza `smoke`/`nav-mobile`).
+
+## T51.5 (e) Formularios → WhatsApp (interceptando `window.open`)
+
+Spec `ux.spec.ts` → `describe('formularios → WhatsApp')`. Se intercepta `window.open`, se valida que la URL
+es `https://wa.me/50600000000?text=…` (sin abrir nada real; el número es placeholder P-03) y que el texto
+codificado contiene los datos.
+
+| Formulario | ¿Abre? | Mensaje verificado |
+|---|---|---|
+| `/` bar form (4 pers · 01-12-2026 · 19:00 · Ana Piera) | ✅ `_blank` + `noopener`, 1 sola llamada | «…4 personas el 2026-12-01 a las 19:00…» |
+| `/contacto/` card form (6 pers · 02-12 · 20:00 · Luis Mora) | ✅ idem | «…6 personas el 2026-12-02 a las 20:00…» |
+| `/eventos/` cotización **con** WhatsApp (+506 8888 7777 · 60 invitados · Boda/ensayo · Salón completo) | ✅ idem | tipo · invitados · fecha · **WhatsApp** · detalles (sin correo) |
+| `/eventos/` cotización **sin** WhatsApp ni correo | ❌ **no abre** | `alert` «Ingresa al menos un canal de contacto: WhatsApp o correo.» (T-24) y `__opened = []` |
+
+**Fix único de código (gramática del mensaje emitido):** `ReserveForm.astro:61` — el mensaje decía
+«Hola Origen, Soy Ana Piera. **quisiera** reservar…» (minúscula tras punto). Cambio mínimo `. ` → `, `:
+«…Soy Ana Piera, quisiera reservar…». Sin cambio funcional; no afecta `nojs.spec` ni `seo.spec`.
+
+## T51.6 Puerta de verificación (transcripción)
+
+| Paso | Comando | Resultado | Exit |
+|---|---|---|---|
+| Typecheck | `npm run check` | **0 errors · 0 warnings · 1 hint** (preexistente `check-placeholders.mjs:107`) · 42 archivos | `0` |
+| Build | `npm run build` | **11 page(s) built** + `sitemap-index.xml` | `0` |
+| Gate | `npm run gate` | **TOTAL: 0 bloqueantes** · avisos TODO × 0 · ph-label × 1 · 0000 × 116 | `0` |
+| E2E | `npx playwright test` | **336 passed (57.3 s)** = 244 previos + **92** de `ux.spec.ts` · chromium + Pixel 5 | `0` |
+
+**Higiene de procesos:** `lsof -ti:4321` **vacío** al terminar; el `webServer` de Playwright arrancó y detuvo
+su propio `astro preview` (no hubo reuso de un huérfano; los scripts de auditoría temporales se eliminaron).
+
+## T51.7 Hallazgos y qué queda para T-26 / T-49 / prod
+
+- **0 defectos bloqueantes.** CA cumplido: 0 trampas de teclado, sin scroll horizontal en 360/768/1440 y
+  ambos formularios entregan el mensaje de WhatsApp (con fallback `window.open` funcionando y el bloqueo de
+  eventos sin canal verificado).
+- **1 fix mínimo aplicado** (gramática del mensaje, §T51.5). **CSS intacto.**
+- **Evidencia en `evidencia/` (gitignored):** `t51-home-360.png`, `t51-home-768.png`, `t51-home-1440.png`,
+  `t51-menu-abierto-360.png`, `t51-contacto-1440.png`, `t51-eventos-360.png` (+ `home-desktop.png`,
+  `home-pixel5.png` previos). Reporte HTML en `playwright-report/`, JUnit en `test-results/junit.xml`.
+- **Para T-26 (fotos reales) / T-49 (prod):** re-medir LCP con `<Image>` reales y confirmar el umbral
+  < 2,5 s en PageSpeed; el par `.dish-price` sobre crema debería seguir sin producirse (o definirse con
+  `--accent-ink`); re-ejecutar esta batería tras cada cambio de contenido que toque el chrome (Header/Footer/forms).
+- **Nota:** los `incomplete` de axe (§T51.2) son texto sobre `.ph` (`background-image`) y se resuelven en
+  T-26 al pasar a `<Image>` con `width/height` (el cálculo manual ya da AA/AAA en todos los pares actuales).
