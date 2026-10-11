@@ -5,6 +5,8 @@ import Photo from '../components/Photo.astro';
 import { site, waLink } from '../data/site';
 
 const waHref = waLink('Hola Origen, quisiera cotizar un evento.');
+const hour12 = (t: string) => Number(t.slice(0, 2)) % 12 || 12;
+const period = (t: string) => (Number(t.slice(0, 2)) >= 12 ? 'pm' : 'am');
 const tipos = [
   ['Grupos de tour', 'grupo de tour', 'Trabajamos con tour operadores de Jacó. Almuerzos y cenas para grupos con menú fijo y servicio ágil.'],
   ['Cumpleaños y aniversarios', 'cumpleaños', 'Mesas privadas o el salón completo, con decoración y pastel coordinados [confirmar].'],
@@ -38,7 +40,7 @@ const tipos = [
     <div class="container grid" style="--min: 220px; --gap: 32px; padding-block: 80px; text-align: center;">
       {[
         [String(site.capacity), 'invitados de capacidad'],
-        ['11–10', 'abierto de 11 am a 10 pm'],
+        [`${hour12(site.hours.opens)}–${hour12(site.hours.closes)}`, `abierto de ${hour12(site.hours.opens)} ${period(site.hours.opens)} a ${hour12(site.hours.closes)} ${period(site.hours.closes)}`],
         ['[ ]', 'menús para grupos [confirmar]'],
       ].map(([n, l]) => (
         <div class="stack" style="gap: 4px;">

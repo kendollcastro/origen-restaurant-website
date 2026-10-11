@@ -27,6 +27,7 @@ export const site = {
     schema: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], // TODO
   },
   capacity: 120,
+  reservationMax: 12, // TODO: confirmar máximo de personas para reserva directa (grupos mayores → /eventos/)
   chef: 'Zugetcy Leitón',
   manager: 'Genesis Chinchilla',
   priceRange: '₡₡', // TODO

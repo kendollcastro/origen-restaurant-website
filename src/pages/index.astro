@@ -59,7 +59,7 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
       <h2 class="display" style="font-size: 40px;">Ubicación</h2>
       <p class="lead">
         {!isPlaceholder(site.address.street) && <>{site.address.street}<br /></>}
-        Jacó, Garabito, Puntarenas
+        {site.address.locality}, {site.address.county}, {site.address.region}
       </p>
       <a href="/contacto/" class="link-caps">Cómo llegar</a>
     </div>

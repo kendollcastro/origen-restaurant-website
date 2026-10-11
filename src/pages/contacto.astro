@@ -29,7 +29,7 @@ const faqSchema = {
     <div class="stack" style="flex: 1 1 380px; gap: 28px;">
       <address class="stack" style="font-style: normal; gap: 4px;">
         <h2 class="label">Dirección</h2>
-        <p style="font-size: 18px;">{site.fullName}<br />{site.address.street}<br />Jacó, Garabito, Puntarenas, Costa Rica</p>
+        <p style="font-size: 18px;">{site.fullName}<br />{site.address.street}<br />{site.address.locality}, {site.address.county}, {site.address.region}, {site.address.countryName}</p>
         <span>
           <a href={site.mapsUrl} class="link-caps" target="_blank" rel="noopener">Google Maps</a> ·
           <a href={site.wazeUrl} class="link-caps" target="_blank" rel="noopener">Waze</a>
@@ -49,7 +49,7 @@ const faqSchema = {
     </div>
     <div style="flex: 1 1 520px;">
       <ReserveForm variant="card" id="c" />
-      <p class="dim" style="margin-top: 12px;">Para grupos de más de 12 personas, visita <a href="/eventos/">Eventos y grupos</a>.</p>
+      <p class="dim" style="margin-top: 12px;">Para grupos de más de {site.reservationMax} personas, visita <a href="/eventos/">Eventos y grupos</a>.</p>
       <p class="dim">¿Primera vez? Mira el <a href="/menu/">menú</a> y conoce <a href="/nosotros/">nuestra historia</a>.</p>
     </div>
   </section>
