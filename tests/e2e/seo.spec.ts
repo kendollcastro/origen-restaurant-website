@@ -202,7 +202,17 @@ test.describe('JSON-LD Restaurant coherente con site.ts', () => {
       const geo = r.geo as Record<string, unknown>;
       expect(geo.latitude).toBe(site.geo.lat);
       expect(geo.longitude).toBe(site.geo.lng);
-      expect(r.maximumAttendeeCapacity).toBe(site.capacity);
+      // T-40: maximumAttendeeCapacity se retiró del Restaurant (no es propiedad válida de
+      // Google para este rich result; la capacidad 120 queda solo en texto visible).
+      expect(r).not.toHaveProperty('maximumAttendeeCapacity');
+      // employee (Person chef/manager, site.ts) y ReserveAction anclada al CTA visible.
+      const employees = r.employee as Record<string, unknown>[];
+      expect(employees).toBeTruthy();
+      const names = employees.map((p) => p.name);
+      expect(names).toContain(site.chef);
+      expect(names).toContain(site.manager);
+      expect(r.potentialAction).toBeTruthy();
+      expect((r.potentialAction as Record<string, unknown>).name).toBe('Reservar mesa');
       expect(r.priceRange).toBe(site.priceRange);
       const opening = r.openingHoursSpecification as Record<string, unknown>[];
       expect(opening[0].dayOfWeek).toEqual(site.hours.schema);

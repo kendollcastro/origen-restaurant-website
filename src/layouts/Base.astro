@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { site } from '../data/site';
+import { site, nav } from '../data/site';
 import { isReal } from '../data/placeholders';
 import { getUi, type Lang } from '../data/i18n/ui';
 
@@ -26,6 +26,12 @@ const ogImage = new URL(image, Astro.site ?? site.url).href;
 // JSON-LD base del restaurante (va en todas las páginas).
 // Campos con dato pendiente del cliente se omiten: política §6 (ocultar > inventar).
 const sameAs = Object.values(site.social).filter(isReal);
+// Personas reales (site.ts). Solo campos seguros: sin image/url inventados (P-16/P-17).
+// `jobTitle` replica literal la etiqueta visible del equipo en /nosotros/ (T-15).
+const employees = [
+  { '@type': 'Person', '@id': `${site.url}/nosotros/#chef`, name: site.chef, jobTitle: 'Chef ejecutiva' },
+  { '@type': 'Person', '@id': `${site.url}/nosotros/#manager`, name: site.manager, jobTitle: 'Gerente general' },
+].filter((p) => isReal(p.name));
 const restaurant = {
   '@context': 'https://schema.org',
   '@type': 'Restaurant',
@@ -36,12 +42,15 @@ const restaurant = {
   url: site.url,
   ...(isReal(site.phone) && !site.phone.includes('0000') ? { telephone: site.phone } : {}),
   ...(isReal(site.email) ? { email: site.email } : {}),
-  // image: se emite en T-27 cuando exista og-image.jpg (hoy pendiente P-17).
+  // image: se emite en T-27 cuando exista og-image.jpg (hoy pendiente P-17). No se inventa.
   servesCuisine: ['Mariscos', 'Parrilla', 'Costarricense'],
   priceRange: site.priceRange,
   acceptsReservations: true,
-  maximumAttendeeCapacity: site.capacity,
   hasMenu: `${site.url}/menu/`,
+  ...(employees.length > 0 ? { employee: employees } : {}),
+  // maximumAttendeeCapacity (heredada de Place/Event) NO es propiedad de Restaurant para
+  // rich results de Google y el PLAN la marca como incorrecta en Base.astro:33 → se retira.
+  // La capacidad (120 invitados) sigue solo en el texto visible (index/eventos/FAQ).
   address: {
     '@type': 'PostalAddress',
     // streetAddress: se omite mientras site.address.street siga pendiente (P-02);
@@ -52,6 +61,8 @@ const restaurant = {
     addressCountry: site.address.country,
   },
   geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
+  // Horario multiday: un único OpeningHoursSpecification con `dayOfWeek` como array
+  // (forma correcta; NO un objeto por día). 1:1 con "Todos los días · 11:00 am – 10:00 pm".
   openingHoursSpecification: [{
     '@type': 'OpeningHoursSpecification',
     dayOfWeek: site.hours.schema,
@@ -59,8 +70,33 @@ const restaurant = {
     closes: site.hours.closes,
   }],
   ...(sameAs.length > 0 ? { sameAs } : {}),
+  // ReserveAction anclada al CTA visible "Reservar mesa" → /contacto/#reservar (texto 1:1).
+  potentialAction: {
+    '@type': 'ReserveAction',
+    name: 'Reservar mesa',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${site.url}/contacto/#reservar`,
+      inLanguage: 'es-CR',
+    },
+  },
 };
-const ld = [restaurant, ...(schema ? (Array.isArray(schema) ? schema : [schema]) : [])];
+// BreadcrumbList solo donde el navegador de migas es visible (PageHero/contacto, T-15):
+// menú, nosotros, eventos y contacto. En / e índices (404, /en/*) no hay migas visibles.
+const crumbLabel = nav.find((n) => n.href === Astro.url.pathname)?.label;
+const breadcrumb =
+  lang === 'es' && crumbLabel && Astro.url.pathname !== '/'
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Inicio', item: `${site.url}/` },
+          { '@type': 'ListItem', position: 2, name: crumbLabel, item: `${site.url}${Astro.url.pathname}` },
+        ],
+      }
+    : undefined;
+const extra = schema ? (Array.isArray(schema) ? schema : [schema]) : [];
+const ld = [restaurant, ...(breadcrumb ? [breadcrumb] : []), ...extra];
 ---
 <!doctype html>
 <html lang={lang}>
