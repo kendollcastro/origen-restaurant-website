@@ -78,13 +78,13 @@ Entradas "Para empezar" · A la parrilla "Fuego" · Mariscos "Mar" · Pastas y a
 | Acción | Texto canónico | Dónde vive hoy |
 |---|---|---|
 | Reserva (navegación) | **Reservar mesa** | `Header.astro:28`, `menu.astro:65`, `nosotros.astro:73` → `/contacto/#reservar` |
-| Reserva (acción directa) | **Reservar por WhatsApp** | `index.astro:30`, `ReserveForm.astro` (variante card) |
+| Reserva (acción directa) | **Reservar por WhatsApp** | `index.astro:30`, `ReserveForm.astro` (ambas variantes) |
 | Menú | **Ver el menú** (variante larga admitida: "Ver menú completo") | `index.astro:29,131`, `nosotros.astro:72`, `404.astro:17` |
-| Eventos (ancla) | **Cotizar mi evento** | `eventos.astro:21` → `#cotizar`; en `index.astro:164` hoy dice "Cotizar evento" (unificar en T-23/T-24) |
-| Eventos (WhatsApp) | **Cotizar por WhatsApp** | Hoy parcialmente "Hablar por WhatsApp" (`index.astro:165`); unificación en T-23/T-24 |
+| Eventos (ancla) | **Cotizar mi evento** | `eventos.astro:21`, `index.astro` (sección CTA) |
+| Eventos (WhatsApp) | **Cotizar por WhatsApp** | `eventos.astro:70`, `index.astro` (CTA acción) |
 | PDF | **Descargar menú PDF** | `menu.astro:66` (hoy da 404, P-18) |
 | Mapa | **Cómo llegar** | `index.astro:55`; links "Google Maps" y "Waze" en `contacto.astro:34-35` |
-| Formulario eventos | **Enviar solicitud** | `eventos.astro:70` (abre WhatsApp; no confirma asistencia) |
+| Formulario eventos | **Solicitar cotización por WhatsApp** | `eventos.astro:70` (abre WhatsApp; no confirma asistencia) |
 
 Prohibidos: "Enviar" a secas, "Click aquí", "Confirmar reserva" (no confirma nada, T-24), "Más información" (vago).
 

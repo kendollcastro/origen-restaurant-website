@@ -70,9 +70,9 @@ const tipos = [
       <div class="field"><label for="e-d">Fecha</label><input id="e-d" name="fecha" type="date" required /></div>
       <div class="field"><label for="e-e">Correo</label><input id="e-e" name="correo" type="email" autocomplete="email" /></div>
       <div class="field full"><label for="e-m">Detalles</label><textarea id="e-m" name="detalles" rows="4"></textarea></div>
-      <button type="submit" class="btn btn-primary full" style="height: 54px;">Enviar solicitud</button>
+      <button type="submit" class="btn btn-primary full" style="height: 54px;">Solicitar cotización por WhatsApp</button>
       <noscript class="full">
-        <p class="dim">Sin JavaScript no enviamos la solicitud: <a href={waHref}>escríbenos por WhatsApp</a> con el tipo de evento, la fecha y el número de invitados.</p>
+        <p class="dim">Sin JavaScript, ingresa al menos WhatsApp o correo y <a href={waHref}>envía la cotización por WhatsApp</a> con el tipo de evento, la fecha y el número de invitados.</p>
       </noscript>
     </form>
   </section>
@@ -93,14 +93,23 @@ const tipos = [
   if (date) date.min = hoyEnCR();
   const form = document.getElementById('event-form') as HTMLFormElement | null;
   form?.addEventListener('submit', (e) => {
-    e.preventDefault();
     const d = new FormData(form);
+    const tel = String(d.get('tel') || '').trim();
+    const correo = String(d.get('correo') || '').trim();
+    if (tel === '' && correo === '') {
+      e.preventDefault();
+      alert('Ingresa al menos un canal de contacto: WhatsApp o correo.');
+      return;
+    }
+    e.preventDefault();
     const msg = [
       'Hola Origen, quisiera cotizar un evento:',
       `• Nombre: ${d.get('nombre')}`,
       `• Tipo: ${d.get('tipo')}`,
       `• Invitados: ${d.get('invitados')}`,
       `• Fecha: ${d.get('fecha')}`,
+      tel ? `• WhatsApp: ${tel}` : '',
+      correo ? `• Correo: ${correo}` : '',
       d.get('detalles') ? `• Detalles: ${d.get('detalles')}` : '',
     ].filter(Boolean).join('\n');
     window.open(`https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');

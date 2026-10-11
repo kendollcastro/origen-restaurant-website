@@ -27,8 +27,14 @@ const waHref = waLink('Hola Origen, quisiera reservar una mesa.');
     <label for={`${id}-h`}>Hora</label>
     <input id={`${id}-h`} name="hora" type="time" value="19:00" min="11:00" max="21:30" required />
   </div>
+  {variant !== 'card' && (
+    <div class="field">
+      <label for={`${id}-n`}>Nombre</label>
+      <input id={`${id}-n`} name="nombre" type="text" autocomplete="name" required />
+    </div>
+  )}
   <button type="submit" class={`btn btn-primary ${variant === 'card' ? 'full' : ''}`} style="height: 50px;">
-    {variant === 'card' ? 'Reservar por WhatsApp' : 'Confirmar reserva'}
+    Reservar por WhatsApp
   </button>
   <noscript class="full">
     <p class="dim">Sin JavaScript no enviamos el formulario: <a href={waHref}>escríbenos por WhatsApp</a> indicando personas, fecha y hora.</p>
