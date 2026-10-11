@@ -334,6 +334,6 @@ Una fase se cierra cuando **todas** sus casillas están `[x]`, el gate global pa
 | F4 | 🟡 2/6 (T-33, T-34) | `refactor:` 36a96e0 · `test:` 711aa33 | T-29…T-32 bloqueadas (P-01…P-06, P-12, P-13); `docs/QA-REPORT.md` + `seo.spec.ts` (206 tests); PDF 404 = P-18 |
 | F5 | 🟡 1/5 (T-35) | `feat:` b085221 | T-36 bloqueada por P-22; `/en/` provisional con `noindex` y fuera del sitemap; **244 tests** |
 | F6 | 🟡 3/5 (T-40, T-42, T-44) | `feat(seo):` 80a11e9 · `fix:` 8379db0 · `docs:` 9cc329c | JSON-LD validado local (11/11); contenido extraíble verificado; revisión GEO en `QA-REPORT.md`; Rich Results/dominio pendientes (P-01) |
-| F7 | 🟡 4/10 (T-45…T-48) | `feat:` 888a662 · `docs:` 13c3acd, ca840ba · `ci:` 1cd25f9 | Batería QA (10 criterios) + **Lighthouse CI** verde + `PREDEPLOY-CHECKLIST.md` (75 casillas: 25 ✅, 50 ⏳ P-xx/T-xx) | ⚠️ T-52/T-53 requieren aprobación explícita |
+| F7 | 🟡 5/10 (T-45…T-48, T-50) | `feat:` 888a662 · `docs:` 13c3acd, ca840ba, 2818cdb · `ci:` 1cd25f9 | Batería QA + **Lighthouse CI** verde + `PREDEPLOY-CHECKLIST.md` + QA de copy (tuteo/CTAs/alt OK; `0000`→P-03, `ph-label`→T-31) | ⚠️ T-52/T-53 requieren aprobación explícita |
 
 > **Recordatorio operativo**: antes de `git push`, cualquier deploy o cambio de DNS → **avisar al usuario y esperar confirmación**.
