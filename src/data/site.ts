@@ -5,7 +5,7 @@ export const site = {
   fullName: 'Origen. Mar, tierra y fuego',
   tagline: 'Mar · Tierra · Fuego',
   description:
-    'Restaurante de mariscos y parrilla en Jacó, Costa Rica. Mariscos frescos del Pacífico, cortes a la parrilla y coctelería, de 11 am a 10 pm.',
+    'Restaurante Origen: mariscos y parrilla en Jacó, Costa Rica. Mariscos frescos del Pacífico, cortes a la parrilla y coctelería de autor.',
   url: 'https://www.origenjaco.com', // TODO: dominio real
   address: {
     street: '[Dirección exacta]', // TODO
