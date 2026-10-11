@@ -331,7 +331,7 @@ Una fase se cierra cuando **todas** sus casillas están `[x]`, el gate global pa
 | F1 | 🟡 12/13 (T-01…T-05, T-07…T-13) | `chore:` 307e795 · `build:` 13932ba · `refactor:` fbd28ab · `docs:` 9c024fa, d60a22b, 233979a, d1fc6f5, b63926a, e1dc4a4, 2c74707, 2d34878, 6bdaa18 · `ci:` fc557e8, 5204338 · `test:` 3ad4285 · `fix(a11y):` 5cf11c2 · `feat(nav):` 3477013 · `fix:` 05842a1 · `feat:` b31cc9b | **T-06 bloqueada por P-01** (único pendiente de F1); gate **VERDE (0)** desde T-17; baseline **99,6/100/100/100**; **160 tests** |
 | F2 | 🟡 4/11 (T-15…T-17, T-24) | `fix(seo):` c5014eb · `refactor:` 65dc9a0 · `fix:` cd5db8a · `fix(ux):` af9a81c | **T-14, T-18…T-23 bloqueadas por datos del cliente** (P-01…P-15, P-20); gate VERDE (0); 160 tests |
 | F3 | 🟡 1/4 (T-25) | `feat:` bd19946 | `docs/SHOTLIST.md` (31 filas, héroe eager/prioritario); T-26/T-27/T-28 bloqueadas por P-16…P-18 |
-| F4 | ⬜ no iniciada | — | Bloqueada por P-01…P-06, P-12, P-13 |
+| F4 | 🟡 1/6 (T-33) | `refactor:` 36a96e0 | T-29…T-32 bloqueadas (P-01…P-06, P-12, P-13); redes sociales ocultas hasta dato real |
 | F5 | ⬜ no iniciada | — | Bloqueada por P-22 |
 | F6 | ⬜ no iniciada | — | — |
 | F7 | 🟡 1/10 (T-45) | `feat:` 888a662 | 404 sirve con **status real 404** en `preview`; reduced-motion completo; JS 0 B · imágenes 246 B | ⚠️ T-52/T-53 requieren aprobación explícita |
