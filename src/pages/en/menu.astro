@@ -1,0 +1,43 @@
+---
+// TODO: traducción aprobada (P-22) — T-36 sustituye títulos de platos y descripciones.
+// Estructura reutilizada de /menu/ (ES): el catálogo de platos vive en src/data/menu.ts.
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import DishList from '../../components/DishList.astro';
+import { menu } from '../../data/menu';
+import { enPages } from '../../data/i18n/pages';
+
+const p = enPages.menu;
+---
+<Base title={p.title} description={p.description} lang="en">
+  <PageHero
+    crumb={p.h1} script={p.script} title={p.h1} photo="mesa con platos variados"
+    lead={p.lead}
+  />
+
+  <nav class="cat-nav" aria-label={p.h1}>
+    <div class="container">
+      {menu.map((c) => <a href={`#${c.id}`}>{c.title}</a>)}
+    </div>
+  </nav>
+
+  <div class="container menu-cats" style="padding-block: 88px 120px;">
+    {menu.map((c) => (
+      <section id={c.id} class="stack" style="gap: 6px;" aria-labelledby={`h-${c.id}`}>
+        <span class="script" style="font-size: 24px;">{c.kicker}</span>
+        <h2 id={`h-${c.id}`} class="display" style="font-size: 46px; margin-bottom: 6px;">{c.title}</h2>
+        {c.note && <p class="dim">{c.note}</p>}
+        <DishList dishes={c.dishes} />
+      </section>
+    ))}
+  </div>
+
+  <section class="light">
+    <div class="container" style="padding-block: 80px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">
+      <div class="stack" style="flex: 1 1 520px; gap: 8px;">
+        <h2 class="display" style="font-size: 44px;">Ready to try it?</h2>
+        <a href="/en/contacto/#reservar" class="btn btn-dark">Book a table</a>
+      </div>
+    </div>
+  </section>
+</Base>

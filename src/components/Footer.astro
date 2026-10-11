@@ -1,6 +1,10 @@
 ---
-import { nav, site, telHref } from '../data/site';
+import { site, telHref } from '../data/site';
 import { isReal } from '../data/placeholders';
+import { getUi, type Lang } from '../data/i18n/ui';
+interface Props { lang?: Lang; }
+const { lang = 'es' } = Astro.props;
+const ui = getUi(lang);
 const year = new Date().getFullYear();
 const hasSocial = isReal(site.social.instagram) || isReal(site.social.facebook) || isReal(site.social.tripadvisor);
 ---
@@ -30,15 +34,15 @@ const hasSocial = isReal(site.social.instagram) || isReal(site.social.facebook) 
         )}
       </div>
       <address class="stack" style="font-style: normal; gap: 4px;">
-        <h2>Visítanos</h2>
+        <h2>{ui.footer.visit}</h2>
         <p>{isReal(site.address.street) && <>{site.address.street}<br /></>}{site.address.locality}, {site.address.county}, {site.address.region}<br />{site.address.countryName}</p>
       </address>
       <div class="stack" style="gap: 4px;">
-        <h2>Horario</h2>
+        <h2>{ui.footer.hours}</h2>
         <p>{site.hours.days}<br />{site.hours.label}</p>
       </div>
       <div class="stack" style="gap: 4px;">
-        <h2>Contacto</h2>
+        <h2>{ui.footer.contact}</h2>
         <p>
           <a href={telHref(site.phone)} style="color: var(--soft);">{site.phone}</a><br />
           <a href={`https://wa.me/${site.whatsapp}`} style="color: var(--soft);">WhatsApp</a><br />
@@ -48,8 +52,8 @@ const hasSocial = isReal(site.social.instagram) || isReal(site.social.facebook) 
     </div>
     <div class="footer-bottom">
       <span>© {year} {site.fullName} · Jacó, Costa Rica</span>
-      <nav aria-label="Pie de página">
-        {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+      <nav aria-label={ui.footerNavAria}>
+        {ui.nav.map((item) => <a href={item.href}>{item.label}</a>)}
       </nav>
     </div>
   </div>

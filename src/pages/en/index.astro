@@ -1,0 +1,45 @@
+---
+// TODO: traducción aprobada (P-22) — T-36 sustituye el cuerpo EN provisional.
+import Base from '../../layouts/Base.astro';
+import { site, waLink } from '../../data/site';
+import { enPages } from '../../data/i18n/pages';
+
+const p = enPages.index;
+const waHref = waLink('Hello Origen, I would like to book a table.');
+---
+<Base title={p.title} description={p.description} lang="en">
+  <section class="hero">
+    <div class="inner">
+      <span class="script" style="font-size: 44px;">{p.script}</span>
+      <p class="hero-title" aria-hidden="true">ORIGEN</p>
+      <hr class="rule" />
+      <h1 class="hero-sub">{p.h1}</h1>
+      <p class="lead" style="max-width: 560px;">{p.lead}</p>
+      <div class="btns" style="margin-top: 14px;">
+        <a href="/en/menu/" class="btn btn-ghost">See the menu</a>
+        <a href={waHref} class="btn btn-primary" target="_blank" rel="noopener">Book on WhatsApp</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="light">
+    <div class="container section row">
+      <div class="center" style="gap: 16px; text-align: center;">
+        <h2 class="caps">Sea, land and fire</h2>
+        <hr class="rule" />
+        <p class="lead" style="max-width: 470px;">
+          Pacific seafood, Costa Rican produce and the fire of the grill. Chef {site.chef} leads the kitchen.
+        </p>
+        <a href="/en/nosotros/" class="link-caps">Our story</a>
+      </div>
+      <div class="center" style="gap: 10px;">
+        <span class="script" style="font-size: 24px;">Find us</span>
+        <h2 class="display" style="font-size: 40px;">Location</h2>
+        <p class="lead">
+          {site.address.locality}, {site.address.county}, {site.address.region}
+        </p>
+        <a href="/en/contacto/" class="link-caps">How to get here</a>
+      </div>
+    </div>
+  </section>
+</Base>

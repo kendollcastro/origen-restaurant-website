@@ -1,0 +1,41 @@
+---
+// TODO: traducción aprobada (P-22) — T-36 sustituye el cuerpo EN provisional.
+// El formulario reutiliza ReserveForm (textos ES) hasta T-37; el cuerpo ES queda como marcado.
+import Base from '../../layouts/Base.astro';
+import ReserveForm from '../../components/ReserveForm.astro';
+import { site, telHref } from '../../data/site';
+import { isReal } from '../../data/placeholders';
+import { enPages } from '../../data/i18n/pages';
+
+const p = enPages.contacto;
+---
+<Base title={p.title} description={p.description} lang="en">
+  <section class="container stack" style="padding-block: 88px 40px; gap: 12px;">
+    <span class="script" style="font-size: 40px;">{p.script}</span>
+    <h1 class="display" style="font-size: clamp(44px, 6vw, 72px);">{p.h1}</h1>
+  </section>
+
+  <section id="reservar" class="container row" style="padding-bottom: 100px; align-items: flex-start; gap: 48px; scroll-margin-top: 24px;">
+    <div class="stack" style="flex: 1 1 380px; gap: 28px;">
+      <address class="stack" style="font-style: normal; gap: 4px;">
+        <h2 class="label">Address</h2>
+        <p style="font-size: 18px;">{site.fullName}<br />{isReal(site.address.street) && <>{site.address.street}<br /></>}{site.address.locality}, {site.address.county}, {site.address.region}, {site.address.countryName}</p>
+      </address>
+      <div class="stack" style="gap: 4px;">
+        <h2 class="label">Hours</h2>
+        <p style="font-size: 18px;">{site.hours.days}<br />{site.hours.label}</p>
+      </div>
+      <div class="stack" style="gap: 4px;">
+        <h2 class="label">Contact</h2>
+        <p style="font-size: 18px;">
+          <a href={telHref(site.phone)}>{site.phone}</a><br />
+          <a href={`https://wa.me/${site.whatsapp}`}>WhatsApp</a><br />
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </p>
+      </div>
+    </div>
+    <div style="flex: 1 1 520px;">
+      <ReserveForm variant="card" id="c" />
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,23 @@
+---
+// TODO: traducción aprobada (P-22) — T-36 sustituye el cuerpo EN provisional.
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import { site } from '../../data/site';
+import { enPages } from '../../data/i18n/pages';
+
+const p = enPages.nosotros;
+---
+<Base title={p.title} description={p.description} lang="en">
+  <PageHero crumb={p.h1} script={p.script} title={p.h1} photo="equipo en la cocina" lead={p.lead} />
+
+  <section class="light">
+    <div class="container section stack" style="gap: 18px; max-width: 820px;">
+      <p class="lead">Origen opened in the space where Hicaco Plaza Jacó once stood, with the same kitchen and front-of-house team, the same quality and the same service, with a renewed proposal.</p>
+      <p class="lead">Chef {site.chef} leads the kitchen. Sea, land and fire: Pacific seafood, Costa Rican produce and the grill as the protagonist.</p>
+      <div class="btns" style="margin-top: 12px;">
+        <a href="/en/menu/" class="btn btn-primary">See the menu</a>
+        <a href="/en/contacto/#reservar" class="btn btn-ghost">Book a table</a>
+      </div>
+    </div>
+  </section>
+</Base>

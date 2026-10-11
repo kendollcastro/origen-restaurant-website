@@ -4,16 +4,23 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
 import { isReal } from '../data/placeholders';
+import { getUi, type Lang } from '../data/i18n/ui';
 
 interface Props {
   title: string;
   description?: string;
   image?: string;
   schema?: object | object[]; // JSON-LD extra por página
+  lang?: Lang; // idioma de la página: es (default) | en
 }
 
-const { title, description = site.description, image = '/og-image.jpg', schema } = Astro.props;
+const { title, description = site.description, image = '/og-image.jpg', schema, lang = 'es' } = Astro.props;
+const ui = getUi(lang);
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const ogLocale = lang === 'en' ? 'en_US' : 'es_CR';
+// Las páginas /en/ aún no están traducidas ni aprobadas (P-22 → T-36). No indexar
+// hasta go-live: T-38 emitirá hreflang/indexación, y el sitemap las excluye (astro.config.mjs).
+const robotsNoIndex = lang === 'en';
 const ogImage = new URL(image, Astro.site ?? site.url).href;
 
 // JSON-LD base del restaurante (va en todas las páginas).
@@ -56,12 +63,13 @@ const restaurant = {
 const ld = [restaurant, ...(schema ? (Array.isArray(schema) ? schema : [schema]) : [])];
 ---
 <!doctype html>
-<html lang="es">
+<html lang={lang}>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  {robotsNoIndex && <meta name="robots" content="noindex, nofollow" />}
   <link rel="canonical" href={canonical} />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <!-- Cuando exista la versión en inglés (/en/...), activar: -->
@@ -75,7 +83,7 @@ const ld = [restaurant, ...(schema ? (Array.isArray(schema) ? schema : [schema])
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
   <meta property="og:image" content={ogImage} />
-  <meta property="og:locale" content="es_CR" />
+  <meta property="og:locale" content={ogLocale} />
   <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -85,11 +93,11 @@ const ld = [restaurant, ...(schema ? (Array.isArray(schema) ? schema : [schema])
   <script type="application/ld+json" set:html={JSON.stringify(ld)} />
 </head>
 <body>
-  <a href="#contenido" class="sr-only skip-link">Saltar al contenido</a>
-  <Header />
+  <a href="#contenido" class="sr-only skip-link">{ui.skipLink}</a>
+  <Header lang={lang} />
   <main id="contenido" tabindex="-1">
     <slot />
   </main>
-  <Footer />
+  <Footer lang={lang} />
 </body>
 </html>

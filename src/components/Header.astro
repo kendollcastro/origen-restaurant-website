@@ -1,31 +1,49 @@
 ---
-import { nav, site } from '../data/site';
+import { site } from '../data/site';
+import { getUi, type Lang } from '../data/i18n/ui';
+import { equivalentPath } from '../data/i18n/routes';
+interface Props { lang?: Lang; }
+const { lang = 'es' } = Astro.props;
+const ui = getUi(lang);
 const path = Astro.url.pathname.replace(/\/?$/, '/');
 const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const logoHref = lang === 'en' ? '/en/' : '/';
+const reserveHref = `${equivalentPath('/contacto/', lang)}#reservar`;
+const langLinks = {
+  es: {
+    href: lang === 'es' ? path : equivalentPath(path, 'es'),
+    current: lang === 'es',
+    label: lang === 'es' ? undefined : ui.switchToEs,
+  },
+  en: {
+    href: lang === 'en' ? path : equivalentPath(path, 'en'),
+    current: lang === 'en',
+    label: lang === 'en' ? undefined : ui.switchToEn,
+  },
+};
 ---
 <header class="site-header">
   <script is:inline>document.documentElement.classList.add('js')</script>
   <div class="container">
-    <a href="/" class="logo" aria-label={`${site.name} — inicio`}>
+    <a href={logoHref} class="logo" aria-label={ui.logoAria(site.name)}>
       <b>ORIGEN</b>
       <small>{site.tagline}</small>
     </a>
-    <nav id="main-nav" class="main-nav" aria-label="Principal">
-      {nav.map((item) => (
+    <nav id="main-nav" class="main-nav" aria-label={ui.navAria}>
+      {ui.nav.map((item) => (
         <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
       ))}
     </nav>
     <div class="header-actions">
-      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Abrir menú">
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label={ui.menuToggleOpen} data-label-open={ui.menuToggleOpen} data-label-close={ui.menuToggleClose}>
         <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
       </button>
-      <div class="lang" aria-label="Idioma">
-        <a href={path} aria-current="true" hreflang="es">ES</a>
+      <div class="lang" aria-label={ui.language}>
+        <a href={langLinks.es.href} aria-current={langLinks.es.current ? 'true' : undefined} hreflang="es" aria-label={langLinks.es.label}>ES</a>
         <span aria-hidden="true">/</span>
-        <!-- TODO: cambiar a <a href={`/en${path}`} hreflang="en"> cuando exista la versión en inglés -->
-        <span title="Próximamente" style="color: var(--muted); padding: 12px 6px;">EN</span>
+        <a href={langLinks.en.href} aria-current={langLinks.en.current ? 'true' : undefined} hreflang="en" aria-label={langLinks.en.label}>EN</a>
       </div>
-      <a href="/contacto/#reservar" class="btn btn-primary">Reservar mesa</a>
+      <a href={reserveHref} class="btn btn-primary">{ui.reserve}</a>
     </div>
   </div>
 </header>
@@ -35,11 +53,13 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
   const toggle = header?.querySelector<HTMLButtonElement>('.nav-toggle');
   const nav = header?.querySelector<HTMLElement>('#main-nav');
   if (header && toggle && nav) {
+    const labelOpen = toggle.dataset.labelOpen ?? 'Abrir menú';
+    const labelClose = toggle.dataset.labelClose ?? 'Cerrar menú';
     const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
     const setOpen = (open: boolean) => {
       header.classList.toggle('is-open', open);
       toggle.setAttribute('aria-expanded', String(open));
-      toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+      toggle.setAttribute('aria-label', open ? labelClose : labelOpen);
     };
     toggle.addEventListener('click', () => setOpen(!isOpen()));
     nav.addEventListener('click', (e) => {
