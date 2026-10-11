@@ -332,7 +332,7 @@ Una fase se cierra cuando **todas** sus casillas están `[x]`, el gate global pa
 | F2 | 🟡 4/11 (T-15…T-17, T-24) | `fix(seo):` c5014eb · `refactor:` 65dc9a0 · `fix:` cd5db8a · `fix(ux):` af9a81c | **T-14, T-18…T-23 bloqueadas por datos del cliente** (P-01…P-15, P-20); gate VERDE (0); 160 tests |
 | F3 | 🟡 1/4 (T-25) | `feat:` bd19946 | `docs/SHOTLIST.md` (31 filas, héroe eager/prioritario); T-26/T-27/T-28 bloqueadas por P-16…P-18 |
 | F4 | 🟡 2/6 (T-33, T-34) | `refactor:` 36a96e0 · `test:` 711aa33 | T-29…T-32 bloqueadas (P-01…P-06, P-12, P-13); `docs/QA-REPORT.md` + `seo.spec.ts` (206 tests); PDF 404 = P-18 |
-| F5 | ⬜ no iniciada | — | Bloqueada por P-22 |
+| F5 | 🟡 1/5 (T-35) | `feat:` b085221 | T-36 bloqueada por P-22; `/en/` provisional con `noindex` y fuera del sitemap; **244 tests** |
 | F6 | ⬜ no iniciada | — | — |
 | F7 | 🟡 1/10 (T-45) | `feat:` 888a662 | 404 sirve con **status real 404** en `preview`; reduced-motion completo; JS 0 B · imágenes 246 B | ⚠️ T-52/T-53 requieren aprobación explícita |
 
