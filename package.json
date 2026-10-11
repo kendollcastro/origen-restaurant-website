@@ -11,11 +11,11 @@
     "gate": "node scripts/check-placeholders.mjs"
   },
   "engines": {
-    "node": ">=20 <24"
+    "node": ">=22.12 <24"
   },
   "dependencies": {
-    "@astrojs/sitemap": "^3.3.0",
-    "astro": "^5.7.0"
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.3.8"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
