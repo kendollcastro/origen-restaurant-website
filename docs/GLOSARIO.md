@@ -142,11 +142,11 @@ Auditoría grep en `src/**`. No se refactoriza aquí (T-16/T-23/T-24 harán la m
 | `ReserveForm.astro:6,56` · `eventos.astro:7,96` · `index.astro:30,165` | Mensajes `Hola Origen, …` | Constantes junto a `waLink` en `site.ts` |
 | `astro.config.mjs:5` | `site: 'https://www.origenjaco.com'` | Dominio real (T-06, bloqueado por P-01; hoy 3 copias del dominio) |
 
-### Inconsistencias de CTA detectadas (resuélvelas T-23/T-24, fuera de alcance de T-12)
+### Inconsistencias de CTA (resueltas en T-24)
 
-- `index.astro:164` dice **"Cotizar evento"** vs. `eventos.astro:21` **"Cotizar mi evento"**.
-- `index.astro:165` dice **"Hablar por WhatsApp"**; el canónico del plan es **"Cotizar por WhatsApp"**.
-- `ReserveForm.astro:31` (variante bar) dice **"Confirmar reserva"** aunque solo abre WhatsApp.
+- ~~`index.astro:164` "Cotizar evento" vs `eventos.astro:21` "Cotizar mi evento"~~ → todo el sitio usa **"Cotizar mi evento"** (T-24).
+- ~~`index.astro:165` "Hablar por WhatsApp"~~ → canónico **"Cotizar por WhatsApp"** (T-24).
+- ~~`ReserveForm.astro:31` "Confirmar reserva"~~ → ahora **"Reservar por WhatsApp"** en ambas variantes (T-24).
 
 ---
 
