@@ -143,7 +143,7 @@ Tras cada tarea: gate (§2.4) + `git commit` convencional + marcar la casilla en
 - [ ] **T-21** · **F2** · **@copywriter** — FAQ: sin corchetes, formas de pago y política del 10% de servicio con el dato real, respuestas citables ≤40 palabras · **archivos:** `src/data/faq.ts` · **CA:** 0 placeholders; respuestas válidas para `FAQPage`; teléfono/dirección derivados de `site.ts` · **est:** 1,5 h · **bloqueo:** P-10
 - [ ] **T-22** · **F2** · **@copywriter** — `/nosotros/`: bio de la chef (3–4 frases), cita literal ≤25 palabras, anécdota/visión de dueños y matiz "mismo equipo, propuesta renovada" · **archivos:** `src/pages/nosotros.astro:16-31` · **CA:** 0 corchetes; cita textual; H1/H2 intactos; párrafo con Hicaco factual · **est:** 2,5 h · **bloqueo:** P-14, P-15
 - [ ] **T-23** · **F2** · **@copywriter** — `/eventos/`: los 4 tipos con beneficios concretos, menús de grupo y decoración/pastel resueltos, CTAs unificados ("Cotizar mi evento" → "Cotizar por WhatsApp") · **archivos:** `src/pages/eventos.astro:7-21,41,55,69` · **CA:** sin `[confirmar]` ni stats `[ ]`; botón y H2 dicen lo mismo; copy operable por tour operators · **est:** 1,5 h · **bloqueo:** P-09
-- [ ] **T-24** · **F2** · **@ux-designer** — CTAs y labels coherentes: un CTA primario por sección, labels que describen el resultado real (evitar "Confirmar reserva" que no confirma), nombre en ambas variantes del formulario y canal de contacto obligatorio en la cotización de eventos · **archivos:** `src/components/{Header,ReserveForm}.astro`, `src/pages/{index,eventos,menu}.astro` · **CA:** ningún botón promete algo que no hace; la cotización no se envía sin WhatsApp o correo; revisión completa en las 5 páginas · **est:** 3 h
+- [x] **T-24** · **F2** · **@ux-designer** — CTAs y labels coherentes: un CTA primario por sección, labels que describen el resultado real (evitar "Confirmar reserva" que no confirma), nombre en ambas variantes del formulario y canal de contacto obligatorio en la cotización de eventos · **archivos:** `src/components/{Header,ReserveForm}.astro`, `src/pages/{index,eventos,menu}.astro` · **CA:** ningún botón promete algo que no hace; la cotización no se envía sin WhatsApp o correo; revisión completa en las 5 páginas · **est:** 3 h
 
 ### F3 — Medios: fotos, og-image, PDF (≈8 h)
 
@@ -329,7 +329,7 @@ Una fase se cierra cuando **todas** sus casillas están `[x]`, el gate global pa
 | Fase | Estado | Commits | Notas |
 |---|---|---|---|
 | F1 | 🟡 12/13 (T-01…T-05, T-07…T-13) | `chore:` 307e795 · `build:` 13932ba · `refactor:` fbd28ab · `docs:` 9c024fa, d60a22b, 233979a, d1fc6f5, b63926a, e1dc4a4, 2c74707, 2d34878, 6bdaa18 · `ci:` fc557e8, 5204338 · `test:` 3ad4285 · `fix(a11y):` 5cf11c2 · `feat(nav):` 3477013 · `fix:` 05842a1 · `feat:` b31cc9b | **T-06 bloqueada por P-01** (único pendiente de F1); gate **VERDE (0)** desde T-17; baseline **99,6/100/100/100**; **160 tests** |
-| F2 | 🟡 3/11 (T-15…T-17) | `fix(seo):` c5014eb · `refactor:` 65dc9a0 · `fix:` cd5db8a | **T-14 bloqueada por P-20**; **gate VERDE (0)** desde T-17 (secciones y JSON-LD sin datos reales se omiten); 160 tests |
+| F2 | 🟡 4/11 (T-15…T-17, T-24) | `fix(seo):` c5014eb · `refactor:` 65dc9a0 · `fix:` cd5db8a · `fix(ux):` af9a81c | **T-14, T-18…T-23 bloqueadas por datos del cliente** (P-01…P-15, P-20); gate VERDE (0); 160 tests |
 | F3 | ⬜ no iniciada | — | Bloqueada por P-16…P-18 |
 | F4 | ⬜ no iniciada | — | Bloqueada por P-01…P-06, P-12, P-13 |
 | F5 | ⬜ no iniciada | — | Bloqueada por P-22 |
