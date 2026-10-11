@@ -325,3 +325,111 @@ El CA «10 criterios globales en verde» queda **NO cerrado** por dependencias e
   **reutiliza** y podría dar falsos verdes/rojos; este run partió de puerto libre.
 - **Temporales eliminados:** los scripts de auditoría usados (`t46-*.mjs`) se borraron; sólo queda
   `evidencia/` (capturas, sin trackear) y `playwright-report/`/`test-results/` (en `.gitignore`).
+
+---
+
+# QA de copy (T-50 · F7)
+
+> **Tarea:** T-50 · F7 · @copywriter + @qc
+> **Fecha:** **2026-10-11**
+> **Fuente de voz:** `docs/GLOSARIO.md` (voz/CTA/términos canónicos).
+> **Alcance:** copy visible de las 5 páginas ES + `404.astro` y el chrome
+> (`Header`, `Footer`, `ReserveForm`, `DishList`, `PageHero`) + `src/data/{site,menu,faq}.ts`.
+> Greps de control sobre `dist/` **ES**. `/en/` (provisional, P-22) y `dist/404.html` heredado quedan **fuera**.
+> **Sin cambios en `src/data/**`, `docs/PLAN.md`, `.github/**`, `scripts/**`, `astro.config.mjs`.**
+> **Ediciones de copy aplicadas:** **ninguna** — todas las desviaciones (§T50.2) son ⚠️ y están acopladas
+> a tareas ya planificadas (T-14/P-20, T-26, dato de cliente); aplicar un fix suelto chocaría con ellas.
+
+## T50.1 Checklist firmada (CA «QA de copy»)
+
+| # | Ítem del CA | Estado | Evidencia |
+|---|---|---|---|
+| 1 | Tuteo consistente (ES, sin usted/«estimado»/«le esperamos») | ✅ | 0 coincidencias de no-tuteo en 6 páginas ES + chrome |
+| 2 | Glosario de términos (Origen, Mar · Tierra · Fuego, mariscos y parrilla, a la parrilla, Jacó, Costa Rica…) | ✅ | §T50.2 · 0 usos prohibidos (grill/BBQ/parrillada/crudo) |
+| 3 | CTAs que nombran la acción y el canal (GLOSARIO §3) | ✅ | §T50.3 · 0 «Enviar»/«Click aquí»/«Más información»/«Confirmar reserva» |
+| 4 | Títulos con datos reales (sin `[placeholder]`) | ✅ | 6/6 `<title>` ES con datos reales; longitudes → T-14/P-20 |
+| 5 | `alt` en toda foto; vacío solo si decorativa justificada | ✅ hoy (⏳ T-26) | §T50.4 · 0 `<img>` en `dist/` ES; `alt`/fallback `label` listos |
+| 6 | Grep CA: `\[`, `TODO`, `0000`, `ph-label` sin resultados **en contenido renderizado** | ⏳ P-03/T-31 | §T50.5 (solo teléfono y mapa por dato pendiente) |
+| 7 | Checklist firmada | ✅ | este documento, §T50.1–§T50.7 |
+
+## T50.2 Desviaciones de voz/glosario (archivo:línea)
+
+**Ninguna desviación bloqueante de tuteo, tono ni término.** El copy ES es consistente con GLOSARIO §1–§3.
+Hallazgos ⚠️ (no corregidos por acoplamiento, con fix propuesto):
+
+| # | Ubicación | Desviación | Fix propuesto | Aplicado |
+|---|---|---|---|---|
+| D1 | `src/pages/menu.astro:33` | Meta description cierra «Precios con **IVA**.» ≠ fórmula única «Precios con **IVA incluido**» (GLOSARIO §3, línea 69) | «IVA» → «IVA incluido» | ❌ diferido a **T-14/P-20** (alarga la description 163→172, ya en reescritura) |
+| D2 | `src/pages/nosotros.astro:15,23` | «Origen abrió en … **octubre de 2026**»: fecha de apertura **no confirmada** (GLOSARIO §5, línea 126) | Confirmar fecha con cliente; mientras, redacción sin fecha | ❌ requiere dato del cliente (T-22/P-xx) |
+| D3 | `src/pages/index.astro:81,145,146` | `<Photo>` **sin `alt`** y `label` de andamiaje («plato insignia», «plato destacado», «detalle»); hoy sin `src` no emite `<img>`, pero T-26 los publicaría como `alt` | `alt` real por toma (SHOTLIST) o `alt=""` si decorativa | ❌ diferido a **T-26** |
+| D4 | `src/pages/index.astro:102` | Tarjetas Mar/Tierra/Fuego: GLOSARIO §7 las marca **decorativas** (`alt=""`, el texto visible ya nombra el plato); hoy heredan `label` | `alt=""` explícito | ❌ diferido a **T-26/T-42** |
+
+**Hallazgo de higiene de docs (no editable por T-50):** el bloque «Inconsistencias de CTA detectadas»
+de `GLOSARIO §5` (líneas 145-149) ya está **resuelto en el código** y quedó obsoleto:
+`index.astro:181` ya dice «Cotizar mi evento», `index.astro:182` «Cotizar por WhatsApp` y
+`ReserveForm.astro:37` «Reservar por WhatsApp» (ya no «Confirmar reserva»).
+
+## T50.3 Auditoría de CTAs (`btn-primary` / `btn-ghost` / `btn-dark` / `link-caps`)
+
+Todos los controles usan el **verbo de la acción** del glosario §3. Prohibidos («Enviar» a secas,
+«Click aquí», «Más información», «Confirmar reserva») → **0** en ES (solo aparecen «grill»/*
+en `/en/`, provisional P-22).
+
+| Ubicación | Texto | Canónico §3 | Estado |
+|---|---|---|---|
+| `Header.astro:46` (`ui.reserve`) | Reservar mesa | Reservar mesa | ✅ |
+| `menu.astro:66` · `nosotros.astro:82` | Reservar mesa | Reservar mesa | ✅ |
+| `index.astro:36` · `ReserveForm.astro:37` | Reservar por WhatsApp | Reservar por WhatsApp | ✅ |
+| `index.astro:35` · `nosotros.astro:81` · `404.astro:17` | Ver el menú | Ver el menú | ✅ |
+| `index.astro:140` | Ver menú completo | variante admitida | ✅ |
+| `index.astro:181` · `eventos.astro:23` | Cotizar mi evento | Cotizar mi evento | ✅ |
+| `index.astro:182` | Cotizar por WhatsApp | Cotizar por WhatsApp | ✅ |
+| `eventos.astro:73` | Solicitar cotización por WhatsApp | Solicitar cotización por WhatsApp | ✅ |
+| `menu.astro:67` | Descargar menú PDF | Descargar menú PDF | ✅ |
+| `index.astro:64` | Cómo llegar | Cómo llegar | ✅ |
+| `contacto.astro:40-41` | Google Maps / Waze | Maps/Waze | ✅ |
+| `index.astro:159` | Síguenos en Instagram | acción + canal | ✅ |
+| `404.astro:16` | Volver al inicio | acción | ✅ |
+
+## T50.4 Estado de `alt`
+
+- **`<img>` en `dist/` ES: 0** (`grep -o '<img'` → 0 en las 6 rutas). Hoy las fotos son bloques CSS; el
+  CA «todo `alt` no vacío» se cumple de forma vacua y queda **listo** para T-26.
+- `Photo.astro:18` garantiza `alt = alt ?? label` (T-42): ninguna futura `<img>` saldría sin texto.
+- **`alt` concretos y correctos** (8–12 palabras, voz de marca §7): `index.astro:27,56,79,147,170(×5),175`,
+  `nosotros.astro:27,32,56`, `eventos.astro:31` (×4) — todos describen la escena sin superlativos ni relleno.
+- **Pendiente T-26:** `index.astro:81,145,146` (fallback `label` de andamiaje) y `index.astro:102`
+  (decorativas → `alt=""`). Ver D3/D4.
+- `index.astro:212` (`<img>` de aliados) usa `alt={p.name}`, pero solo se emite si `partners.length > 0` (hoy 0, P-13).
+
+## T50.5 Greps del CA (contenido renderizado, `dist/` ES)
+
+| Grep | Criterio | Resultado (6 rutas ES) | Estado | Dependencia |
+|---|---|---|---|---|
+| `\[[^\]]+\]` | 0 placeholders (texto visible + JSON-LD) | **0** (gate `TOTAL: 0`) | ✅ | — |
+| `TODO` | 0 en contenido renderizado | **0** (solo comentarios HTML de código: hreflang y P-09) | ✅ | — |
+| `0000` | solo el teléfono placeholder | 70 (solo `site.phone`) — index 18 · contacto 20 · eventos 14 · menu 6 · nosotros 6 · 404 6 | ⏳ **P-03** | P-03 → T-18 |
+| `ph-label` | solo el bloque del mapa | **1** (`dist/contacto/index.html` §`#mapa`) | ⏳ **T-31** | P-05 → T-31 |
+
+> Nota metodológica: un `grep '['` **crudo** sí devuelve coincidencias, pero **todas** son sintaxis de
+> código/JSON-LD (`[role="tab"]`, `[type="date"]`, arrays `["Mariscos",…]`), **no** placeholders de copy.
+> El CA «0 `\[`» se interpreta como **0 tokens `[….]` de placeholder**, que es lo que mide el gate.
+
+## T50.6 Puerta de verificación (T-50)
+
+| Paso | Comando | Resultado | Exit |
+|---|---|---|---|
+| Typecheck | `npm run check` | **0 errors · 0 warnings · 1 hint** (preexistente `check-placeholders.mjs:107`) · 36 archivos | `0` |
+| Build | `npm run build` | **11 page(s) built** | `0` |
+| Gate | `npm run gate` | **TOTAL: 0 bloqueantes**; avisos TODO × 0 · ph-label × 1 · 0000 × 116 | `0` |
+| E2E | `npx playwright test` | **244 passed (50.8s)** · chromium + Pixel 5 | `0` |
+
+## T50.7 Hallazgos
+
+- **0 defectos de copy** que bloqueen: tuteo, tono y CTAs son consistentes con GLOSARIO §2–§3.
+- **4 desviaciones ⚠️** (§T50.2 D1–D4), todas diferidas a tareas ya planificadas; **ninguna editable
+  sin colisionar** con T-14/P-20 (longitud de descriptions) ni T-26 (alt/loading).
+- El **CA de greps** queda **✅ para `\[` y `TODO`** y **⏳ P-03 (`0000`) / T-31 (`ph-label`)**: ambos son
+  datos pendientes del cliente, no defectos de copy (coincide con la tabulación de T-46 §T46.6).
+- **Docs-higiene:** el bloque «Inconsistencias de CTA» de `GLOSARIO §5` está obsoleto (ya corregido en
+  código por T-23/T-24); anotarlo para la próxima revisión del glosario (fuera del alcance editable de T-50).
