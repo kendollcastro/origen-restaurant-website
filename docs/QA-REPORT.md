@@ -84,3 +84,118 @@ Rica, email, horario, capacidad, Maps/Waze, y omisión correcta de `streetAddres
 2. **P-18:** retirar `/menu-origen.pdf` de `KNOWN_PENDING_LOCAL_LINKS` cuando el PDF responda 200.
 3. **P-06 (T-29/T-30):** crear/verificar la ficha y ejecutar la comparación **literal** con `site.ts`
    (columna *Ficha Google* de §3) — acción externa al repo, hoy **pendiente y no simulada**.
+
+---
+
+# GEO / contenido estático
+
+> **Tarea:** T-44 · F6 · @devops + @qa-tester
+> **última revisión GEO:** **2026-10-11**
+> **Alcance:** auditoría de evidencia sobre el build real (`dist/**/*.html`): HTML estático (no
+> JS-imagen-PDF), grep de contenido clave y re-validación JSON-LD. **No se editó ninguna página.**
+
+## G.1 Comprobación de CA (estado)
+
+| # | CA | Estado | Dependencia / nota |
+|---|---|---|---|
+| 1 | Platos presentes en HTML estático (grep por nombre) | ✅ | 0 insumos |
+| 2 | Horario `11:00 am – 10:00 pm` en HTML | ✅ | P-04 (cerrado) |
+| 3 | **Sin precios inventados** (grep `₡` con dígitos = 0) | ✅ | ⏳ **precios reales P-07** (aún pendiente; política «ocultar > inventar») |
+| 4 | FAQ visible e indexable en HTML | ✅ | 0 insumos |
+| 5 | NAP (teléfono/dirección) en HTML | ✅ | ⏳ teléfono placeholder **P-03**; dirección calle **P-02** |
+| 6 | Datos críticos **no** viven en JS/imagen/PDF | ✅ | PDF sigue 404 → **P-18** (no aporta contenido al DOM) |
+| 7 | JSON-LD `JSON.parse` sin error en los 3 tipos | ✅ | 11/11 bloques OK · dominio `origenjaco.com` **P-01** en `@id`/`url` |
+| 8 | `/en/` no duplica `Menu`/`FAQPage` | ✅ | 0 insumos |
+| 9 | Gate verde | ✅ | 0 bloqueantes |
+
+## G.2 Evidencia grep (archivo:línea)
+
+**a) Platos por nombre** (texto estático en el DOM, no sólo en JSON-LD):
+
+| Plato | Evidencia |
+|---|---|
+| `Ceviche Diablo` | `dist/menu/index.html:1` (h3 `.dish-name` + JSON-LD) · `dist/index.html:3` |
+| `Perlas del Pacífico` | `dist/menu/index.html:1` · `dist/index.html:3` |
+| `Rib Eye` | `dist/menu/index.html:1` · `dist/index.html:3` |
+
+**b) Precios y horario**
+
+- **Precios inventados:** `grep -oE '₡ ?[0-9][0-9.,]*' dist` → **0 coincidencias** ✅ (política
+  «ocultar > inventar»). Las **22** apariciones de `₡` corresponden únicamente a `"priceRange":"₡₡"`
+  (símbolo genérico, **×2 por página · 11/11**), **ningún** precio numérico.
+- **Horario** `11:00 am – 10:00 pm` en las 11 páginas. Muestra: `dist/index.html:3` y `:9`,
+  `dist/menu/index.html:1`, `dist/contacto/index.html:1`, `dist/nosotros/index.html:1`,
+  `dist/eventos/index.html:1`.
+
+**c) FAQ** (visible en `/contacto/`, no sólo JSON-LD): `dist/contacto/index.html:1`
+`<h3>¿Cuál es el horario de Origen?</h3>` y `¿Qué tipo de comida sirve Origen?`,
+`¿Necesito reservar?`, `¿Tienen menú para niños?`, `¿Reciben grupos y eventos privados?`
+(5 `Question` en `FAQPage`).
+
+**d) NAP**: `dist/contacto/index.html:1` → `tel:+50600000000` y
+`Origen. Mar, tierra y fuego · Jacó, Garabito, Puntarenas, Costa Rica`
+(placeholder de teléfono **P-03**, coherente con §3).
+
+## G.3 Contenido estático vs JS (por página)
+
+- **`<script src=` (externos): 0 en 11/11 páginas** ✅ (`grep -c '<script src=' dist/**/*.html`).
+- **`<img>`: 0 en 11/11** — las fotos son `background-image` CSS (`.ph`); **ningún** dato de
+  plato/precio/horario depende de imagen o PDF.
+
+| Página | `<script>` total | ld+json | nav-toggle (`module`) | form fecha CR (`module`) | tabs (`module` + inline) | clase `js` inline |
+|---|---|---|---|---|---|---|
+| `dist/index.html` | 6 | 1 | 1 | 1 | 1 module + 1 inline | 1 |
+| `dist/contacto/index.html` | 4 | 1 | 1 | 1 | — | 1 |
+| `dist/en/contacto/index.html` | 4 | 1 | 1 | 1 | — | 1 |
+| `dist/eventos/index.html` | 4 | 1 | 1 | 1 | — | 1 |
+| `dist/en/eventos/index.html` | 3 | 1 | 1 | — | — | 1 |
+| `dist/menu/index.html` | 3 | 1 | 1 | — | — | 1 |
+| `dist/nosotros/index.html` | 3 | 1 | 1 | — | — | 1 |
+| `dist/en/index.html` | 3 | 1 | 1 | — | — | 1 |
+| `dist/en/menu/index.html` | 3 | 1 | 1 | — | — | 1 |
+| `dist/en/nosotros/index.html` | 3 | 1 | 1 | — | — | 1 |
+| `dist/404.html` | 3 | 1 | 1 | — | — | 1 |
+
+Qué hace cada `<script>`: (1) **`ld+json`** = datos structured-data (no ejecutable); (2) **`<script>`**
+inicial de 44 b `document.documentElement.classList.add('js')` = mejora progresiva; (3) **`module` nav**
+= abrir/cerrar menú móvil; (4) **`module` form** = fecha por defecto en `America/Costa_Rica`
+(ReserveForm/eventos); (5) **tabs** (home) = rol `tab`/`tabpanel`. **Ninguno transporta** el contenido
+de platos, precios, horario, FAQ ni NAP: todo eso ya está en el HTML servido.
+
+## G.4 Validación JSON-LD por `@type` (re-ejecutada sobre `dist/`)
+
+`JSON.parse` **OK: 11/11** bloques `<script type="application/ld+json">`, **0 errores**.
+
+| `@type` | Nº páginas | Dónde |
+|---|---|---|
+| `Restaurant` | 11 | 1 por página (ES + EN + 404) |
+| `Menu` | 1 | `dist/menu/index.html` (sólo ES) |
+| `FAQPage` | 1 | `dist/contacto/index.html` (sólo ES) |
+| `BreadcrumbList` | 4 | `menu`, `nosotros`, `eventos`, `contacto` (sólo ES) |
+
+`/en/*` declara **únicamente** `Restaurant` → **no duplica** `Menu`/`FAQPage` ✅.
+
+## G.5 Gate (transcripción)
+
+```
+Resumen de bloqueantes (\[[^\]]+\]): TOTAL: 0 (0 texto visible + 0 JSON-LD)
+Avisos: TODO × 0 · ph-label × 1 · 0000 × 116
+✓ gate OK — 0 placeholders bloqueantes.   (exit 0)
+```
+
+## G.6 Puerta de verificación (T-44)
+
+| Paso | Resultado |
+|---|---|
+| `npm run check` | **0 errores / 0 warnings** (1 hint preexistente en `check-placeholders.mjs`) · exit 0 |
+| `npm run build` | **11 páginas** · exit 0 |
+| `npm run gate` | **0 bloqueantes** · exit 0 |
+| `npx playwright test` | **244 passed** · exit 0 |
+
+## G.7 Hallazgos / contraejemplos al CA
+
+- **Sin contraejemplos al CA.** Contenido clave 100 % HTML estático; 0 scripts externos; JSON-LD válido.
+- **Pendientes que NO rompen el CA (por diseño):** P-07 (precios reales → hoy ocultos correctamente),
+  P-18 (PDF 404 → enlaza desde `/menu/` pero el contenido no depende de él), P-01 (dominio en
+  `@id`/`url`/canonical), P-02/P-03 (calle/teléfono placeholder). Al llegar los datos, la tarea que los
+  cargue re-valida sin cambios en estas páginas.
