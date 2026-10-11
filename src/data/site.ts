@@ -50,3 +50,5 @@ export const nav = [
 
 export const waLink = (text: string) =>
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
+
+export const telHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, '')}`;

@@ -5,7 +5,7 @@ import ReserveForm from '../components/ReserveForm.astro';
 import DishList from '../components/DishList.astro';
 import { site, waLink } from '../data/site';
 import { menu, type Category } from '../data/menu';
-import { isPlaceholder } from '../data/placeholders';
+import { isPlaceholder, isReal } from '../data/placeholders';
 
 // Datos aún no entregados por el cliente: al llegar (T-31/T-32) se llenan aquí y la sección aparece.
 const reviews: { platform: string; stars: number; quote: string; author: string }[] = [];
@@ -155,7 +155,9 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
         <span class="script" style="font-size: 26px;">Momentos en Origen</span>
         <h2 id="gal-t" class="display">Galería</h2>
       </div>
-      <a href={site.social.instagram} class="link-caps" target="_blank" rel="noopener">Síguenos en Instagram</a>
+      {isReal(site.social.instagram) && (
+        <a href={site.social.instagram} class="link-caps" target="_blank" rel="noopener">Síguenos en Instagram</a>
+      )}
     </div>
     <div class="grid" style="--min: 220px; --gap: 10px; padding: 0 10px;">
       {[

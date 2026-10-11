@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ReserveForm from '../components/ReserveForm.astro';
-import { site } from '../data/site';
+import { site, telHref } from '../data/site';
 import { faqs } from '../data/faq';
 import { isReal } from '../data/placeholders';
 
@@ -48,7 +48,8 @@ const faqSchema = publicFaqs.length
       <div class="stack" style="gap: 4px;">
         <h2 class="label">Contacto</h2>
         <p style="font-size: 18px;">
-          <a href={`https://wa.me/${site.whatsapp}`}>WhatsApp {site.phone}</a><br />
+          <a href={telHref(site.phone)}>{site.phone}</a><br />
+          <a href={`https://wa.me/${site.whatsapp}`}>WhatsApp</a><br />
           <a href={`mailto:${site.email}`}>{site.email}</a>
         </p>
       </div>
