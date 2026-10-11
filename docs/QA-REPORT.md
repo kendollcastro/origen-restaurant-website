@@ -199,3 +199,129 @@ Avisos: TODO × 0 · ph-label × 1 · 0000 × 116
   P-18 (PDF 404 → enlaza desde `/menu/` pero el contenido no depende de él), P-01 (dominio en
   `@id`/`url`/canonical), P-02/P-03 (calle/teléfono placeholder). Al llegar los datos, la tarea que los
   cargue re-valida sin cambios en estas páginas.
+
+---
+
+# Batería T-46 (F7) — Batería completa
+
+> **Tarea:** T-46 · F7 · @qa-tester
+> **Fecha de ejecución:** **2026-10-10** (reloj del entorno: `Sat Oct 10 2026`)
+> **Alcance:** `check` + `build` + gate + Playwright (chromium + Pixel 5) sobre `npm run preview`
+> (`:4321`) + axe (5 ES) + link check (crawl del spec) + validación JSON-LD (dist) + console errors.
+> **Entorno:** Node 23.7.0 (`.nvmrc` fija 22 LTS para CI; local no-LTS, ver §2.4.23).
+> **Sin cambios en `src/**`, `data/**`, `scripts/**`, `.github/**`, `astro.config.mjs`, `docs/PLAN.md`.**
+
+## T46.1 check · build · gate (transcripción)
+
+| Paso | Comando | Resultado | Exit |
+|---|---|---|---|
+| Typecheck | `npm run check` | **0 errors · 0 warnings · 1 hint** (preexistente `check-placeholders.mjs:107` `'err'` sin usar) · 36 archivos | `0` |
+| Build | `npm run build` | **11 page(s) built** (`/`, `/menu/`, `/nosotros/`, `/eventos/`, `/contacto/`, `/404.html` + 5 `/en/*`) · `sitemap-index.xml` | `0` |
+| Gate | `npm run gate` | **TOTAL: 0 bloqueantes** (0 texto visible + 0 JSON-LD) · avisos: TODO × 0 · ph-label × 1 · 0000 × 116 | `0` |
+
+```
+Resumen de bloqueantes (\[[^\]]+\]):  TOTAL: 0 (0 texto visible + 0 JSON-LD)
+Avisos: TODO × 0 · ph-label × 1 · 0000 × 116
+✓ gate OK — 0 placeholders bloqueantes.   (exit 0)
+```
+
+## T46.2 Playwright (CI-set completo)
+
+`npx playwright test` → **244 passed (36.4s)** · exit 0 · projects `chromium` + `Pixel 5` · webServer
+`npm run build && npm run preview` (`:4321`, `reuseExistingServer`).
+
+| Spec | Cubre | Estado |
+|---|---|---|
+| `smoke.spec.ts` | 200 + un `h1` visible + 0 errores de consola (×5 ES) + 404 | ✅ |
+| `a11y.spec.ts` | axe sin `serious`/`critical` (×6) + skip-link enfocable/`outline` | ✅ |
+| `nav-mobile.spec.ts` | sin scroll horizontal a 360px + nav colapsado + fallback sin JS | ✅ |
+| `nojs.spec.ts` | tabs, forms `wa.me`, `date.min` en `America/Costa_Rica` | ✅ |
+| `onpage.spec.ts` | jerarquía de headings, 1 `h1`, anclas, breadcrumbs, `og:type` | ✅ |
+| `seo.spec.ts` | NAP literal, `tel:`/`wa.me`/`mailto:`, JSON-LD, crawl de enlaces | ✅ |
+| `i18n.spec.ts` | `/en/*` `lang="en"`, `noindex`, switcher ES↔EN | ✅ |
+
+**Evidencia local (no commiteada, en `.gitignore`/sin trackear):**
+- Reporte HTML: `playwright-report/index.html`
+- JUnit: `test-results/junit.xml`
+- Capturas: `evidencia/home-desktop.png` (Desktop Chrome), `evidencia/home-pixel5.png` (Pixel 5)
+
+## T46.3 axe (5 páginas ES sobre `:4321`)
+
+Método: `@axe-core/playwright` (reglas por defecto) en `/`, `/menu/`, `/nosotros/`, `/eventos/`,
+`/contacto/`.
+
+| Métrica | Resultado |
+|---|---|
+| Violaciones `critical` | **0** |
+| Violaciones `serious` | **0** |
+| Violaciones `color-contrast` | **0** |
+| Violaciones totales (todos los impactos) | **0** |
+| `color-contrast` en `incomplete` (no computable automáticamente) | sí — texto sobre `background-image` (`.ph`) |
+
+**Nota de contraste (R-09, verificada a mano):** axe marca `color-contrast` como **`incomplete`**, no
+como violación, en el texto que se apoya en secciones `.ph` (fondo `background-color: var(--ph)`
+`#221F1B` + `background-image: repeating-linear-gradient(...)` de baja opacidad ≈3,5 %, lo que impide
+el cálculo automático). Cálculo manual del sospechoso `.script` (`color: var(--accent)` `#D9844A`,
+44 px/500) sobre `#221F1B`: luminancia relativa `L=0,318` vs `L=0,014` → **contraste ≈ 5,7:1**, que
+**supera AA (4,5:1)** incluso para texto normal. **No se detecta el fallo 2,4:1 de R-09 en el build
+actual**; hero/h1 usan `--cream` `#F2EBDD` sobre el mismo fondo oscuro (contraste muy superior). → **sin
+pendiente de contraste**; el punto queda cubierto por T-47 (Lighthouse a11y) sólo como confirmación.
+
+## T46.4 Link check (crawl del spec, sin dependencias nuevas)
+
+Se usa el crawl interno de `seo.spec.ts:285` (`page.request.get` sobre todos los `<a href>` locales de
+las 6 rutas ES) como **link check**. No se instaló `linkinator`.
+
+| Path | Status | Origen | Estado |
+|---|---|---|---|
+| `/menu-origen.pdf` | **404** | `/menu/` | ⏳ esperado **P-18 → T-28** (allowlist `KNOWN_PENDING_LOCAL_LINKS`) |
+| `og-image.jpg` | **404** | meta `og:image` (11 páginas) | ⏳ esperado **P-17** (no es un `<a>`, no entra en el crawl) |
+| resto de enlaces locales | **200** | 6 rutas | ✅ 0 rotos |
+
+Log de la corrida: `[crawl T-34] status ≠ 200: [{ "path": "/menu-origen.pdf", "status": 404, "origins": ["/menu/"] }]`.
+
+## T46.5 Validación JSON-LD (T-40, sobre `dist/`)
+
+`JSON.parse` **11/11 bloques OK · 0 errores**.
+
+| `@type` | Nº | Dónde |
+|---|---|---|
+| `Restaurant` | 11 | 1/página (5 ES + 5 EN + `404.html`) |
+| `BreadcrumbList` | 4 | `/menu/`, `/nosotros/`, `/eventos/`, `/contacto/` (sólo ES) |
+| `FAQPage` | 1 | `/contacto/` (sólo ES) |
+| `Menu` | 1 | `/menu/` (sólo ES) |
+
+`/en/*` declara sólo `Restaurant` → no duplica `Menu`/`FAQPage` ✅. Sin corchetes de placeholder en
+ninguna cadena (verificado por `seo.spec.ts` y por el gate).
+
+## T46.6 Criterios globales §2.4.22 (estado real)
+
+| # | Criterio | Estado | Evidencia / bloqueo |
+|---|---|---|---|
+| 1 | 0 placeholders `\[[^\]]+\]` en `dist/` **y** JSON-LD | ✅ | gate `TOTAL: 0` (§T46.1) |
+| 2 | 1 `h1` por página | ✅ | `onpage.spec.ts` + conteo `h1n=1` en 5 ES |
+| 3 | titles únicos **≤60** y descriptions **120–160** | ⏳ **T-14 / P-20** | títulos: `/`=68, `/menu/`=62, `/nosotros/`=48 ✅, `/eventos/`=55 ✅, `/contacto/`=77 ❌; descriptions: `/`=135 ✅, `/menu/`=163 ❌, `/nosotros/`=171 ❌, `/eventos/`=148 ✅, `/contacto/`=137 ✅ |
+| 4 | 0 enlaces internos rotos (PDF e `og-image` → 200) | ⏳ **P-18 / P-17** | sólo `/menu-origen.pdf` 404 (P-18) y `og-image.jpg` 404 (P-17); resto 200 (§T46.4) |
+| 5 | axe 0 `critical`/`serious` y 0 `color-contrast` | ✅ | 0 violaciones (§T46.3); `incomplete` sobre `.ph` con cálculo manual 5,7:1 |
+| 6 | Lighthouse perf ≥90 mobile / a11y ≥95 / SEO ≥95 | ⏳ **T-47** | LHCI **no instalado**; no se ejecuta (acordado no instalar) |
+| 7 | 0 errores de consola | ✅ | `page.on('console'/'pageerror')` = [] en 5 ES; `smoke.spec.ts` (×5 ES · 2 projects) |
+| 8 | `whatsapp` válido `^506\d{8}$` | ✅ | `seo.spec.ts:130` (`50600000000`) |
+| 9 | NAP idéntico Header/Footer/Contacto/JSON-LD | ✅ | **T-33/T-34** (§3 NAP) |
+| 10 | NAP idéntico en la **ficha de Google** | ⏳ **P-06** | ficha aún no existe; comparación externa no simulada (§3) |
+
+**Veredicto T-46:** batería técnica en **verde** (check/build/gate/Playwright/axe/JSON-LD/console).
+El CA «10 criterios globales en verde» queda **NO cerrado** por dependencias externas y de fase:
+**T-14/P-20** (titles/descriptions), **P-17/P-18** (`og-image`/PDF 404), **T-47** (Lighthouse) y
+**P-06** (ficha Google). Ninguna es un defecto de código descubierto por esta batería.
+
+## T46.7 Hallazgos
+
+- **0 defectos nuevos** en `tests/e2e/*.spec.ts` → no fue necesaria ninguna edición de specs.
+- **0 violaciones axe** incluidas `color-contrast`; el único punto es `incomplete` por fondos con
+  `background-image` (`.ph`), cubierto a mano (§T46.3).
+- **Servidores residuales:** `lsof -ti:4321` **vacío** antes y después de la corrida; el `webServer:` de
+  Playwright arrancó y detuvo su `astro preview` correctamente (no hubo `reuseExistingServer` sobre un
+  proceso previo). Nota: si en el futuro aparece un `astro preview` huérfano en `:4321`, Playwright lo
+  **reutiliza** y podría dar falsos verdes/rojos; este run partió de puerto libre.
+- **Temporales eliminados:** los scripts de auditoría usados (`t46-*.mjs`) se borraron; sólo queda
+  `evidencia/` (capturas, sin trackear) y `playwright-report/`/`test-results/` (en `.gitignore`).
