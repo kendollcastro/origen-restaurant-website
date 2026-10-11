@@ -1,5 +1,6 @@
 ---
 import { nav, site } from '../data/site';
+import { isReal } from '../data/placeholders';
 const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
@@ -21,7 +22,7 @@ const year = new Date().getFullYear();
       </div>
       <address class="stack" style="font-style: normal; gap: 4px;">
         <h2>Visítanos</h2>
-        <p>{site.address.street}<br />{site.address.locality}, {site.address.county}, {site.address.region}<br />{site.address.countryName}</p>
+        <p>{isReal(site.address.street) && <>{site.address.street}<br /></>}{site.address.locality}, {site.address.county}, {site.address.region}<br />{site.address.countryName}</p>
       </address>
       <div class="stack" style="gap: 4px;">
         <h2>Horario</h2>

@@ -3,6 +3,12 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Photo from '../components/Photo.astro';
 import { site } from '../data/site';
+import { isReal } from '../data/placeholders';
+
+// Al llegar el dato del cliente (T-22) se llena la constante y el bloque aparece (política §6).
+const duenos = ''; // anécdota o visión de los dueños
+const chefTrayectoria = ''; // trayectoria, formación y plato favorito de la chef
+const chefFrase = ''; // cita literal de la chef sobre su cocina
 ---
 <Base
   title="Nosotros · Origen Jacó — Historia, chef y equipo"
@@ -16,7 +22,7 @@ import { site } from '../data/site';
         <h2 class="display">Del antiguo Hicaco a Origen</h2>
         <p class="lead">Origen abrió en octubre de 2026 en el mismo local donde funcionó Hicaco Plaza Jacó. Mantenemos al mismo equipo de cocina y de salón, la misma calidad y el mismo servicio, con una propuesta renovada.</p>
         <p class="lead">Nuestro nombre lo dice todo: volver al origen de cada ingrediente. Mariscos del Pacífico de proveedores locales, frutas y verduras costarricenses, y la parrilla como protagonista.</p>
-        <p class="lead">[Párrafo opcional: anécdota o visión de los dueños]</p>
+        {isReal(duenos) && <p class="lead">{duenos}</p>}
       </div>
       <Photo label="fachada / salón" height="520px" style="background-color:#2A2520" />
     </div>
@@ -27,8 +33,10 @@ import { site } from '../data/site';
     <div class="stack">
       <span class="script">En la cocina</span>
       <h2 id="chef-t" class="display" style="font-size: 52px;">Chef {site.chef}</h2>
-      <p class="lead">Jefa de cocina de Origen y la misma chef que estaba al frente de la cocina del restaurante anterior. [Agregar trayectoria, formación y su plato favorito del menú.]</p>
-      <blockquote style="margin: 8px 0 0; font-family: var(--serif); font-style: italic; font-size: 28px; line-height: 1.3;">“[Frase real de la chef sobre su cocina]”</blockquote>
+      <p class="lead">Jefa de cocina de Origen y la misma chef que estaba al frente de la cocina del restaurante anterior.{isReal(chefTrayectoria) && <> {chefTrayectoria}</>}</p>
+      {isReal(chefFrase) && (
+        <blockquote style="margin: 8px 0 0; font-family: var(--serif); font-style: italic; font-size: 28px; line-height: 1.3;">“{chefFrase}”</blockquote>
+      )}
     </div>
   </section>
 

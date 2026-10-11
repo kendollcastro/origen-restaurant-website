@@ -9,7 +9,7 @@ const hour12 = (t: string) => Number(t.slice(0, 2)) % 12 || 12;
 const period = (t: string) => (Number(t.slice(0, 2)) >= 12 ? 'pm' : 'am');
 const tipos = [
   ['Grupos de tour', 'grupo de tour', 'Trabajamos con tour operadores de Jacó. Almuerzos y cenas para grupos con menú fijo y servicio ágil.'],
-  ['Cumpleaños y aniversarios', 'cumpleaños', 'Mesas privadas o el salón completo, con decoración y pastel coordinados [confirmar].'],
+  ['Cumpleaños y aniversarios', 'cumpleaños', 'Mesas privadas o el salón completo.'],
   ['Empresas', 'cena corporativa', 'Cenas de equipo, fiestas de fin de año y reuniones con menú cerrado y factura electrónica.'],
   ['Bodas y ensayos', 'boda', 'Cenas de ensayo y recepciones íntimas a pasos de la playa de Jacó.'],
 ];
@@ -41,13 +41,13 @@ const tipos = [
       {[
         [String(site.capacity), 'invitados de capacidad'],
         [`${hour12(site.hours.opens)}–${hour12(site.hours.closes)}`, `abierto de ${hour12(site.hours.opens)} ${period(site.hours.opens)} a ${hour12(site.hours.closes)} ${period(site.hours.closes)}`],
-        ['[ ]', 'menús para grupos [confirmar]'],
       ].map(([n, l]) => (
         <div class="stack" style="gap: 4px;">
           <span style="font-family: var(--serif); font-weight: 600; font-size: 64px; line-height: 1;">{n}</span>
           <span class="label" style="color: var(--ink-muted);">{l}</span>
         </div>
       ))}
+      <!-- Menús para grupos: pendiente (P-09 → T-23), se oculta hasta el dato real (política §6). -->
     </div>
   </section>
 

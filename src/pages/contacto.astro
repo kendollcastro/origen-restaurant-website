@@ -3,16 +3,22 @@ import Base from '../layouts/Base.astro';
 import ReserveForm from '../components/ReserveForm.astro';
 import { site } from '../data/site';
 import { faqs } from '../data/faq';
+import { isReal } from '../data/placeholders';
 
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: faqs.map((f) => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
-};
+// Solo se publican las FAQ con pregunta y respuesta reales (política §6); las pendientes
+// quedan en faq.ts como shot list hasta T-21. Si no hay ninguna, se oculta la sección y el FAQPage.
+const publicFaqs = faqs.filter((f) => isReal(f.q) && isReal(f.a));
+const faqSchema = publicFaqs.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: publicFaqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    }
+  : undefined;
 ---
 <Base
   title="Reservas y contacto · Origen Jacó — Dirección, horario y preguntas frecuentes"
@@ -29,7 +35,7 @@ const faqSchema = {
     <div class="stack" style="flex: 1 1 380px; gap: 28px;">
       <address class="stack" style="font-style: normal; gap: 4px;">
         <h2 class="label">Dirección</h2>
-        <p style="font-size: 18px;">{site.fullName}<br />{site.address.street}<br />{site.address.locality}, {site.address.county}, {site.address.region}, {site.address.countryName}</p>
+        <p style="font-size: 18px;">{site.fullName}<br />{isReal(site.address.street) && <>{site.address.street}<br /></>}{site.address.locality}, {site.address.county}, {site.address.region}, {site.address.countryName}</p>
         <span>
           <a href={site.mapsUrl} class="link-caps" target="_blank" rel="noopener">Google Maps</a> ·
           <a href={site.wazeUrl} class="link-caps" target="_blank" rel="noopener">Waze</a>
@@ -57,20 +63,22 @@ const faqSchema = {
   <!-- TODO: reemplazar por el iframe de Google Maps de la ficha de Origen -->
   <div id="mapa" class="ph" style="height: 420px;"><span class="ph-label">Mapa · Google Maps embebido con el pin de Origen</span></div>
 
-  <section class="light" aria-labelledby="faq-t">
-    <div class="container section stack" style="max-width: 920px; gap: 32px;">
-      <div class="center" style="gap: 6px; text-align: center;">
-        <span class="script">Antes de venir</span>
-        <h2 id="faq-t" class="display">Preguntas frecuentes</h2>
+  {publicFaqs.length > 0 && (
+    <section class="light" aria-labelledby="faq-t">
+      <div class="container section stack" style="max-width: 920px; gap: 32px;">
+        <div class="center" style="gap: 6px; text-align: center;">
+          <span class="script">Antes de venir</span>
+          <h2 id="faq-t" class="display">Preguntas frecuentes</h2>
+        </div>
+        <div class="faq">
+          {publicFaqs.map((f) => (
+            <details>
+              <summary><h3>{f.q}</h3><span class="pm" aria-hidden="true">+</span></summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
       </div>
-      <div class="faq">
-        {faqs.map((f) => (
-          <details>
-            <summary><h3>{f.q}</h3><span class="pm" aria-hidden="true">+</span></summary>
-            <p>{f.a}</p>
-          </details>
-        ))}
-      </div>
-    </div>
-  </section>
+    </section>
+  )}
 </Base>
