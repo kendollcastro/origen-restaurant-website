@@ -129,9 +129,8 @@ const ld = [restaurant, ...(breadcrumb ? [breadcrumb] : []), ...extra];
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={ogImage} />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" />
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-600.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="/fonts/jost-400.woff2" crossorigin />
 
   <script type="application/ld+json" set:html={JSON.stringify(ld)} />
 </head>

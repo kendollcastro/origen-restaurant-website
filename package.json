@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "og:image": "node scripts/generate-og-image.mjs",
+    "fonts": "node scripts/fetch-fonts.mjs",
     "gate": "node scripts/check-placeholders.mjs"
   },
   "engines": {

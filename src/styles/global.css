@@ -1,3 +1,6 @@
+/* @font-face auto-hospedados (cormorant + jost, subset latin) — ver scripts/fetch-fonts.mjs */
+@import './fonts.css';
+
 :root {
   --bg: #0F0E0C;
   --surface: #15130F;

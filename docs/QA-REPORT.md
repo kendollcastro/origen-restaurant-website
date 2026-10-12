@@ -640,3 +640,18 @@ cuando detecta agente en el shell y eso mataba el proceso del `webServer`); los 
 **Pendiente P-17:** reemplazar por la imagen del cliente o aprobar este diseño. Verificar visualmente
 `public/og-image.jpg` (el modelo no puede previsualizar la imagen) y, a go-live, «Sharpen / Sharing Debugger»
 de Facebook para confirmar que no recorta el preview.
+
+---
+
+# Fuentes auto-hospedadas (T-28 · parte, pref. total)
+
+> **Fecha:** 2026-10-12 · **Bloqueo:** el PDF del menú queda pendiente de P-18; las fuentes ya están locales.
+
+| Ítem | Resultado |
+|---|---|
+| `scripts/fetch-fonts.mjs` (regenerable con `npm run fonts`) | descarga Cormorant Garamond + Jost (pesos usados) subset **latin** (8 woff2, 254 KB) vía curl |
+| `src/styles/fonts.css` | 8 caras `@font-face` `font-display: swap`, `unicode-range` latin (español cubierto) |
+| `Base.astro` | se eliminan preconnect + stylesheet de Google Fonts (`fonts.googleapis`/`gstatic`:
+  **0 coincidencias en `dist/`**); preload selectivo `cormorant-600.woff2` y `jost-400.woff2` |
+| `vercel.json` | CSP sin `fonts.googleapis.com`/`gstatic` (solo `style-src 'self' 'unsafe-inline'` + `font-src 'self'`); cache `public,max-age=31536000,immutable` para `/fonts/*.woff2` |
+| Verificación | `check` 0 errores, `build` 11 páginas (8 woff2 + 1 css con font-face), gate OK, **336/336 Playwright** (30.8 s), Lighthouse móvil **perf 94–97 / a11y 100 / bp 100 / seo 100**, LCP home 2.7–2.8 s lab |
