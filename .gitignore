@@ -10,3 +10,5 @@ evidencia/
 .lighthouseci/
 lhci-reports/
 lhci-reports-desktop/
+.vercel
+.env*
