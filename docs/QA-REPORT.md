@@ -655,3 +655,16 @@ de Facebook para confirmar que no recorta el preview.
   **0 coincidencias en `dist/`**); preload selectivo `cormorant-600.woff2` y `jost-400.woff2` |
 | `vercel.json` | CSP sin `fonts.googleapis.com`/`gstatic` (solo `style-src 'self' 'unsafe-inline'` + `font-src 'self'`); cache `public,max-age=31536000,immutable` para `/fonts/*.woff2` |
 | Verificación | `check` 0 errores, `build` 11 páginas (8 woff2 + 1 css con font-face), gate OK, **336/336 Playwright** (30.8 s), Lighthouse móvil **perf 94–97 / a11y 100 / bp 100 / seo 100**, LCP home 2.7–2.8 s lab |
+
+# Optimización de imágenes (T-28 · parte 2, `sizes`/`widths` por uso)
+
+> **Fecha:** 2026-10-12 · **Causa:** el home referenciaba candidatos de hasta 415 KB por usar `sizes="100vw"` por defecto (`Photo.astro`) aunque el ancho renderizado fuera pequeño (galería ~300 px pedía ~100vw).
+
+| Cambio | Detalle |
+|---|---|
+| `Photo.astro` | default `widths` recortado de `[320,480,640,800,1080]` → `[320,480,640]`; las bandas/héroes pasan su lista explícita |
+| `index.astro` | `sizes` reales por slot: salón `33vw`, insignia `520px`, destacado `540px`, detalle/cóctel `180px`, galería `300px` (desktop) con `widths` por elemento (galería `[320,480]`, miniaturas `[240,320,480]`, band única `[480,640,800,1024]`) |
+| `PageHero.astro` | full-bleed con `widths=[480,640,800,1024,1440]` |
+| `nosotros.astro` | fachada `50vw` con `widths=[480,640,800]` |
+| Peso avif @1440 (candidatos elegidos) | 5 páginas: **945 → 362 KB (−62%)**; home 847 → 285 KB |
+| Verificación | `check` 0 errores, **336/336 Playwright** (36.7 s), Lighthouse tras el cambio: home **perf 95 / LCP 2.7 s lab / 78 KB imágenes transferidas / page 308 KB, `lcp-lazy` ok**; menu/nosotros/eventos/contacto **perf 95–96 / LCP 2.3–2.6 s lab / a11y-bp-seo 100** |

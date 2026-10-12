@@ -4,7 +4,7 @@ import type { ImageMetadata } from 'astro';
 interface Props { crumb: string; script: string; title: string; lead?: string; photo: string; src?: ImageMetadata; caps?: boolean; }
 const { crumb, script, title, lead, photo, src, caps = true } = Astro.props;
 ---
-<Photo label={photo} src={src} class="hero hero-sm">
+<Photo label={photo} src={src} class="hero hero-sm" sizes="(min-width: 900px) 100vw, 100vw" widths={[480, 640, 800, 1024, 1440]}>
   <div class="inner overlay">
     <nav class="breadcrumb" aria-label="Ruta de navegación"><a href="/">Inicio</a> <span aria-hidden="true">/</span> <span aria-current="page">{crumb}</span></nav>
     <span class="script script-lg">{script}</span>

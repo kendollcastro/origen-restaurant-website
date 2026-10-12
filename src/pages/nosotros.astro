@@ -25,7 +25,7 @@ const chefFrase = ''; // cita literal de la chef sobre su cocina
         <p class="lead">Nuestro nombre lo dice todo: volver al origen de cada ingrediente. Mariscos del Pacífico de proveedores locales, frutas y verduras costarricenses, y la parrilla como protagonista.</p>
         {isReal(duenos) && <p class="lead">{duenos}</p>}
       </div>
-      <Photo label="fachada / salón" src={ambiente[5]} alt="El salón de Origen, en Jacó." height="520px" style="background-color:#2A2520" />
+      <Photo label="fachada / salón" src={ambiente[5]} alt="El salón de Origen, en Jacó." height="520px" style="background-color:#2A2520" sizes="(min-width: 900px) 50vw, 100vw" widths={[480, 640, 800]} />
     </div>
   </section>
 
