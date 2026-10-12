@@ -668,3 +668,18 @@ de Facebook para confirmar que no recorta el preview.
 | `nosotros.astro` | fachada `50vw` con `widths=[480,640,800]` |
 | Peso avif @1440 (candidatos elegidos) | 5 páginas: **945 → 362 KB (−62%)**; home 847 → 285 KB |
 | Verificación | `check` 0 errores, **336/336 Playwright** (36.7 s), Lighthouse tras el cambio: home **perf 95 / LCP 2.7 s lab / 78 KB imágenes transferidas / page 308 KB, `lcp-lazy` ok**; menu/nosotros/eventos/contacto **perf 95–96 / LCP 2.3–2.6 s lab / a11y-bp-seo 100** |
+
+# QA i18n (T-35 + T-39)
+
+> **Fecha:** 2026-10-12 · **Estado:** arquitectura i18n cerrada (T-35) y spec QA (T-39). El contenido EN es **provisional** hasta la traducción aprobada (P-22 → T-36/T-37); `/en/` emite `noindex` y queda fuera del sitemap hasta go-live (T-38).
+
+| Ítem | Resultado |
+|---|---|
+| Rutas `/en/` (5) | 💚 200 con `<html lang="en">` y `meta robots noindex` |
+| Sitio ES intacto | 💚 5 rutas mantienen h1 y sin `noindex` (`i18n.spec.ts`) |
+| Switcher ES↔EN | 💚 recorre los **5 pares en ambas direcciones** por ruta equivalente (`routes.ts`); enlace real, enfocable, `hreflang` y `aria-label`/`aria-current` |
+| Título/descripción EN | 💚 por ruta = `enPages` (§1.2); un solo `h1` por página |
+| axe en `/en/` | 💚 sin violaciones serious/critical (5 rutas, ambos viewports) |
+| Sitemap | 💛 excluye `/en/` (estado provisional verificado); T-38 lo hace bilingüe en go-live |
+| Fixes | ✅ héroe `/en/` con foto real (espejo del ES); CTA eventos sin anchor muerto (`/en/contacto/#cotizar` → inexistente, ahora `/en/contacto/`); copy "guests of capacity" → "guests · space for groups and events" |
+| Verificación | `check` 0 errores, **388/388 Playwright** (36.1 s) |

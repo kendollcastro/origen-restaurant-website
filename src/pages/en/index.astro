@@ -1,15 +1,17 @@
 ---
 // TODO: traducción aprobada (P-22) — T-36 sustituye el cuerpo EN provisional.
 import Base from '../../layouts/Base.astro';
+import Photo from '../../components/Photo.astro';
 import { site, waLink } from '../../data/site';
 import { enPages } from '../../data/i18n/pages';
+import { platos } from '../../data/photos';
 
 const p = enPages.index;
 const waHref = waLink('Hello Origen, I would like to book a table.');
 ---
 <Base title={p.title} description={p.description} lang="en">
-  <section class="hero">
-    <div class="inner">
+  <Photo label="grill fire / table facing the sea" src={platos[5]} alt="Sea and land cooking served at Origen, Jacó." priority class="hero">
+    <div class="inner overlay">
       <span class="script" style="font-size: 44px;">{p.script}</span>
       <p class="hero-title" aria-hidden="true">ORIGEN</p>
       <hr class="rule" />
@@ -20,7 +22,7 @@ const waHref = waLink('Hello Origen, I would like to book a table.');
         <a href={waHref} class="btn btn-primary" target="_blank" rel="noopener">Book on WhatsApp</a>
       </div>
     </div>
-  </section>
+  </Photo>
 
   <section class="light">
     <div class="container section row">
