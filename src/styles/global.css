@@ -90,7 +90,9 @@ h1, h2, h3, p { margin: 0; }
   position: relative; overflow: hidden; background-color: var(--ph);
   background-image: repeating-linear-gradient(135deg, rgba(242,235,221,.035) 0 2px, transparent 2px 14px);
 }
-.ph > img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.ph > img, .ph picture, .ph picture > img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.ph picture { display: block; }
+.ph-scrim { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(24,20,16,.45), rgba(24,20,16,.68)); }
 .ph-label { position: absolute; left: 16px; bottom: 14px; font: 500 11px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); z-index: 1; }
 .overlay { position: relative; z-index: 2; }
 

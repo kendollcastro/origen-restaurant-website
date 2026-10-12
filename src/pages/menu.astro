@@ -4,6 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import DishList from '../components/DishList.astro';
 import { menu } from '../data/menu';
 import { site } from '../data/site';
+import { platos } from '../data/photos';
 
 // JSON-LD del menú (solo platos confirmados)
 const menuSchema = {
@@ -34,7 +35,7 @@ const menuSchema = {
   schema={menuSchema}
 >
   <PageHero
-    crumb="Menú" script="Nuestro" title="Menú" photo="mesa con platos variados"
+    crumb="Menú" script="Nuestro" title="Menú" photo="mesa con platos variados" src={platos[6]}
     lead="Mariscos frescos del Pacífico, cortes a la parrilla y cocina costarricense en Jacó. Precios con IVA incluido."
   />
 

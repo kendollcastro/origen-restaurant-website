@@ -20,9 +20,11 @@ export default defineConfig({
     { name: 'Pixel 5', use: { ...devices['Pixel 5'] } },
   ],
   webServer: {
-    command: 'npm run build && npm run preview',
+    // `--ignore-lock` fuerza primer plano: en astro ≥7 `astro preview` daemoniza
+    // cuando detecta un agente en el shell y el proceso del webServer sale al punto.
+    command: 'npm run build && npm run preview -- --ignore-lock',
     url: 'http://localhost:4321',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 120_000,
   },
 });

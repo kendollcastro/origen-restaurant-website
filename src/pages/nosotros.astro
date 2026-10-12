@@ -4,6 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import Photo from '../components/Photo.astro';
 import { site } from '../data/site';
 import { isReal } from '../data/placeholders';
+import { ambiente } from '../data/photos';
 
 // Al llegar el dato del cliente (T-22) se llena la constante y el bloque aparece (política §6).
 const duenos = ''; // anécdota o visión de los dueños
@@ -24,7 +25,7 @@ const chefFrase = ''; // cita literal de la chef sobre su cocina
         <p class="lead">Nuestro nombre lo dice todo: volver al origen de cada ingrediente. Mariscos del Pacífico de proveedores locales, frutas y verduras costarricenses, y la parrilla como protagonista.</p>
         {isReal(duenos) && <p class="lead">{duenos}</p>}
       </div>
-      <Photo label="fachada / salón" alt="La fachada de Origen y el salón que abre a la calle de Jacó." height="520px" style="background-color:#2A2520" />
+      <Photo label="fachada / salón" src={ambiente[5]} alt="El salón de Origen, en Jacó." height="520px" style="background-color:#2A2520" />
     </div>
   </section>
 

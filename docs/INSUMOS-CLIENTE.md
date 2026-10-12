@@ -13,7 +13,7 @@ Para poder cerrar el sitio es necesario recibir estos insumos. Agrupados en dos 
 | P-05 | URLs exactas: Instagram, Facebook, TripAdvisor, ficha Google Maps y Waze | Redes sociales y enlaces (T-31) | ⏳ |
 | P-06 | Google Business Profile: crear/verificar, categoría, **URL de la ficha** | Ficha de Google (T-29/T-30) | ⏳ |
 | P-11 | `priceRange` real: personas normales 1 plato + bebida ≈ ₡1 500–3 500 / 3 500–6 000 / 6 000+ | JSON-LD `priceRange` (T-18) | ⏳ |
-| P-16 | **Fotos** (o autorización de sesión en el local) con permiso de uso de chef y equipo, según `docs/SHOTLIST.md` (31 tomas) | Toda la galería y hero (T-26) | ⏳ |
+| P-16 | **Fotos** (o autorización de sesión en el local) con permiso de uso de chef y equipo, según `docs/SHOTLIST.md` (31 tomas) — **parcial**: recibidas **32** (`platos/` 11 · `bebidas/` 13 · `ambiente/` 8) e integradas en T-26; faltan **hero/**, **equipo/**, **eventos/**, **aliados/**, el **permiso por escrito** y la **leyenda por archivo** (qué plato es cada `comida-N.jpg`, para `alt`/copy específicos) | Galería y hero (T-26) ⏳ alt específico | ⏳ |
 | P-17 | `og-image.jpg` 1200×630 (o aprobar generarla con diseño) | Tarjetas al compartir (T-27) | ⏳ |
 | P-18 | `menu-origen.pdf` definitivo | Botón de descarga en `/menu/` (hoy 404) (T-28) | ⏳ |
 | P-21 | Capacidad ("120" por confirmar) + ¿salón privado/zona separada? | `maximumAttendeeCapacity`, reservas (T-14) | ⏳ |

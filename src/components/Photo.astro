@@ -1,23 +1,59 @@
 ---
-// Placeholder de foto. Cuando tengas la imagen, pasa `src` y `alt` y se muestra la foto.
-// Sin `src` se reserva el bloque (textura) pero sin texto de placeholder: política §6.
-// El bloque es CSS/fondo: el rol y la información los aporta el `<slot>` visible (h1, artículo…).
-// Recomendado: guardar fotos en src/assets y migrar a <Image /> de astro:assets.
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+// Foto con placeholder de reserva (política §6). Con `src` (asset de astro:assets)
+// emite <Picture> optimizado (AVIF/WebP + srcset/sizes) y previene CLS con el ratio
+// del contenedor. Sin `src` reserva el bloque textura y muestra el <slot>.
 interface Props {
   label: string;
-  src?: string;
+  src?: ImageMetadata | string;
   alt?: string;
   height?: string;
   class?: string;
   style?: string;
+  /** Héroe: `loading="eager"` + `fetchpriority="high"` (solo el LCP). */
+  priority?: boolean;
+  sizes?: string;
+  widths?: number[];
 }
-// T-42: ninguna <img> real puede salir sin texto alternativo. `alt` explícito manda;
-// si la página no lo pasa, se usa `label` (descriptor de la toma). Un `alt=""` explícito
-// sigue siendo válido para imágenes decorativas (GLOSARIO §7). T-26 afinará alt/loading.
-const { label, src, alt, height, class: cls = '', style = '' } = Astro.props;
+const {
+  label,
+  src,
+  alt,
+  height,
+  class: cls = '',
+  style = '',
+  priority = false,
+  sizes = '100vw',
+  widths = [320, 480, 640, 800, 1080],
+} = Astro.props;
+
+// `alt` explícito manda; si no, el descriptor de la toma. `alt=""` = decorativa (GLOSARIO §7).
 const imgAlt = alt ?? label;
+const asset = src && typeof src === 'object' ? src : null;
+const stringSrc = typeof src === 'string' ? src : undefined;
+const hasOverlay = Astro.slots.has('default');
+const load = priority ? 'eager' : 'lazy';
+const fetchpriority = priority ? 'high' : 'auto';
 ---
 <div class={`ph ${cls}`} style={`${height ? `height:${height};` : ''}${style}`}>
-  {src && <img src={src} alt={imgAlt} loading="lazy" decoding="async" />}
+  {asset ? (
+    <>
+      <Picture
+        src={asset}
+        alt={imgAlt}
+        formats={['avif', 'webp']}
+        widths={widths}
+        sizes={sizes}
+        loading={load}
+        decoding={priority ? 'sync' : 'async'}
+        fetchpriority={fetchpriority}
+      />
+      {hasOverlay && <span class="ph-scrim" aria-hidden="true"></span>}
+    </>
+  ) : stringSrc ? (
+    <img src={stringSrc} alt={imgAlt} loading={load} decoding="async" fetchpriority={fetchpriority} />
+  ) : null}
   <slot />
 </div>

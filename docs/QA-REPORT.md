@@ -348,7 +348,7 @@ El CA «10 criterios globales en verde» queda **NO cerrado** por dependencias e
 | 2 | Glosario de términos (Origen, Mar · Tierra · Fuego, mariscos y parrilla, a la parrilla, Jacó, Costa Rica…) | ✅ | §T50.2 · 0 usos prohibidos (grill/BBQ/parrillada/crudo) |
 | 3 | CTAs que nombran la acción y el canal (GLOSARIO §3) | ✅ | §T50.3 · 0 «Enviar»/«Click aquí»/«Más información»/«Confirmar reserva» |
 | 4 | Títulos con datos reales (sin `[placeholder]`) | ✅ | 6/6 `<title>` ES con datos reales; longitudes → T-14/P-20 |
-| 5 | `alt` en toda foto; vacío solo si decorativa justificada | ✅ hoy (⏳ T-26) | §T50.4 · 0 `<img>` en `dist/` ES; `alt`/fallback `label` listos |
+| 5 | `alt` en toda foto; vacío solo si decorativa justificada | ✅ | §T50.4 · **17 `<img>` en `dist/` ES, 0 sin `alt`** (T-26); decorativas Mar/Tierra/Fuego no emiten `<img>` (sin `src`) |
 | 6 | Grep CA: `\[`, `TODO`, `0000`, `ph-label` sin resultados **en contenido renderizado** | ⏳ P-03/T-31 | §T50.5 (solo teléfono y mapa por dato pendiente) |
 | 7 | Checklist firmada | ✅ | este documento, §T50.1–§T50.7 |
 
@@ -361,8 +361,8 @@ Hallazgos ⚠️ (no corregidos por acoplamiento, con fix propuesto):
 |---|---|---|---|---|
 | D1 | `src/pages/menu.astro:33` | Meta description cierra «Precios con **IVA**.» ≠ fórmula única «Precios con **IVA incluido**» (GLOSARIO §3, línea 69) | «IVA» → «IVA incluido» | ❌ diferido a **T-14/P-20** (alarga la description 163→172, ya en reescritura) |
 | D2 | `src/pages/nosotros.astro:15,23` | «Origen abrió en … **octubre de 2026**»: fecha de apertura **no confirmada** (GLOSARIO §5, línea 126) | Confirmar fecha con cliente; mientras, redacción sin fecha | ❌ requiere dato del cliente (T-22/P-xx) |
-| D3 | `src/pages/index.astro:81,145,146` | `<Photo>` **sin `alt`** y `label` de andamiaje («plato insignia», «plato destacado», «detalle»); hoy sin `src` no emite `<img>`, pero T-26 los publicaría como `alt` | `alt` real por toma (SHOTLIST) o `alt=""` si decorativa | ❌ diferido a **T-26** |
-| D4 | `src/pages/index.astro:102` | Tarjetas Mar/Tierra/Fuego: GLOSARIO §7 las marca **decorativas** (`alt=""`, el texto visible ya nombra el plato); hoy heredan `label` | `alt=""` explícito | ❌ diferido a **T-26/T-42** |
+| D3 | `src/pages/index.astro:81,145,146` | En T-50 no había `src` (no emitía `<img>`) | `alt` real por toma (SHOTLIST) o `alt=""` si decorativa; en T-26 se conectó `src` con `alt` de **categoría** (scrim) | ✅ aplicado en **T-26**; alt específico de plato pendiente de confirmar cada archivo (P-16) |
+| D4 | `src/pages/index.astro:102` | Tarjetas Mar/Tierra/Fuego: GLOSARIO §7 las marca **decorativas** (`alt=""`, el texto visible ya nombra el plato); hoy heredan `label` | `alt=""` explícito | ✅ resuelto por **diseño** en T-26: **sin `src`** → no emiten `<img>`; `label` nunca se renderiza (decorativas, texto visible bien) |
 
 **Hallazgo de higiene de docs (no editable por T-50):** el bloque «Inconsistencias de CTA detectadas»
 de `GLOSARIO §5` (líneas 145-149) ya está **resuelto en el código** y quedó obsoleto:
@@ -393,13 +393,16 @@ en `/en/`, provisional P-22).
 
 ## T50.4 Estado de `alt`
 
-- **`<img>` en `dist/` ES: 0** (`grep -o '<img'` → 0 en las 6 rutas). Hoy las fotos son bloques CSS; el
-  CA «todo `alt` no vacío» se cumple de forma vacua y queda **listo** para T-26.
-- `Photo.astro:18` garantiza `alt = alt ?? label` (T-42): ninguna futura `<img>` saldría sin texto.
-- **`alt` concretos y correctos** (8–12 palabras, voz de marca §7): `index.astro:27,56,79,147,170(×5),175`,
-  `nosotros.astro:27,32,56`, `eventos.astro:31` (×4) — todos describen la escena sin superlativos ni relleno.
-- **Pendiente T-26:** `index.astro:81,145,146` (fallback `label` de andamiaje) y `index.astro:102`
-  (decorativas → `alt=""`). Ver D3/D4.
+- **`<img>` en `dist/` ES: 17** (`dist/index.html` 15 · `menu/index.html` 1 · `nosotros/index.html` 1),
+  **0 sin `alt`** (`grep -ro '<img[^>]*>' dist` | `grep -vc 'alt='` → **0**). Las tarjetas Mar/Tierra/Fuego
+  siguen **sin `src`** (decorativas, texto visible): no emiten `<img>`, su `label` nunca se renderiza (D4).
+- `Photo.astro:18` garantiza `alt = alt ?? label` (T-42) **y**, con `src` real desde T-26, se conecta el asset de
+  `astro:assets` con `<Picture>` (avif/webp, widths, `priority` en héroe) + **scrim** cuando hay overlay.
+- **`alt` concretos y correctos** (8–12 palabras, voz de marca §7): los de andamiaje de T-50
+  (`index.astro:27,56,79,147,170..,175`, `nosotros.astro:27,32,56`, `eventos.astro:31`) se reemplazaron en T-26
+  por descripciones **honestas de categoría** (p. ej. `alt="Platos de mar y tierra servidos en Origen, Jacó."`),
+  porque el proveedor entregó archivos genéricos (`comida-N.jpg`, `bebida-N.jpg`, `ambiente-N.jpg`) sin leyenda:
+  el `alt` **específico de plato** queda pendiente de que el chef identifique cada archivo (P-16).
 - `index.astro:212` (`<img>` de aliados) usa `alt={p.name}`, pero solo se emite si `partners.length > 0` (hoy 0, P-13).
 
 ## T50.5 Greps del CA (contenido renderizado, `dist/` ES)
@@ -424,6 +427,12 @@ en `/en/`, provisional P-22).
 | Gate | `npm run gate` | **TOTAL: 0 bloqueantes**; avisos TODO × 0 · ph-label × 1 · 0000 × 116 | `0` |
 | E2E | `npx playwright test` | **244 passed (50.8s)** · chromium + Pixel 5 | `0` |
 
+> **Re-ejecución T-26 (fotos):** `npx playwright test` → **336 passed (56.5s)** con las 32 fotos reales
+> conectadas (`<Picture>`). Nota: el `webServer` de Playwright ahora usa `astro preview -- --ignore-lock`;
+> en astro ≥7 el `preview` auto-daemoniza cuando detecta un agente en el shell y el proceso del `webServer`
+> salía al punto («Process from config.webServer exited early»). `--ignore-lock` fuerza primer plano.
+> Para cortar huérfanos: `npx astro preview stop`.
+
 ## T50.7 Hallazgos
 
 - **0 defectos de copy** que bloqueen: tuteo, tono y CTAs son consistentes con GLOSARIO §2–§3.
@@ -445,9 +454,11 @@ en `/en/`, provisional P-22).
 > LCP lab 4G (referencia; las fotos reales llegan en T-26), 0 errores de consola y entrega de ambos
 > formularios a WhatsApp (interceptando `window.open`, sin enviar a un humano; `site.whatsapp` sigue
 > placeholder `50600000000`, P-03).
-> **Entorno:** Node 23.7.0 · `npm run preview` en `:4321` · Playwright `chromium` + `Pixel 5`.
+> **Entorno:** Node 23.7.0 · `npm run preview` en `:4321` · Playwright `chromium` + `Pixel 5».
 > **Ediciones de código:** 1 fix mínimo en `ReserveForm.astro:61` (gramática del mensaje); `global.css` **sin cambios**
 > (0 violaciones de contraste reales, justificado en §T51.2).
+> **Re-ejecución T-26 con fotos reales:** ver §T51.4 — home mantiene **LCP ≤ 2,5 s** con la foto del héroe; el
+> contraste del `.ph` lo resuelve el **scrim** añadido en `Photo.astro` (T-26) para overlays sobre foto.
 
 ## T51.1 (a) Teclado — 0 trampas de foco
 
@@ -543,6 +554,15 @@ Página completa = 1 CSS de Astro (~3 KB) + CSS de fuentes Google (1 KB); sin im
 producción con T-49.** El spec `ux.spec.ts` deja la medición anotada como referencia y fallaría si pasara
 de 2,5 s.
 
+**Re-ejecución con fotos reales (T-26, home):**
+
+| Modelo | LCP | FCP | Elemento LCP |
+|---|---|---|---|
+| 4G simulado (lab) con `<Picture>` (`platos[5]` hero) | **1,7–2,5 s** | ~1,7 s | `<img>` del héroe (avif, eager) |
+
+Home es la ruta más pesada (héroe + aside + insignia + destacado + 8 galería). Menú/nosotros/eventos/contacto
+bajan a **LCP ~1,5 s** (D3/D4/D5 re-medidas en Lighthouse T-47: perf móvil 99–100, a11y/bp/seo 100).
+
 **Consola:** `page.on('console'/'pageerror')` = `[]` en las 6 rutas (0 errores; refuerza `smoke`/`nav-mobile`).
 
 ## T51.5 (e) Formularios → WhatsApp (interceptando `window.open`)
@@ -573,6 +593,9 @@ codificado contiene los datos.
 
 **Higiene de procesos:** `lsof -ti:4321` **vacío** al terminar; el `webServer` de Playwright arrancó y detuvo
 su propio `astro preview` (no hubo reuso de un huérfano; los scripts de auditoría temporales se eliminaron).
+En la re-ejecución T-26 el `webServer` cambió a `astro preview -- --ignore-lock` (astro 7 daemoniza el preview
+cuando detecta agente en el shell y eso mataba el proceso del `webServer`); los daemon huérfanos se cierran con
+`npx astro preview stop`.
 
 ## T51.7 Hallazgos y qué queda para T-26 / T-49 / prod
 
@@ -583,8 +606,13 @@ su propio `astro preview` (no hubo reuso de un huérfano; los scripts de auditor
 - **Evidencia en `evidencia/` (gitignored):** `t51-home-360.png`, `t51-home-768.png`, `t51-home-1440.png`,
   `t51-menu-abierto-360.png`, `t51-contacto-1440.png`, `t51-eventos-360.png` (+ `home-desktop.png`,
   `home-pixel5.png` previos). Reporte HTML en `playwright-report/`, JUnit en `test-results/junit.xml`.
-- **Para T-26 (fotos reales) / T-49 (prod):** re-medir LCP con `<Image>` reales y confirmar el umbral
-  < 2,5 s en PageSpeed; el par `.dish-price` sobre crema debería seguir sin producirse (o definirse con
-  `--accent-ink`); re-ejecutar esta batería tras cada cambio de contenido que toque el chrome (Header/Footer/forms).
+- **T-26 aplicado:** 32 fotos conectadas con `<Picture>` + scrim; **336/336** Playwright verdes; Lighthouse
+  (T-47 re-run local) móvil: home **perf 94 / LCP ≤ 2,5 s**, menu/nosotros/eventos/contacto **perf 99–100**;
+  a11y/bp/seo **100**. Quedan **0 `<img>` sin `alt`** en `dist/` ES.
+- **Para T-49 (prod):** re-medir LCP/CWV en PageSpeed sobre el dominio real y confirmar < 2,5 s; el par
+  `.dish-price` sobre crema debería seguir sin producirse (o definirse con `--accent-ink`); re-ejecutar esta
+  batería tras cada cambio de contenido que toque el chrome (Header/Footer/forms).
+- **Pendiente P-16:** confirmar con el chef qué plato es cada archivo `comida-N.jpg` para publicar `alt` y
+  texto específicos (hoy alt = categoría); faltan shoots de `hero/`, `equipo/`, `eventos/`, `aliados/`.
 - **Nota:** los `incomplete` de axe (§T51.2) son texto sobre `.ph` (`background-image`) y se resuelven en
   T-26 al pasar a `<Image>` con `width/height` (el cálculo manual ya da AA/AAA en todos los pares actuales).
