@@ -40,3 +40,46 @@ Para poder cerrar el sitio es necesario recibir estos insumos. Agrupados en dos 
 - El sitio ya está desplegado en **preview** (acceso por login a la cuenta Vercel `kendollcastro`). Nada en producción.
 - La apertura "octubre de 2026" no está confirmada (afecta a fecha del esquema `openingHoursSpecification`).
 - Recibir P-01…P-06 desbloquea T-06/T-14/T-18…T-21/T-23 y el go-live; el resto se puede cerrar en tandas.
+
+## C. Mensaje listo para enviar (WhatsApp / correo)
+
+> Respuestas en **texto plano, un dato por línea**. Mientras llegan, la web mantiene marcadores de posición ocultos y **nada en producción** (solo preview con login).
+
+Hola 👋 — voy cerrando la web de Origen y para publicarla necesito unos datos. Si me los mandas en bloques así se hace muy rápido:
+
+**1. Identidad y contacto**
+- Nombre oficial del restaurante y cómo se ve en la fachada.
+- Teléfono de reservas (con +506).
+- WhatsApp de reservas.
+- Correo de contacto (si lo hay).
+
+**2. Dominio y acceso**
+- El dominio definitivo (`origenjaco.com`): ¿ya está comprado? ¿quién tiene acceso al panel? (Sin esto no se puede lanzar.)
+- ¿Quién es la persona que autoriza la publicación final? (El "sí" final antes de ir en vivo; yo solo la creo.)
+
+**3. Redes y ficha de Google (enlaces exactos)**
+- Instagram, Facebook, TripAdvisor (si aplica), página de Google Maps y de Waze.
+
+**4. Menú y precios**
+- Precio en colones (con IVA) de cada plato del menú actual.
+- La lista de platos que faltan: mariscos (4), pastas y arroces (3), hamburguesas (2), coctelería (3) — nombre y qué lleva cada una.
+- Rango de precio "de una persona normal" (1 plato + 1 bebida): ¿₡1 500–3 500, ₡3 500–6 000, o más?
+- ¿El PDF del menú definitivo? (El botón de descarga hoy apunta a un archivo que falta.)
+
+**5. Fotografías**
+- Las 32 que mandaste ya están puestas 👌. Me falta:
+  - que me digas **qué plato es cada `comida-N.jpg`** (o aprobar los textos de pie de foto genéricos por categoría),
+  - fotos para: la imagen principal (portada), el equipo/chef, eventos y aliados,
+  - **permiso por escrito** para usar las fotos (un "sí, pueden usarse en la web" por WhatsApp sirve).
+
+**6. Restaurante**
+- Capacidad: ¿confirmas que son 120 personas? ¿hay salón privado o zona separada?
+- Formas de pago y la frase exacta del 10% de servicio (¿factura electrónica sí/no?).
+- Menús para grupos (precio por persona, mínimo, opciones) y si ofrecen decoración/pastel para eventos.
+
+**7. Confianza y textos**
+- 2–4 reseñas literales (texto, nombre publicable, estrellas y plataforma) con permiso de uso.
+- Logos (PNG, fondo transparente) de 3–6 aliados + nombre y web de cada uno.
+- Unas frases tuyas: qué es Origen para ustedes y qué heredaron de Hicaco (3–5 frases). Y de la chef: quién es, su plato favorito y una frase corta.
+
+Con **1–4 y 6** puedo cerrar el sitio y publicarlo; el resto (5, 7) se puede ir sumando después y seguir mejorando la página. Gracias 🙌
