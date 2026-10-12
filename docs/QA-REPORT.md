@@ -616,3 +616,27 @@ cuando detecta agente en el shell y eso mataba el proceso del `webServer`); los 
   texto específicos (hoy alt = categoría); faltan shoots de `hero/`, `equipo/`, `eventos/`, `aliados/`.
 - **Nota:** los `incomplete` de axe (§T51.2) son texto sobre `.ph` (`background-image`) y se resuelven en
   T-26 al pasar a `<Image>` con `width/height` (el cálculo manual ya da AA/AAA en todos los pares actuales).
+
+---
+
+# Metadatos sociales y og-image (T-27 · F3)
+
+> **Tarea:** T-27 · F3 · @frontend-dev + @seo-geo
+> **Fecha:** **2026-10-12** · **Estado:** ejecutada como **provisional (pendiente P-17)**.
+> **Generador:** `scripts/generate-og-image.mjs` — render en Chromium (Playwright, ya instalado; **sin
+> dependencias nuevas**) de un póster 1200×630 con la foto real `src/assets/images/ambiente/ambiente-1.jpeg`
+> como fondo, scrim, wordmark `Origen`, escudo `Mar · Tierra · Fuego` y pie `Costa Rica · origenjaco.com`.
+> Fuentes del diseño actual (Cormorant Garamond / Jost vía Google Fonts, con fallbacks locales).
+
+## T27.1 Evidencia
+
+| Ítem | Resultado |
+|---|---|
+| `public/og-image.jpg` (producto y `dist/`) | **1200×630 px · 60 KB** (presupuesto de assets < 300 KB ✅) |
+| `og:image:width / height / alt` + `twitter:title/description/image` en `<head>` | ✅ emitidos en las 11 páginas (`Base.astro:122-130`) |
+| JSON-LD `Restaurant.image` | ✅ `["https://www.origenjaco.com/og-image.jpg"]` (URL absoluta, CA: resuelve 200 — el archivo existe en `dist/`; en dominio real se valida en T-54) |
+| Typecheck / gate / E2E | `check` 0 errores · `gate` 0 bloqueantes · **336/336 Playwright** (incluye `seo.spec` con validación social) |
+
+**Pendiente P-17:** reemplazar por la imagen del cliente o aprobar este diseño. Verificar visualmente
+`public/og-image.jpg` (el modelo no puede previsualizar la imagen) y, a go-live, «Sharpen / Sharing Debugger»
+de Facebook para confirmar que no recorta el preview.

@@ -42,7 +42,8 @@ const restaurant = {
   url: site.url,
   ...(isReal(site.phone) && !site.phone.includes('0000') ? { telephone: site.phone } : {}),
   ...(isReal(site.email) ? { email: site.email } : {}),
-  // image: se emite en T-27 cuando exista og-image.jpg (hoy pendiente P-17). No se inventa.
+  // og-image provisional (T-27, P-17): se emite ya que public/og-image.jpg responde 200.
+  image: [ogImage],
   servesCuisine: ['Mariscos', 'Parrilla', 'Costarricense'],
   priceRange: site.priceRange,
   acceptsReservations: true,
@@ -119,8 +120,14 @@ const ld = [restaurant, ...(breadcrumb ? [breadcrumb] : []), ...extra];
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
   <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Origen — mar, tierra y fuego en Jacó, Costa Rica." />
   <meta property="og:locale" content={ogLocale} />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
