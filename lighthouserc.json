@@ -9,6 +9,7 @@
         "http://localhost:4173/contacto/"
       ],
       "settings": {
+        "chromeFlags": "--no-sandbox --disable-dev-shm-usage --disable-gpu",
         "disableStorageReset": true
       }
     },
