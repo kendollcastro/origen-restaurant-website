@@ -19,19 +19,19 @@ const chefFrase = ''; // cita literal de la chef sobre su cocina
 
   <section class="light">
     <div class="container section row">
-      <div class="stack" style="gap: 18px;">
+      <div class="stack reveal" style="gap: 18px;">
         <h2 class="display">Del antiguo Hicaco a Origen</h2>
         <p class="lead">Origen abrió en octubre de 2026 en el mismo local donde funcionó Hicaco Plaza Jacó. Mantenemos al mismo equipo de cocina y de salón, la misma calidad y el mismo servicio, con una propuesta renovada.</p>
         <p class="lead">Nuestro nombre lo dice todo: volver al origen de cada ingrediente. Mariscos del Pacífico de proveedores locales, frutas y verduras costarricenses, y la parrilla como protagonista.</p>
         {isReal(duenos) && <p class="lead">{duenos}</p>}
       </div>
-      <Photo label="fachada / salón" src={ambiente[5]} alt="El salón de Origen, en Jacó." height="520px" style="background-color:#2A2520" sizes="(min-width: 900px) 50vw, 100vw" widths={[480, 640, 800]} />
+      <Photo label="fachada / salón" src={ambiente[5]} alt="El salón de Origen, en Jacó." class="reveal" height="520px" style="background-color:#2A2520;--reveal-delay:.12s" sizes="(min-width: 900px) 50vw, 100vw" widths={[480, 640, 800]} />
     </div>
   </section>
 
   <section class="container section row" style="flex-wrap: wrap-reverse;" aria-labelledby="chef-t">
-    <Photo label={`retrato chef ${site.chef}`} alt={`La chef ${site.chef}, jefa de cocina de Origen.`} height="560px" />
-    <div class="stack">
+    <Photo label={`retrato chef ${site.chef}`} alt={`La chef ${site.chef}, jefa de cocina de Origen.`} class="reveal" height="560px" />
+    <div class="stack reveal" style="--reveal-delay:.12s">
       <span class="script">En la cocina</span>
       <h2 id="chef-t" class="display" style="font-size: 52px;">Chef {site.chef}</h2>
       <p class="lead">Jefa de cocina de Origen y la misma chef que estaba al frente de la cocina del restaurante anterior.{isReal(chefTrayectoria) && <> {chefTrayectoria}</>}</p>
@@ -43,7 +43,7 @@ const chefFrase = ''; // cita literal de la chef sobre su cocina
 
   <section class="dark-2" aria-labelledby="team-t">
     <div class="container section stack" style="gap: 48px;">
-      <div class="center" style="gap: 6px;">
+      <div class="center reveal" style="gap: 6px;">
         <span class="script">Las personas</span>
         <h2 id="team-t" class="caps" style="font-weight: 500; font-size: 34px;">Nuestro equipo</h2>
       </div>
@@ -52,8 +52,8 @@ const chefFrase = ''; // cita literal de la chef sobre su cocina
           [site.chef, 'Chef ejecutiva', 'foto', `La chef ${site.chef}, chef ejecutiva de Origen.`],
           [site.manager, 'Gerente general', 'foto', `Retrato de ${site.manager}, gerente general de Origen.`],
           ['Cocina y salón', 'El equipo de siempre', 'foto grupal', 'El equipo de cocina y de salón de Origen.'],
-        ].map(([name, role, photo, alt]) => (
-          <div class="stack" style="gap: 12px;">
+        ].map(([name, role, photo, alt], i) => (
+          <div class="stack reveal" style={`gap: 12px; --reveal-delay:${i * 0.08}s`}>
             <Photo label={photo} alt={alt} height="320px" />
             <h3 style="font-family: var(--serif); font-weight: 600; font-size: 26px;">{name}</h3>
             <span class="label">{role}</span>
@@ -64,14 +64,14 @@ const chefFrase = ''; // cita literal de la chef sobre su cocina
   </section>
 
   <section class="container section stack" style="gap: 48px;" aria-labelledby="val-t">
-    <h2 id="val-t" class="display" style="text-align: center;">Lo que nos define</h2>
+    <h2 id="val-t" class="display reveal" style="text-align: center;">Lo que nos define</h2>
     <div class="grid" style="--min: 260px; --gap: 40px;">
       {[
         ['Mar', 'Pescado y mariscos del Pacífico costarricense, comprados a proveedores locales.'],
         ['Tierra', 'Frutas y verduras de productores de la zona, salsas y bases hechas en casa cada día.'],
         ['Fuego', 'Cortes a la parrilla con chimichurri ahumado y el sabor que solo da la brasa.'],
-      ].map(([t, d]) => (
-        <div class="stack" style="gap: 10px; border-top: 1px solid var(--accent); padding-top: 24px;">
+      ].map(([t, d], i) => (
+        <div class="stack reveal" style={`gap: 10px; border-top: 1px solid var(--accent); padding-top: 24px; --reveal-delay:${i * 0.08}s`}>
           <h3 style="font-family: var(--serif); font-weight: 600; font-size: 34px;">{t}</h3>
           <p style="color: var(--soft);">{d}</p>
         </div>

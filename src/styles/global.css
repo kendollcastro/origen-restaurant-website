@@ -24,6 +24,9 @@
   --serif: 'Cormorant Garamond', Georgia, serif;
   --sans: 'Jost', system-ui, sans-serif;
   --max: 1240px;
+  /* Easing (skill `animate`, Emil Kowalski): curvas fuertes, no las built-in */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -172,6 +175,47 @@ html:not(.js) .tabs { display: none; }
 .element h3 { font-family: var(--serif); font-weight: 600; font-size: 52px; line-height: 1; }
 .element p { color: var(--soft); }
 
+/* Galería (carrusel scroll-snap + lightbox nativo) */
+.gallery { padding-block: 100px; }
+.gallery-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 32px; }
+.gallery-actions { display: flex; align-items: center; gap: 20px; }
+.gallery-nav { display: flex; gap: 8px; }
+.gallery-arrow {
+  width: 46px; height: 46px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); background: transparent; color: var(--cream); cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.gallery-arrow:hover { color: var(--accent); border-color: var(--accent); }
+.gallery-track {
+  display: grid; grid-auto-flow: column; grid-auto-columns: min(78vw, 360px); gap: 10px;
+  overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;
+  scroll-padding-inline: 24px; padding: 0 24px 14px; -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.gallery-track::-webkit-scrollbar { height: 8px; }
+.gallery-track::-webkit-scrollbar-thumb { background: var(--border); }
+.gallery-item { position: relative; margin: 0; scroll-snap-align: start; }
+.gallery-open { position: absolute; inset: 0; border: 0; background: transparent; cursor: zoom-in; }
+.gallery-open:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+.lightbox { border: 0; padding: 0; background: transparent; max-width: none; max-height: none; }
+.lightbox::backdrop { background: rgba(8, 7, 6, .94); }
+.lb-figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.lb-figure img { max-width: min(92vw, 1500px); max-height: 82vh; width: auto; height: auto; object-fit: contain; }
+.lb-figure figcaption { color: var(--soft); font-size: 14px; }
+.lb-btn {
+  position: fixed; width: 52px; height: 52px; display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); background: rgba(20, 17, 14, .75); color: var(--cream); cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.lb-btn:hover { color: var(--accent); border-color: var(--accent); }
+.lb-close { top: 20px; right: 20px; }
+.lb-prev { left: 20px; top: 50%; transform: translateY(-50%); }
+.lb-next { right: 20px; top: 50%; transform: translateY(-50%); }
+@media (max-width: 640px) {
+  .gallery { padding-block: 72px; }
+  .lb-prev, .lb-next { top: auto; bottom: 20px; transform: none; }
+}
+
 /* FAQ */
 .faq { border-top: 1px solid var(--line-light); }
 .faq details { border-bottom: 1px solid var(--line-light); }
@@ -224,8 +268,40 @@ html:not(.js) .tabs { display: none; }
   .caps { letter-spacing: .1em; }
 }
 
+/* Motion (progressive enhancement): sin JS el contenido es visible y estático */
+/* Reveal al hacer scroll — opacity + translate (transform/opacity: GPU, no disparan layout).
+   Solo cuando hay JS; sin JS no se oculta nada. Se dispara una sola vez.
+   NOTA: no usar `clip-path` aquí — Chromium lo cuenta para IntersectionObserver y el
+   elemento recortado nunca intersecta (deadlock). */
+html.js .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out);
+  transition-delay: var(--reveal-delay, 0s);
+}
+html.js .reveal[data-visible] { opacity: 1; transform: none; }
+
+/* Entrada del hero — animación CSS predeterminada (off-main-thread), stagger 60ms.
+   Solo con JS; `prefers-reduced-motion` la vuelve instantánea (bloque global abajo). */
+@media (prefers-reduced-motion: no-preference) {
+  html.js .hero-top .inner > * {
+    animation: hero-in 700ms var(--ease-out) both;
+  }
+  html.js .hero-top .inner > :nth-child(1) { animation-delay: 60ms; }
+  html.js .hero-top .inner > :nth-child(2) { animation-delay: 120ms; }
+  html.js .hero-top .inner > :nth-child(3) { animation-delay: 180ms; }
+  html.js .hero-top .inner > :nth-child(4) { animation-delay: 240ms; }
+  html.js .hero-top .inner > :nth-child(5) { animation-delay: 300ms; }
+  html.js .hero-top .inner > :nth-child(6) { animation-delay: 360ms; }
+}
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  html.js .reveal { opacity: 1; transform: none; transition: none; }
   *, *::before, *::after {
     transition-duration: .01ms !important;
     animation-duration: .01ms !important;

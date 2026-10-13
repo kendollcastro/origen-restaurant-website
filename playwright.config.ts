@@ -14,6 +14,10 @@ export default defineConfig({
     baseURL: 'http://localhost:4321',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    // Las animaciones de entrada (reveal/hero) son mejora progresiva. Los E2E
+    // evalúan el estado final y estable: sin esto, axe mide colores a mitad de
+    // transición (opacidad < 1) y reporta falsos positivos de contraste.
+    reducedMotion: 'reduce',
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },

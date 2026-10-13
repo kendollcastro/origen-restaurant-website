@@ -25,7 +25,7 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
 ---
 <Base title="Origen Jacó · Restaurante de mariscos y parrilla en Jacó, Costa Rica">
 
-  <Photo label="parrilla encendida / mesa frente al mar" src={platos[5]} alt="Cocina de mar y tierra servida en Origen, Jacó." priority class="hero" sizes="(min-width: 900px) 100vw, 100vw" widths={[480, 640, 800, 1080, 1440]}>
+  <Photo label="parrilla encendida / mesa frente al mar" src={platos[5]} alt="Cocina de mar y tierra servida en Origen, Jacó." priority class="hero hero-top" sizes="(min-width: 900px) 100vw, 100vw" widths={[480, 640, 800, 1080, 1440]}>
     <div class="inner overlay">
       <span class="script" style="font-size: 44px;">Bienvenidos a</span>
       <p class="hero-title" aria-hidden="true">ORIGEN</p>
@@ -48,14 +48,14 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
   </section>
 
   <section class="container section grid" aria-label="Información" style="--min: 280px; --gap: 48px; align-items: center; text-align: center;">
-    <div class="center" style="gap: 10px;">
+    <div class="center reveal" style="gap: 10px;">
       <span class="script" style="font-size: 24px;">Te esperamos</span>
       <h2 class="display" style="font-size: 40px;">Horario</h2>
       <p class="lead">{site.hours.days}<br />{site.hours.label}</p>
       <p class="dim">Almuerzo · Cena · Cócteles</p>
     </div>
-    <Photo label="salón / barra" src={ambiente[0]} alt="El salón de Origen, en Jacó." height="360px" sizes="(min-width: 900px) 33vw, 90vw" widths={[320, 480, 640]} />
-    <div class="center" style="gap: 10px;">
+    <Photo label="salón / barra" src={ambiente[0]} alt="El salón de Origen, en Jacó." class="reveal" style="--reveal-delay:.08s" height="360px" sizes="(min-width: 900px) 33vw, 90vw" widths={[320, 480, 640]} />
+    <div class="center reveal" style="gap: 10px; --reveal-delay:.16s">
       <span class="script" style="font-size: 24px;">Encuéntranos</span>
       <h2 class="display" style="font-size: 40px;">Ubicación</h2>
       <p class="lead">
@@ -68,7 +68,7 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
 
   <section id="historia" class="light">
     <div class="container section row">
-      <div class="center" style="gap: 16px; text-align: center;">
+      <div class="center reveal" style="gap: 16px; text-align: center;">
         <span class="script script-lg">Descubre</span>
         <h2 class="caps">Nuestro origen</h2>
         <hr class="rule" />
@@ -76,7 +76,7 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
         <p class="lead" style="max-width: 470px;">Al frente de la cocina, la chef {site.chef}.</p>
         <a href="/nosotros/" class="link-caps">Conoce nuestra historia</a>
       </div>
-      <div class="grid" style="--min: 180px; --gap: 16px;">
+      <div class="grid reveal" style="--min: 180px; --gap: 16px; --reveal-delay:.12s">
         <Photo label={`chef ${site.chef}`} alt={`La chef ${site.chef} al frente de la cocina de Origen.`} height="440px" style="background-color:#2A2520" />
         <div class="stack" style="padding-top: 64px;">
           <Photo label="plato insignia" src={platos[0]} alt="Plato de la cocina de Origen." height="240px" style="background-color:#2A2520" sizes="(min-width: 900px) 520px, 90vw" widths={[320, 480, 640]} />
@@ -99,8 +99,8 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
         ['01', 'Mar', 'Ceviche Diablo', 'Ceviche Diablo, Perlas del Pacífico, carpaccio de corvina y salmón, crema de langosta.'],
         ['02', 'Tierra', 'Caprese di Bufala', 'Producto local y de temporada: hojas frescas, piña a la parrilla, maíz rostizado, tostones dulces.'],
         ['03', 'Fuego', 'Rib Eye en la parrilla', 'Lomito, New York y Rib Eye a la parrilla, con chimichurri ahumado y guarnición a elegir.'],
-      ].map(([n, t, photo, text]) => (
-        <Photo label={photo} class="element">
+      ].map(([n, t, photo, text], i) => (
+        <Photo label={photo} class="element reveal" style={`--reveal-delay:${i * 0.09}s`}>
           <article class="overlay stack" style="gap: 10px;">
             <span class="script">{n}</span>
             <h3>{t}</h3>
@@ -113,7 +113,7 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
 
   <section id="menu" class="container section" aria-labelledby="menu-t">
     <div class="row" style="align-items: flex-start;">
-      <div class="stack" style="flex: 999 1 560px; gap: 28px;">
+      <div class="stack reveal" style="flex: 999 1 560px; gap: 28px;">
         <div class="stack" style="gap: 6px;">
           <span class="script" style="font-size: 26px;">De nuestra cocina</span>
           <h2 id="menu-t" class="display">El menú</h2>
@@ -142,7 +142,7 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
           <span class="dim">También: mariscos, pastas, arroces, hamburguesas y coctelería · Precios con IVA incluido</span>
         </div>
       </div>
-      <div class="grid" style="flex: 1 1 380px; --min: 160px; --gap: 14px;">
+      <div class="grid reveal" style="flex: 1 1 380px; --min: 160px; --gap: 14px; --reveal-delay:.12s">
         <Photo label="plato destacado" src={platos[1]} alt="Plato de mariscos de Origen, Jacó." height="300px" style="grid-column: 1 / -1;" sizes="(min-width: 900px) 540px, 100vw" widths={[320, 480, 640]} />
         <Photo label="detalle" src={ambiente[1]} alt="Detalle del salón de Origen." height="220px" sizes="(min-width: 900px) 180px, 45vw" widths={[240, 320, 480]} />
         <Photo label="cóctel" src={bebidas[0]} alt="Cóctel servido en la barra de Origen." height="220px" sizes="(min-width: 900px) 180px, 45vw" widths={[240, 320, 480]} />
@@ -150,17 +150,27 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
     </div>
   </section>
 
-  <section id="galeria" class="dark-2" aria-labelledby="gal-t" style="padding-block: 100px;">
-    <div class="container" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px; margin-bottom: 40px;">
+  <section id="galeria" class="dark-2 gallery" aria-labelledby="gal-t">
+    <div class="container gallery-head">
       <div class="stack" style="gap: 4px;">
         <span class="script" style="font-size: 26px;">Momentos en Origen</span>
         <h2 id="gal-t" class="display">Galería</h2>
       </div>
-      {isReal(site.social.instagram) && (
-        <a href={site.social.instagram} class="link-caps" target="_blank" rel="noopener">Síguenos en Instagram</a>
-      )}
+      <div class="gallery-actions">
+        {isReal(site.social.instagram) && (
+          <a href={site.social.instagram} class="link-caps" target="_blank" rel="noopener">Síguenos en Instagram</a>
+        )}
+        <div class="gallery-nav">
+          <button type="button" class="gallery-arrow" data-dir="-1" aria-label="Foto anterior">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+          </button>
+          <button type="button" class="gallery-arrow" data-dir="1" aria-label="Foto siguiente">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="grid" style="--min: 220px; --gap: 10px; padding: 0 10px;">
+    <div class="gallery-track" data-gallery tabindex="0" role="region" aria-label="Galería de fotos de Origen">
       {[
         { l: 'Interior de Origen', a: 'Interior del salón de Origen en Jacó.', s: ambiente[2] },
         { l: 'Plato de mariscos', a: 'Plato de mariscos de la cocina de Origen.', s: platos[2] },
@@ -170,14 +180,32 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
         { l: 'Coctelería', a: 'La coctelería de Origen.', s: bebidas[2] },
         { l: 'Ambiente', a: 'Ambiente de Origen restaurante en Jacó, Costa Rica.', s: ambiente[4] },
         { l: 'Corte a la parrilla', a: 'Corte a la parrilla de Origen.', s: platos[4] },
-      ].map(({ l, a, s }) => (
-        <Photo label={l} alt={a} src={s} height="360px" sizes="(min-width: 1100px) 300px, (min-width: 600px) 45vw, 100vw" widths={[320, 480]} />
+      ].map(({ l, a, s }, i) => (
+        <figure class="gallery-item reveal" style={`--reveal-delay:${i * 0.06}s`}>
+          <Photo label={l} alt={a} src={s} height="360px" sizes="(min-width: 1100px) 340px, (min-width: 600px) 60vw, 78vw" widths={[320, 480]} />
+          <button type="button" class="gallery-open" aria-label={`Ampliar: ${l}`} data-full={s.src} data-alt={a} data-caption={l}></button>
+        </figure>
       ))}
     </div>
+    <dialog id="lightbox" class="lightbox" aria-label="Galería ampliada">
+      <figure class="lb-figure">
+        <img id="lb-img" alt="" decoding="async" />
+        <figcaption id="lb-cap"></figcaption>
+      </figure>
+      <button type="button" class="lb-btn lb-close" aria-label="Cerrar" data-close>
+        <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+      <button type="button" class="lb-btn lb-prev" aria-label="Foto anterior" data-prev>
+        <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+      </button>
+      <button type="button" class="lb-btn lb-next" aria-label="Foto siguiente" data-next>
+        <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+      </button>
+    </dialog>
   </section>
 
   <Photo label="mesa larga para evento" src={ambiente[6]} alt="El salón de Origen preparado para una celebración en Jacó." class="hero" style="min-height: 0; padding: 140px 24px;" widths={[480, 640, 800, 1024]}>
-    <section class="inner overlay" style="max-width: 760px;" aria-labelledby="ev-t">
+    <section class="inner overlay reveal" style="max-width: 760px;" aria-labelledby="ev-t">
       <span class="script script-lg">Celebra con</span>
       <h2 id="ev-t" class="caps">Nosotros</h2>
       <p class="lead">Cumpleaños, bodas, cenas de empresa y grupos de tour. Espacio para hasta {site.capacity} invitados con menú a la medida.</p>
@@ -250,4 +278,54 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
       next.focus();
     });
   });
+</script>
+
+<script>
+  const track = document.querySelector<HTMLElement>('[data-gallery]');
+  const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
+  const lbImg = document.getElementById('lb-img') as HTMLImageElement | null;
+  const lbCap = document.getElementById('lb-cap');
+
+  if (track) {
+    const opens = Array.from(track.querySelectorAll<HTMLButtonElement>('.gallery-open'));
+    let index = 0;
+
+    const show = (i: number) => {
+      if (!lbImg || !lbCap || opens.length === 0) return;
+      index = (i + opens.length) % opens.length;
+      const data = opens[index].dataset;
+      lbImg.src = data.full ?? '';
+      lbImg.alt = data.alt ?? '';
+      lbCap.textContent = data.caption ?? '';
+    };
+
+    const section = track.closest('.gallery');
+    section?.querySelectorAll<HTMLButtonElement>('.gallery-arrow').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = track.querySelector('.gallery-item');
+        const step = item ? item.getBoundingClientRect().width + 10 : track.clientWidth * 0.8;
+        track.scrollBy({ left: Number(btn.dataset.dir) * step, behavior: 'smooth' });
+      });
+    });
+
+    opens.forEach((el, i) => {
+      el.addEventListener('click', () => {
+        show(i);
+        if (dialog && !dialog.open) dialog.showModal();
+      });
+    });
+
+    if (dialog && lbImg) {
+      dialog.querySelector('[data-close]')?.addEventListener('click', () => dialog.close());
+      dialog.querySelector('[data-prev]')?.addEventListener('click', () => show(index - 1));
+      dialog.querySelector('[data-next]')?.addEventListener('click', () => show(index + 1));
+      dialog.addEventListener('click', (e) => {
+        if (e.target === dialog) dialog.close();
+      });
+      dialog.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') show(index + 1);
+        else if (e.key === 'ArrowLeft') show(index - 1);
+      });
+    }
+  }
 </script>

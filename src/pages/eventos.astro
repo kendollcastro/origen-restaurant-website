@@ -24,10 +24,10 @@ const tipos = [
   </PageHero>
 
   <section class="container section stack" style="gap: 48px;" aria-labelledby="tipos-t">
-    <h2 id="tipos-t" class="display" style="text-align: center;">¿Qué celebramos contigo?</h2>
+    <h2 id="tipos-t" class="display reveal" style="text-align: center;">¿Qué celebramos contigo?</h2>
     <div class="grid" style="--min: 260px;">
-      {tipos.map(([t, photo, d, alt]) => (
-        <article class="stack" style="gap: 14px;">
+      {tipos.map(([t, photo, d, alt], i) => (
+        <article class="stack reveal" style={`gap: 14px; --reveal-delay:${i * 0.08}s`}>
           <Photo label={photo} alt={alt} height="300px" />
           <h3 style="font-family: var(--serif); font-weight: 600; font-size: 30px; line-height: 1.1;">{t}</h3>
           <p style="color: var(--soft);">{d}</p>
@@ -37,7 +37,7 @@ const tipos = [
   </section>
 
   <section class="light">
-    <div class="container grid" style="--min: 220px; --gap: 32px; padding-block: 80px; text-align: center;">
+    <div class="container grid reveal" style="--min: 220px; --gap: 32px; padding-block: 80px; text-align: center;">
       {[
         [String(site.capacity), 'invitados de capacidad'],
         [`${hour12(site.hours.opens)}–${hour12(site.hours.closes)}`, `abierto de ${hour12(site.hours.opens)} ${period(site.hours.opens)} a ${hour12(site.hours.closes)} ${period(site.hours.closes)}`],
@@ -52,14 +52,14 @@ const tipos = [
   </section>
 
   <section id="cotizar" class="container section row" style="align-items: flex-start;" aria-labelledby="cot-t">
-    <div class="stack" style="flex: 1 1 380px; gap: 14px;">
+    <div class="stack reveal" style="flex: 1 1 380px; gap: 14px;">
       <span class="script">Hablemos</span>
       <h2 id="cot-t" class="display">Cotiza tu evento</h2>
       <p class="lead">Cuéntanos la fecha y el número de personas. Te respondemos por WhatsApp o correo con una propuesta de menú.</p>
       <p class="muted" style="font-size: 14px;">WhatsApp {site.phone}<br />{site.email}</p>
       <p class="dim">Mientras tanto, mira el <a href="/menu/">menú</a>, conoce a <a href="/nosotros/">nuestro equipo</a> o encuéntranos en <a href="/contacto/">contacto</a>.</p>
     </div>
-    <form id="event-form" class="form" style="flex: 2 1 560px;" data-wa={site.whatsapp} action={waHref} method="get" target="_blank">
+    <form id="event-form" class="form reveal" style="flex: 2 1 560px; --reveal-delay:.12s" data-wa={site.whatsapp} action={waHref} method="get" target="_blank">
       <div class="field"><label for="e-n">Nombre</label><input id="e-n" name="nombre" type="text" autocomplete="name" required /></div>
       <div class="field"><label for="e-w">WhatsApp</label><input id="e-w" name="tel" type="tel" autocomplete="tel" /></div>
       <div class="field">
