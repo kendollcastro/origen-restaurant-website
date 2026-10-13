@@ -186,6 +186,12 @@ html:not(.js) .tabs { display: none; }
   transition: background .2s, color .2s, border-color .2s;
 }
 .gallery-arrow:hover { color: var(--accent); border-color: var(--accent); }
+/* Autoplay: el botón de pausa solo aparece con JS (evita un control muerto sin JS). */
+.gallery-toggle { display: none; }
+html.js .gallery-toggle { display: inline-flex; }
+.gallery-toggle .ic-play { display: none; }
+.gallery-toggle[data-state="paused"] .ic-pause { display: none; }
+.gallery-toggle[data-state="paused"] .ic-play { display: inline; }
 .gallery-track {
   display: grid; grid-auto-flow: column; grid-auto-columns: min(78vw, 360px); gap: 10px;
   overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory;

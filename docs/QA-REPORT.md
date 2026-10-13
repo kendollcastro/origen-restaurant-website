@@ -704,10 +704,11 @@ de Facebook para confirmar que no recorta el preview.
 | Ítem | Resultado |
 |---|---|
 | Galería | 💚 8 slides con `scroll-snap-type: x mandatory`; flechas desplazan el track; lightbox `<dialog>` abre/navega (wrap) /cierra con teclado ←/→ y clic en backdrop; datos críticos siguen en el DOM (imágenes lazy) |
+| Autoplay (T-56) | 💚 avanza sola cada 4,5 s con wrap; **botón pausa/reanudar** siempre presente con JS (WCAG 2.2.2) y oculto sin JS (sin control muerto); pausa en hover/foco, con el lightbox abierto, con la pestaña oculta y fuera de viewport (`IntersectionObserver`); `prefers-reduced-motion` arranca en pausa |
 | Motion | 💚 `.reveal` (`opacity`+`translateY`, una sola vez) vía `IntersectionObserver`; `hero-in` con stagger; `prefers-reduced-motion` instantáneo; sin JS, contenido visible y estático |
 | **Hallazgo de implementación** | 🔴→💚 el reveal con `clip-path` **rompía** `IntersectionObserver` en Chromium (el área recortada nunca intersecta → deadlock): cambiar a `opacity`/`transform` |
 | Estrategia de test | E2E corre con `reducedMotion: 'reduce'` para que **axe mida el estado final** (la opacidad a mitad de transición generaba falsos positivos de contraste); `tests/e2e/motion.spec.ts` cubre el camino animado y el fallback sin JS |
-| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **414/414 Playwright** (48.6 s; +6 T-57 motion, +4 T-56 galería) |
+| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **500/500 Playwright** (50.8 s; +autoplay T-56) |
 
 # Traducción EN completa (T-36 · F5)
 
