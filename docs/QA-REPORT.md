@@ -724,3 +724,17 @@ de Facebook para confirmar que no recorta el preview.
 | Verificación | `check` 0 errores (`1` hint preexistente) · `build` 11 páginas · `gate` 0 bloqueantes · **432/432 Playwright** (40.1 s; +18 T-36) |
 
 **Pendiente T-37:** estado accesible del switcher y desbordes a 360 px con el texto EN (~20% más largo).
+
+# UI en inglés a 360/768/1440 (T-37 · F5)
+
+> **Fecha:** 2026-10-13 · **Alcance:** validar que el copy EN (~20% más largo) no rompe el layout y que la paridad ES↔EN se mantiene. **Sin cambios de CSS necesarios.**
+
+| Ítem | Resultado |
+|---|---|
+| Desborde horizontal (5 rutas `/en/` × 360/768/1440) | 💚 0 desborde; CTAs y formularios dentro del viewport (`ux.spec.ts`, 30 tests/añadidos) |
+| Árbol de encabezados | 💚 idéntico al ES equivalente (`h1..h6`), 1 solo `h1` por página |
+| CTAs por sección | 💚 `a.btn` equivalentes (rutas internas con prefijo `/en`; `wa.me` igual base, mensaje localizado) |
+| Tipografía de marca | 💚 `.script` = Cormorant Garamond y `.caps` = Jost, ambas cargadas (`document.fonts.check`) y sin recorte a 360px |
+| Switcher accesible | 💚 cubierto en `i18n.spec.ts` (`aria-current`, `aria-label`, `href` real, foco) |
+| Nota | no requirió cambios de producción: `clamp()` y `letter-spacing: .1em` a ≤380px ya absorbían el texto EN |
+| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **492/492 Playwright** (42.1 s; +30 T-37, +30 responsive EN) |

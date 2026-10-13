@@ -7,6 +7,7 @@ import { site } from '../../src/data/site';
 // Referencia: WCAG 2.1 AA (4.5:1 texto normal, 3:1 texto grande/UI) y foco ≥3:1.
 
 const ES_ROUTES = ['/', '/menu/', '/nosotros/', '/eventos/', '/contacto/'];
+const EN_ROUTES = ['/en/', '/en/menu/', '/en/nosotros/', '/en/eventos/', '/en/contacto/'];
 const ALL_ROUTES = [...ES_ROUTES, '/404.html'];
 const WHATSAPP = site.whatsapp;
 
@@ -260,7 +261,7 @@ test.describe('responsive (T-51)', () => {
     test.describe(`${vp.name}px`, () => {
       test.use({ viewport: { width: vp.width, height: vp.height } });
 
-      for (const route of ALL_ROUTES) {
+      for (const route of [...ALL_ROUTES, ...EN_ROUTES]) {
         test(`${route} · sin desborde horizontal, CTAs y formularios dentro del viewport`, async ({
           page,
         }) => {
@@ -319,6 +320,84 @@ test.describe('responsive (T-51)', () => {
       expect(right).toBeLessThanOrEqual(client);
       await expect(page.locator('.element h3').nth(1)).toHaveText('Tierra');
       await expect(page.locator('footer.site-footer')).toBeVisible();
+    });
+  }
+});
+
+// --- 3b. Paridad ES ↔ EN (T-37) ---------------------------------------------
+// La traducción EN crece ~20%: se verifica que el árbol de encabezados, los CTAs por
+// sección y las piezas decorativas (.script/.caps) se mantengan equivalentes y legibles.
+
+const ROUTE_PAIRS: [string, string][] = [
+  ['/', '/en/'],
+  ['/menu/', '/en/menu/'],
+  ['/nosotros/', '/en/nosotros/'],
+  ['/eventos/', '/en/eventos/'],
+  ['/contacto/', '/en/contacto/'],
+];
+
+// Enlace EN equivalente: prefija las rutas de página con /en, deja anclas, externos y ficheros igual.
+const toEnHref = (href: string) =>
+  /^\/(?!\/)/.test(href) && !/\.\w+$/.test(href) ? `/en${href}` : href;
+// Normaliza enlaces a WhatsApp (el mensaje se localiza): se compara solo la base.
+const stripQuery = (href: string) => href.split('?')[0];
+
+test.describe('T-37 · paridad ES ↔ EN', () => {
+  for (const [es, en] of ROUTE_PAIRS) {
+    test(`${en} · mismo árbol de encabezados que ${es}`, async ({ page }) => {
+      const outline = async (route: string) => {
+        await page.goto(route);
+        return page.$$eval('h1, h2, h3, h4, h5, h6', (els) =>
+          els.map((el) => Number(el.tagName[1])),
+        );
+      };
+      const esOutline = await outline(es);
+      const enOutline = await outline(en);
+      expect(enOutline).toEqual(esOutline);
+      expect(enOutline.filter((n) => n === 1)).toHaveLength(1);
+    });
+
+    test(`${en} · CTAs equivalentes a ${es}`, async ({ page }) => {
+      const ctaHrefs = async (route: string) => {
+        await page.goto(route);
+        return page.$$eval('a.btn', (els) =>
+          els.map((el) => el.getAttribute('href') ?? ''),
+        );
+      };
+      const esHrefs = (await ctaHrefs(es)).map((h) => toEnHref(stripQuery(h)));
+      const enHrefs = (await ctaHrefs(en)).map(stripQuery);
+      expect(enHrefs).toEqual(esHrefs);
+    });
+
+    test(`${en} · .script y .caps usan la tipografía de marca y no se recortan a 360px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 360, height: 740 });
+      await page.goto(en);
+      const report = await page.evaluate(async () => {
+        await document.fonts.ready;
+        const read = (sel: string) =>
+          Array.from(document.querySelectorAll<HTMLElement>(sel)).map((el) => {
+            const cs = getComputedStyle(el);
+            return {
+              text: el.textContent?.trim().slice(0, 40) ?? '',
+              font: cs.fontFamily.toLowerCase(),
+              loaded: document.fonts.check(`${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`),
+              clipped: el.scrollWidth > el.clientWidth + 1,
+            };
+          });
+        return { script: read('.script'), caps: read('.caps') };
+      });
+      for (const item of report.script) {
+        expect(item.font, `script: ${item.text}`).toContain('cormorant');
+        expect(item.loaded, `script sin cargar: ${item.text}`).toBe(true);
+        expect(item.clipped, `script recortado: ${item.text}`).toBe(false);
+      }
+      for (const item of report.caps) {
+        expect(item.font, `caps: ${item.text}`).toContain('jost');
+        expect(item.loaded, `caps sin cargar: ${item.text}`).toBe(true);
+        expect(item.clipped, `caps recortado: ${item.text}`).toBe(false);
+      }
     });
   }
 });
