@@ -8,9 +8,9 @@ Para poder cerrar el sitio es necesario recibir estos insumos. Agrupados en dos 
 |----|--------|--------------|--------|
 | P-01 | **Dominio definitivo** (`origenjaco.com`) + credenciales del registrador | go-live (T-53), mails, canonical | ⏳ |
 | P-02 | Nombre oficial del restaurante y del local (fachada) | NAP global (T-18) | ⏳ (hoy "Origen.") |
-| P-03 | **Teléfono real** (hoy `+506 0000 0000`) | NAP global, JSON-LD, botones | ⏳ |
-| P-04 | **WhatsApp real** (hoy `506 0000 0000`) + etiqueta oficial | Botón reservar/cotizar, footer | ⏳ |
-| P-05 | URLs exactas: Instagram, Facebook, TripAdvisor, ficha Google Maps y Waze | Redes sociales y enlaces (T-31) | ⏳ |
+| P-03 | ~~**Teléfono real**~~ ✅ `+506 7195 5800` (2026-10-13) | NAP global, JSON-LD, botones | ✅ |
+| P-04 | ~~**WhatsApp real**~~ ✅ `50671955800` (2026-10-13) + etiqueta oficial *(falta confirmar etiqueta)* | Botón reservar/cotizar, footer | ✅ |
+| P-05 | URLs exactas: Instagram, Facebook, TripAdvisor, **ficha Google Maps** ✅ (`maps.app.goo.gl/jojXbrhHB41TM3kMA`) y Waze | Redes sociales y enlaces (T-31) | 🟡 (falta IG/FB/TA/Waze) |
 | P-06 | Google Business Profile: crear/verificar, categoría, **URL de la ficha** | Ficha de Google (T-29/T-30) | ⏳ |
 | P-11 | `priceRange` real: personas normales 1 plato + bebida ≈ ₡1 500–3 500 / 3 500–6 000 / 6 000+ | JSON-LD `priceRange` (T-18) | ⏳ |
 | P-16 | **Fotos** (o autorización de sesión en el local) con permiso de uso de chef y equipo, según `docs/SHOTLIST.md` (31 tomas) — **parcial**: recibidas **32** (`platos/` 11 · `bebidas/` 13 · `ambiente/` 8) e integradas en T-26; faltan **hero/**, **equipo/**, **eventos/**, **aliados/**, el **permiso por escrito** y la **leyenda por archivo** (qué plato es cada `comida-N.jpg`, para `alt`/copy específicos) | Galería y hero (T-26) ⏳ alt específico | ⏳ |
@@ -36,7 +36,7 @@ Para poder cerrar el sitio es necesario recibir estos insumos. Agrupados en dos 
 
 ## Notas
 
-- Hoy los valores de ejemplo (`+506 0000 0000`, WhatsApp, redes sociales) están **ocultos** en la web hasta recibir los reales (commit T-17/T-33).
+- Hoy los valores de ejemplo restantes (correo, redes, dirección, coordenadas) siguen **ocultos** en la web hasta recibir los reales; teléfono, WhatsApp y horario ya son reales (2026-10-13).
 - El sitio ya está desplegado en **preview** (acceso por login a la cuenta Vercel `kendollcastro`). Nada en producción.
 - La apertura "octubre de 2026" no está confirmada (afecta a fecha del esquema `openingHoursSpecification`).
 - Recibir P-01…P-06 desbloquea T-06/T-14/T-18…T-21/T-23 y el go-live; el resto se puede cerrar en tandas.

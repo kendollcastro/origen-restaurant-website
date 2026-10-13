@@ -16,8 +16,8 @@ export const site = {
     countryName: 'Costa Rica',
   },
   geo: { lat: 9.6141, lng: -84.6284 }, // TODO: coordenadas exactas del local
-  phone: '+506 0000 0000', // TODO
-  whatsapp: '50600000000', // TODO: solo dígitos, con código de país
+  phone: '+506 7195 5800', // confirmado por el cliente (2026-10-13); mismo número que WhatsApp
+  whatsapp: '50671955800', // confirmado por el cliente (2026-10-13): wa.me/50671955800
   email: 'info@origenjaco.com', // TODO
   hours: {
     label: '11:00 am – 10:00 pm',
@@ -36,7 +36,7 @@ export const site = {
     facebook: 'https://facebook.com/[pagina]', // TODO
     tripadvisor: 'https://www.tripadvisor.com/[ficha]', // TODO
   },
-  mapsUrl: 'https://maps.google.com/?q=Origen+Jaco', // TODO: link de la ficha de Google
+  mapsUrl: 'https://maps.app.goo.gl/jojXbrhHB41TM3kMA', // confirmado 2026-10-13
   wazeUrl: 'https://waze.com/ul?q=Origen%20Jaco', // TODO
 };
 
