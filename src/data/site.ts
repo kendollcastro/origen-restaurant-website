@@ -6,6 +6,8 @@ export const site = {
   tagline: 'Mar · Tierra · Fuego',
   description:
     'Restaurante Origen: mariscos y parrilla en Jacó, Costa Rica. Mariscos frescos del Pacífico, cortes a la parrilla y coctelería de autor.',
+  descriptionEn:
+    'Origen Restaurant: seafood and grill in Jacó, Costa Rica. Fresh Pacific seafood, grilled cuts and signature cocktails.', // T-36
   url: 'https://www.origenjaco.com', // TODO: dominio real
   address: {
     street: '[Dirección exacta]', // TODO
@@ -22,6 +24,7 @@ export const site = {
   hours: {
     label: '11:00 am – 10:00 pm',
     days: 'Todos los días', // confirmado por el cliente (2026-10-13): los 7 días
+    daysEn: 'Every day', // T-36: equivalente EN de `days`
     opens: '11:00',
     closes: '22:00',
     schema: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], // confirmado 2026-10-13

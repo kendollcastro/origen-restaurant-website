@@ -1,16 +1,36 @@
 ---
-// TODO: traducción aprobada (P-22) — T-36 sustituye el cuerpo EN provisional.
+// T-36: cuerpo EN completo (P-22 aprobado). Espejo de /index.astro con el copy en inglés.
 import Base from '../../layouts/Base.astro';
 import Photo from '../../components/Photo.astro';
+import ReserveForm from '../../components/ReserveForm.astro';
+import DishList from '../../components/DishList.astro';
 import { site, waLink } from '../../data/site';
+import { menu, type Category } from '../../data/menu';
+import { isPlaceholder, isReal } from '../../data/placeholders';
+import { platos, bebidas, ambiente } from '../../data/photos';
 import { enPages } from '../../data/i18n/pages';
-import { platos } from '../../data/photos';
 
 const p = enPages.index;
 const waHref = waLink('Hello Origen, I would like to book a table.');
+
+// Datos aún no entregados por el cliente: al llegar (T-31/T-32) se llenan aquí y la sección aparece.
+const reviews: { platform: string; stars: number; quote: string; author: string }[] = [];
+const partners: { name: string; logo: string }[] = [];
+const mapsEmbedUrl = '';
+
+const categoryById = (id: string): Category => {
+  const category = menu.find((c) => c.id === id);
+  if (!category) {
+    throw new Error(`Category "${id}" not found in src/data/menu.ts`);
+  }
+  return category;
+};
+
+const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => categoryById(id));
 ---
 <Base title={p.title} description={p.description} lang="en">
-  <Photo label="grill fire / table facing the sea" src={platos[5]} alt="Sea and land cooking served at Origen, Jacó." priority class="hero">
+
+  <Photo label="grill fire / table facing the sea" src={platos[5]} alt="Sea and land cooking served at Origen, Jacó." priority class="hero hero-top" sizes="(min-width: 900px) 100vw, 100vw" widths={[480, 640, 800, 1080, 1440]}>
     <div class="inner overlay">
       <span class="script" style="font-size: 44px;">{p.script}</span>
       <p class="hero-title" aria-hidden="true">ORIGEN</p>
@@ -24,24 +44,293 @@ const waHref = waLink('Hello Origen, I would like to book a table.');
     </div>
   </Photo>
 
-  <section class="light">
+  <section id="reservar" class="dark-2" aria-labelledby="res-t" style="border-bottom: 1px solid rgba(242,235,221,.08);">
+    <div class="container stack" style="max-width: 1100px; padding-block: 48px; gap: 18px;">
+      <h2 id="res-t" class="label">Book your table</h2>
+      <ReserveForm id="home" lang="en" />
+      <p class="dim">We confirm on WhatsApp · {site.phone}</p>
+    </div>
+  </section>
+
+  <section class="container section grid" aria-label="Information" style="--min: 280px; --gap: 48px; align-items: center; text-align: center;">
+    <div class="center reveal" style="gap: 10px;">
+      <span class="script" style="font-size: 24px;">See you soon</span>
+      <h2 class="display" style="font-size: 40px;">Hours</h2>
+      <p class="lead">{site.hours.daysEn}<br />{site.hours.label}</p>
+      <p class="dim">Lunch · Dinner · Cocktails</p>
+    </div>
+    <Photo label="dining room / bar" src={ambiente[0]} alt="The dining room at Origen, in Jacó." class="reveal" style="--reveal-delay:.08s" height="360px" sizes="(min-width: 900px) 33vw, 90vw" widths={[320, 480, 640]} />
+    <div class="center reveal" style="gap: 10px; --reveal-delay:.16s">
+      <span class="script" style="font-size: 24px;">Find us</span>
+      <h2 class="display" style="font-size: 40px;">Location</h2>
+      <p class="lead">
+        {!isPlaceholder(site.address.street) && <>{site.address.street}<br /></>}
+        {site.address.locality}, {site.address.county}, {site.address.region}
+      </p>
+      <a href="/en/contacto/" class="link-caps">How to get here</a>
+    </div>
+  </section>
+
+  <section id="historia" class="light">
     <div class="container section row">
-      <div class="center" style="gap: 16px; text-align: center;">
-        <h2 class="caps">Sea, land and fire</h2>
+      <div class="center reveal" style="gap: 16px; text-align: center;">
+        <span class="script script-lg">Discover</span>
+        <h2 class="caps">Our origin</h2>
         <hr class="rule" />
-        <p class="lead" style="max-width: 470px;">
-          Pacific seafood, Costa Rican produce and the fire of the grill. Chef {site.chef} leads the kitchen.
-        </p>
+        <p class="lead" style="max-width: 470px;">Origen opens where Hicaco Plaza Jacó used to be, with the same team, the same quality and the same service our guests already know. A kitchen that honors three elements: the Pacific sea, the Costa Rican land and the fire of the grill.</p>
+        <p class="lead" style="max-width: 470px;">At the helm of the kitchen, chef {site.chef}.</p>
         <a href="/en/nosotros/" class="link-caps">Our story</a>
       </div>
-      <div class="center" style="gap: 10px;">
-        <span class="script" style="font-size: 24px;">Find us</span>
-        <h2 class="display" style="font-size: 40px;">Location</h2>
-        <p class="lead">
-          {site.address.locality}, {site.address.county}, {site.address.region}
-        </p>
-        <a href="/en/contacto/" class="link-caps">How to get here</a>
+      <div class="grid reveal" style="--min: 180px; --gap: 16px; --reveal-delay:.12s">
+        <Photo label={`chef ${site.chef}`} alt={`Chef ${site.chef} leading the kitchen at Origen.`} height="440px" style="background-color:#2A2520" />
+        <div class="stack" style="padding-top: 64px;">
+          <Photo label="signature dish" src={platos[0]} alt="A dish from the Origen kitchen." height="240px" style="background-color:#2A2520" sizes="(min-width: 900px) 520px, 90vw" widths={[320, 480, 640]} />
+          <div style="background: var(--ink); color: var(--cream); padding: 24px;">
+            <span style="font-family: var(--serif); font-size: 52px; font-weight: 600; line-height: 1; display: block;">{site.capacity}</span>
+            <span class="label" style="color: #C9C0B1;">guests · ideal for groups and events</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
+
+  <section class="container" aria-labelledby="el-t" style="padding-block: 120px 40px;">
+    <div class="center" style="gap: 8px; margin-bottom: 56px;">
+      <span class="script" style="font-size: 48px;">Three elements</span>
+      <h2 id="el-t" class="caps" style="font-weight: 500;">One kitchen</h2>
+    </div>
+    <div class="grid" style="--min: 300px;">
+      {[
+        ['01', 'Sea', 'Ceviche Diablo', 'Ceviche Diablo, Pacific Pearls, sea bass and salmon carpaccio, lobster bisque.'],
+        ['02', 'Land', 'Caprese di Bufala', 'Local and seasonal produce: fresh leaves, grilled pineapple, roasted corn, sweet tostones.'],
+        ['03', 'Fire', 'Rib Eye on the grill', 'Tenderloin, New York Strip and Rib Eye from the grill, with smoked chimichurri and a side of your choice.'],
+      ].map(([n, t, photo, text], i) => (
+        <Photo label={photo} class="element reveal" style={`--reveal-delay:${i * 0.09}s`}>
+          <article class="overlay stack" style="gap: 10px;">
+            <span class="script">{n}</span>
+            <h3>{t}</h3>
+            <p>{text}</p>
+          </article>
+        </Photo>
+      ))}
+    </div>
+  </section>
+
+  <section id="menu" class="container section" aria-labelledby="menu-t">
+    <div class="row" style="align-items: flex-start;">
+      <div class="stack reveal" style="flex: 999 1 560px; gap: 28px;">
+        <div class="stack" style="gap: 6px;">
+          <span class="script" style="font-size: 26px;">From our kitchen</span>
+          <h2 id="menu-t" class="display">The menu</h2>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Menu categories">
+          {featured.map((c, i) => (
+            <button type="button" class="tab" role="tab" id={`tab-${c.id}`} aria-controls={`panel-${c.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>{c.titleEn ?? c.title}</button>
+          ))}
+        </div>
+        {featured.map((c) => (
+          <div role="tabpanel" id={`panel-${c.id}`} aria-labelledby={`tab-${c.id}`}>
+            <h3 class="panel-title label">{c.titleEn ?? c.title}</h3>
+            {c.noteEn && <p class="dim" style="margin-bottom: 4px;">{c.noteEn}</p>}
+            <DishList dishes={c.dishes} headingTag="span" lang="en" />
+          </div>
+        ))}
+        <script is:inline>
+          document.querySelectorAll('[role="tab"]').forEach((tab) => {
+            const id = tab.getAttribute('aria-controls');
+            const panel = id ? document.getElementById(id) : null;
+            if (panel) panel.hidden = tab.getAttribute('aria-selected') !== 'true';
+          });
+        </script>
+        <div style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center;">
+          <a href="/en/menu/" class="btn btn-ghost">See full menu</a>
+          <span class="dim">Also: seafood, pastas, rice dishes, burgers and cocktails · Prices include VAT</span>
+        </div>
+      </div>
+      <div class="grid reveal" style="flex: 1 1 380px; --min: 160px; --gap: 14px; --reveal-delay:.12s">
+        <Photo label="featured dish" src={platos[1]} alt="A seafood dish from Origen, Jacó." height="300px" style="grid-column: 1 / -1;" sizes="(min-width: 900px) 540px, 100vw" widths={[320, 480, 640]} />
+        <Photo label="detail" src={ambiente[1]} alt="A detail of the Origen dining room." height="220px" sizes="(min-width: 900px) 180px, 45vw" widths={[240, 320, 480]} />
+        <Photo label="cocktail" src={bebidas[0]} alt="A cocktail served at the Origen bar." height="220px" sizes="(min-width: 900px) 180px, 45vw" widths={[240, 320, 480]} />
+      </div>
+    </div>
+  </section>
+
+  <section id="galeria" class="dark-2 gallery" aria-labelledby="gal-t">
+    <div class="container gallery-head">
+      <div class="stack" style="gap: 4px;">
+        <span class="script" style="font-size: 26px;">Moments at Origen</span>
+        <h2 id="gal-t" class="display">Gallery</h2>
+      </div>
+      <div class="gallery-actions">
+        {isReal(site.social.instagram) && (
+          <a href={site.social.instagram} class="link-caps" target="_blank" rel="noopener">Follow us on Instagram</a>
+        )}
+        <div class="gallery-nav">
+          <button type="button" class="gallery-arrow" data-dir="-1" aria-label="Previous photo">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+          </button>
+          <button type="button" class="gallery-arrow" data-dir="1" aria-label="Next photo">
+            <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="gallery-track" data-gallery tabindex="0" role="region" aria-label="Photo gallery of Origen">
+      {[
+        { l: 'Inside Origen', a: 'Inside the Origen dining room in Jacó.', s: ambiente[2] },
+        { l: 'Seafood dish', a: 'A seafood dish from the Origen kitchen.', s: platos[2] },
+        { l: 'Cocktail', a: 'A cocktail served at the Origen bar.', s: bebidas[1] },
+        { l: 'Dining room', a: 'The dining room at Origen, in Jacó.', s: ambiente[3] },
+        { l: 'Grilled dish', a: 'A grilled dish from Origen.', s: platos[3] },
+        { l: 'Cocktails', a: 'The Origen cocktail bar.', s: bebidas[2] },
+        { l: 'Atmosphere', a: 'The atmosphere at Origen restaurant in Jacó, Costa Rica.', s: ambiente[4] },
+        { l: 'Grilled cut', a: 'A grilled cut from Origen.', s: platos[4] },
+      ].map(({ l, a, s }, i) => (
+        <figure class="gallery-item reveal" style={`--reveal-delay:${i * 0.06}s`}>
+          <Photo label={l} alt={a} src={s} height="360px" sizes="(min-width: 1100px) 340px, (min-width: 600px) 60vw, 78vw" widths={[320, 480]} />
+          <button type="button" class="gallery-open" aria-label={`Enlarge: ${l}`} data-full={s.src} data-alt={a} data-caption={l}></button>
+        </figure>
+      ))}
+    </div>
+    <dialog id="lightbox" class="lightbox" aria-label="Enlarged gallery">
+      <figure class="lb-figure">
+        <img id="lb-img" alt="" decoding="async" />
+        <figcaption id="lb-cap"></figcaption>
+      </figure>
+      <button type="button" class="lb-btn lb-close" aria-label="Close" data-close>
+        <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+      <button type="button" class="lb-btn lb-prev" aria-label="Previous photo" data-prev>
+        <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+      </button>
+      <button type="button" class="lb-btn lb-next" aria-label="Next photo" data-next>
+        <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+      </button>
+    </dialog>
+  </section>
+
+  <Photo label="long table set for an event" src={ambiente[6]} alt="The Origen dining room set for a celebration in Jacó." class="hero" style="min-height: 0; padding: 140px 24px;" widths={[480, 640, 800, 1024]}>
+    <section class="inner overlay reveal" style="max-width: 760px;" aria-labelledby="ev-t">
+      <span class="script script-lg">Celebrate with</span>
+      <h2 id="ev-t" class="caps">Us</h2>
+      <p class="lead">Birthdays, weddings, company dinners and tour groups. Room for up to {site.capacity} guests with a tailor-made menu.</p>
+      <div class="btns" style="margin-top: 14px;">
+        <a href="/en/eventos/" class="btn btn-primary">Quote my event</a>
+        <a href={waLink('Hello Origen, I would like to quote an event.')} class="btn btn-ghost" target="_blank" rel="noopener">Quote on WhatsApp</a>
+      </div>
+    </section>
+  </Photo>
+
+  {(reviews.length > 0 || partners.length > 0) && (
+    <section class="light" aria-label="Reviews and partners">
+      <div class="container section stack" style="gap: 72px;">
+        {reviews.length > 0 && (
+          <div class="row" style="gap: 48px;">
+            <div class="stack" style="flex: 1 1 340px; gap: 10px;">
+              <span class="script" style="font-size: 26px;">What they say</span>
+              <h2 class="display">Our guests</h2>
+              <p>Verified reviews from Google and TripAdvisor.</p>
+            </div>
+            <div class="grid" style="flex: 2 1 560px; --min: 260px; --gap: 16px;">
+              {reviews.map((r) => (
+                <figure class="review">
+                  <span class="label" style="color: var(--ink-muted);">{r.platform} · {'★'.repeat(r.stars)}</span>
+                  <blockquote>{r.quote}</blockquote>
+                  <figcaption>{r.author}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+        )}
+        {partners.length > 0 && (
+          <div class="center" style="gap: 24px; border-top: 1px solid #DDD3C2; padding-top: 56px;">
+            <h2 class="label" style="color: var(--ink-muted); text-align: center;">Recommended by tour operators, hotels and Airbnbs in Jacó</h2>
+            <div class="grid" style="--min: 150px; --gap: 12px; width: 100%;">
+              {partners.map((p) => <div class="partner"><img src={p.logo} alt={p.name} loading="lazy" decoding="async" /></div>)}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  {mapsEmbedUrl && (
+    <iframe src={mapsEmbedUrl} title="Origen location in Jacó, Costa Rica" loading="lazy" style="width: 100%; height: 240px; border: 0; display: block;" />
+  )}
 </Base>
+
+<script>
+  const tabs = Array.from(document.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+  const select = (tab: HTMLButtonElement) => {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      const controlsId = t.getAttribute('aria-controls');
+      const panel = controlsId ? document.getElementById(controlsId) : null;
+      if (panel) panel.hidden = !on;
+    });
+  };
+  const initial = tabs.find((t) => t.getAttribute('aria-selected') === 'true') ?? tabs[0];
+  if (initial) select(initial);
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t));
+    t.addEventListener('keydown', (e) => {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (!d) return;
+      const next = tabs[(i + d + tabs.length) % tabs.length];
+      select(next);
+      next.focus();
+    });
+  });
+</script>
+
+<script>
+  const track = document.querySelector<HTMLElement>('[data-gallery]');
+  const dialog = document.getElementById('lightbox') as HTMLDialogElement | null;
+  const lbImg = document.getElementById('lb-img') as HTMLImageElement | null;
+  const lbCap = document.getElementById('lb-cap');
+
+  if (track) {
+    const opens = Array.from(track.querySelectorAll<HTMLButtonElement>('.gallery-open'));
+    let index = 0;
+
+    const show = (i: number) => {
+      if (!lbImg || !lbCap || opens.length === 0) return;
+      index = (i + opens.length) % opens.length;
+      const data = opens[index].dataset;
+      lbImg.src = data.full ?? '';
+      lbImg.alt = data.alt ?? '';
+      lbCap.textContent = data.caption ?? '';
+    };
+
+    const section = track.closest('.gallery');
+    section?.querySelectorAll<HTMLButtonElement>('.gallery-arrow').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = track.querySelector('.gallery-item');
+        const step = item ? item.getBoundingClientRect().width + 10 : track.clientWidth * 0.8;
+        track.scrollBy({ left: Number(btn.dataset.dir) * step, behavior: 'smooth' });
+      });
+    });
+
+    opens.forEach((el, i) => {
+      el.addEventListener('click', () => {
+        show(i);
+        if (dialog && !dialog.open) dialog.showModal();
+      });
+    });
+
+    if (dialog && lbImg) {
+      dialog.querySelector('[data-close]')?.addEventListener('click', () => dialog.close());
+      dialog.querySelector('[data-prev]')?.addEventListener('click', () => show(index - 1));
+      dialog.querySelector('[data-next]')?.addEventListener('click', () => show(index + 1));
+      dialog.addEventListener('click', (e) => {
+        if (e.target === dialog) dialog.close();
+      });
+      dialog.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') show(index + 1);
+        else if (e.key === 'ArrowLeft') show(index - 1);
+      });
+    }
+  }
+</script>

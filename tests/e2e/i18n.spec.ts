@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { enPages } from '../../src/data/i18n/pages';
+import { site } from '../../src/data/site';
+import { faqs } from '../../src/data/faq';
+import { isReal, isRealPhone } from '../../src/data/placeholders';
 
 // T-35 · Arquitectura i18n: rutas /en/, prop lang, noindex y switcher ES↔EN.
 // El contenido EN es provisional (TODO P-22); estas aserciones validan estructura y navegación,
@@ -155,5 +158,85 @@ test.describe('T-39 · sitemap (estado provisional)', () => {
       expect(body).toContain(`https://www.origenjaco.com${es === '/' ? '' : es}`);
     }
     expect(body).not.toContain('/en/');
+  });
+});
+
+// T-36 · Traducción EN completa (P-22 aprobado). Verifica que /en/ no mezcle texto ES
+// y que los datos bilingües (menú, FAQ, NAP) y el JSON-LD se emitan en inglés.
+const ES_MARKERS =
+  /\b(Todos|días|Menú|Nosotros|Eventos|Contacto|Reservar|Reserva|Horario|Ubicación|Galería|Precios|Personas|Nombre|Fecha|Invitados|Cotiza|Cumpleaños|Mariscos|Parrilla|Postres|Entradas|Coctelería|Bebidas|Síguenos|Descubre|Bienvenidos|esperamos|Dirección|Cerrar|Anterior|Siguiente|Ampliar|Momentos|Celebra|Nuestro|Nuestra|Invita|Almuerzo|Cena|Cócteles|llega|servimos|incluyen|Costarricense)\b/;
+
+test.describe('T-36 · /en/ sin texto ES mezclado', () => {
+  for (const route of EN_ROUTES) {
+    test(`${route} solo muestra copy en inglés`, async ({ page }) => {
+      await page.goto(route);
+      const text = await page.locator('body').innerText();
+      const hits = [...new Set(text.match(ES_MARKERS) ?? [])];
+      expect(hits).toEqual([]);
+    });
+  }
+});
+
+test.describe('T-36 · datos bilingües se emiten en inglés', () => {
+  test('menú: nombres y descripciones EN (no la fuente ES)', async ({ page }) => {
+    await page.goto('/en/menu/');
+    const text = await page.locator('.menu-cats').innerText();
+    expect(text).toContain('Pacific Pearls');
+    expect(text).toContain('Fish Fingers');
+    expect(text).toContain('Each cut comes with a side of your choice.');
+    expect(text).not.toContain('Perlas del Pacífico');
+    expect(text).not.toContain('Menú de niños');
+  });
+
+  test('FAQ de contacto en EN y FAQPage JSON-LD 1:1', async ({ page }) => {
+    await page.goto('/en/contacto/');
+    const phonePending = !isRealPhone(site.phone);
+    const expected = faqs.filter(
+      (f) => isReal(f.qEn) && isReal(f.aEn) && !(phonePending && (f.aEn as string).includes(site.phone)),
+    );
+    expect(expected.length).toBeGreaterThan(0);
+
+    const scripts = await page.locator('script[type="application/ld+json"]').allTextContents();
+    const faqSchema = scripts
+      .map((s) => JSON.parse(s))
+      .flat()
+      .find((node) => node['@type'] === 'FAQPage');
+    expect(faqSchema).toBeTruthy();
+    expect(faqSchema.mainEntity).toHaveLength(expected.length);
+    expect(faqSchema.mainEntity.map((q: { name: string }) => q.name)).toEqual(
+      expected.map((f) => f.qEn),
+    );
+
+    const visible = await page.locator('.faq').innerText();
+    expect(visible).toContain(expected[0].qEn as string);
+  });
+
+  test('JSON-LD Restaurant en inglés (descripción, cocina y ReserveAction /en/)', async ({ page }) => {
+    await page.goto('/en/contacto/');
+    const scripts = await page.locator('script[type="application/ld+json"]').allTextContents();
+    const restaurant = scripts
+      .map((s) => JSON.parse(s))
+      .flat()
+      .find((node) => node['@type'] === 'Restaurant');
+    expect(restaurant.description).toBe(site.descriptionEn);
+    expect(restaurant.servesCuisine).toEqual(['Seafood', 'Grill', 'Costa Rican']);
+    expect(restaurant.hasMenu).toBe(`${site.url}/en/menu/`);
+    expect(restaurant.potentialAction.name).toBe('Book a table');
+    expect(restaurant.potentialAction.target.urlTemplate).toBe(`${site.url}/en/contacto/#reservar`);
+    expect(restaurant.potentialAction.target.inLanguage).toBe('en');
+  });
+
+  test('JSON-LD Restaurant en ES conserva el copy español', async ({ page }) => {
+    await page.goto('/contacto/');
+    const scripts = await page.locator('script[type="application/ld+json"]').allTextContents();
+    const restaurant = scripts
+      .map((s) => JSON.parse(s))
+      .flat()
+      .find((node) => node['@type'] === 'Restaurant');
+    expect(restaurant.description).toBe(site.description);
+    expect(restaurant.servesCuisine).toEqual(['Mariscos', 'Parrilla', 'Costarricense']);
+    expect(restaurant.hasMenu).toBe(`${site.url}/menu/`);
+    expect(restaurant.potentialAction.name).toBe('Reservar mesa');
+    expect(restaurant.potentialAction.target.urlTemplate).toBe(`${site.url}/contacto/#reservar`);
   });
 });

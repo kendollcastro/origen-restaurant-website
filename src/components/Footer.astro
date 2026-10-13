@@ -39,7 +39,7 @@ const hasSocial = isReal(site.social.instagram) || isReal(site.social.facebook) 
       </address>
       <div class="stack" style="gap: 4px;">
         <h2>{ui.footer.hours}</h2>
-        <p>{site.hours.days}<br />{site.hours.label}</p>
+        <p>{lang === 'en' ? site.hours.daysEn : site.hours.days}<br />{site.hours.label}</p>
       </div>
       <div class="stack" style="gap: 4px;">
         <h2>{ui.footer.contact}</h2>

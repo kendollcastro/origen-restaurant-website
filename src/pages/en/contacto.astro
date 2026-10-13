@@ -1,29 +1,49 @@
 ---
-// TODO: traducción aprobada (P-22) — T-36 sustituye el cuerpo EN provisional.
-// El formulario reutiliza ReserveForm (textos ES) hasta T-37; el cuerpo ES queda como marcado.
+// T-36: página EN completa (P-22 aprobado). Espejo de /contacto/ con la FAQ y el formulario en inglés.
 import Base from '../../layouts/Base.astro';
 import ReserveForm from '../../components/ReserveForm.astro';
 import { site, telHref } from '../../data/site';
-import { isReal } from '../../data/placeholders';
+import { faqs } from '../../data/faq';
+import { isReal, isRealPhone } from '../../data/placeholders';
 import { enPages } from '../../data/i18n/pages';
 
 const p = enPages.contacto;
+
+// Igual que en ES: solo FAQ reales, y se excluyen las que incrustan el teléfono mientras siga pendiente (T-40).
+const phonePending = !isRealPhone(site.phone);
+const publicFaqs = faqs.filter((f) => isReal(f.qEn) && isReal(f.aEn) && !(phonePending && (f.aEn as string).includes(site.phone)));
+const faqSchema = publicFaqs.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: publicFaqs.map((f) => ({
+        '@type': 'Question',
+        name: f.qEn,
+        acceptedAnswer: { '@type': 'Answer', text: f.aEn },
+      })),
+    }
+  : undefined;
 ---
-<Base title={p.title} description={p.description} lang="en">
-  <section class="container stack" style="padding-block: 88px 40px; gap: 12px;">
+<Base title={p.title} description={p.description} lang="en" schema={faqSchema}>
+  <section class="container stack reveal" style="padding-block: 88px 40px; gap: 12px;">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/en/">Home</a> <span aria-hidden="true">/</span> <span aria-current="page">Contact</span></nav>
     <span class="script" style="font-size: 40px;">{p.script}</span>
     <h1 class="display" style="font-size: clamp(44px, 6vw, 72px);">{p.h1}</h1>
   </section>
 
   <section id="reservar" class="container row" style="padding-bottom: 100px; align-items: flex-start; gap: 48px; scroll-margin-top: 24px;">
-    <div class="stack" style="flex: 1 1 380px; gap: 28px;">
+    <div class="stack reveal" style="flex: 1 1 380px; gap: 28px;">
       <address class="stack" style="font-style: normal; gap: 4px;">
         <h2 class="label">Address</h2>
         <p style="font-size: 18px;">{site.fullName}<br />{isReal(site.address.street) && <>{site.address.street}<br /></>}{site.address.locality}, {site.address.county}, {site.address.region}, {site.address.countryName}</p>
+        <span>
+          <a href={site.mapsUrl} class="link-caps" target="_blank" rel="noopener">Google Maps</a> ·
+          <a href={site.wazeUrl} class="link-caps" target="_blank" rel="noopener">Waze</a>
+        </span>
       </address>
       <div class="stack" style="gap: 4px;">
         <h2 class="label">Hours</h2>
-        <p style="font-size: 18px;">{site.hours.days}<br />{site.hours.label}</p>
+        <p style="font-size: 18px;">{site.hours.daysEn}<br />{site.hours.label}</p>
       </div>
       <div class="stack" style="gap: 4px;">
         <h2 class="label">Contact</h2>
@@ -34,8 +54,32 @@ const p = enPages.contacto;
         </p>
       </div>
     </div>
-    <div style="flex: 1 1 520px;">
-      <ReserveForm variant="card" id="c" />
+    <div class="reveal" style="flex: 1 1 520px; --reveal-delay:.12s">
+      <ReserveForm variant="card" id="c" lang="en" />
+      <p class="dim" style="margin-top: 12px;">For groups of more than {site.reservationMax} people, see <a href="/en/eventos/">Events and groups</a>.</p>
+      <p class="dim">First time here? See the <a href="/en/menu/">menu</a> and read <a href="/en/nosotros/">our story</a>.</p>
     </div>
   </section>
+
+  <!-- TODO: reemplazar por el iframe de Google Maps de la ficha de Origen -->
+  <div id="mapa" class="ph" style="height: 420px;"><span class="ph-label">Map · Google Maps embed with the Origen pin</span></div>
+
+  {publicFaqs.length > 0 && (
+    <section class="light" aria-labelledby="faq-t">
+      <div class="container section stack reveal" style="max-width: 920px; gap: 32px;">
+        <div class="center" style="gap: 6px; text-align: center;">
+          <span class="script">Before you come</span>
+          <h2 id="faq-t" class="display">Frequently asked questions</h2>
+        </div>
+        <div class="faq">
+          {publicFaqs.map((f) => (
+            <details>
+              <summary><h3>{f.qEn}</h3><span class="pm" aria-hidden="true">+</span></summary>
+              <p>{f.aEn}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
 </Base>

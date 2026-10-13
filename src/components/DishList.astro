@@ -1,16 +1,19 @@
 ---
 import { formatPrice, hasDish, type Dish } from '../data/menu';
-interface Props { dishes: Dish[]; headingTag?: 'h3' | 'span'; }
-const { dishes, headingTag = 'h3' } = Astro.props;
+import type { Lang } from '../data/i18n/ui';
+interface Props { dishes: Dish[]; headingTag?: 'h3' | 'span'; lang?: Lang; }
+const { dishes, headingTag = 'h3', lang = 'es' } = Astro.props;
 const Tag = headingTag;
 const visible = dishes.filter(hasDish);
+const dishName = (d: Dish) => (lang === 'en' ? d.nameEn ?? d.name : d.name);
+const dishDesc = (d: Dish) => (lang === 'en' ? d.descEn ?? d.desc : d.desc);
 ---
 {visible.length > 0 && (
   <ul class="dishes">
     {visible.map((d) => (
       <li class="dish">
         <div class="dish-head">
-          <Tag class="dish-name">{d.name}</Tag>
+          <Tag class="dish-name">{dishName(d)}</Tag>
           {d.price ? (
             <>
               <span class="dish-dots" aria-hidden="true"></span>
@@ -18,7 +21,7 @@ const visible = dishes.filter(hasDish);
             </>
           ) : null}
         </div>
-        {d.desc && <p class="dish-desc">{d.desc}</p>}
+        {dishDesc(d) && <p class="dish-desc">{dishDesc(d)}</p>}
       </li>
     ))}
   </ul>

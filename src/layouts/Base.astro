@@ -29,25 +29,27 @@ const sameAs = Object.values(site.social).filter(isReal);
 // Personas reales (site.ts). Solo campos seguros: sin image/url inventados (P-16/P-17).
 // `jobTitle` replica literal la etiqueta visible del equipo en /nosotros/ (T-15).
 const employees = [
-  { '@type': 'Person', '@id': `${site.url}/nosotros/#chef`, name: site.chef, jobTitle: 'Chef ejecutiva' },
-  { '@type': 'Person', '@id': `${site.url}/nosotros/#manager`, name: site.manager, jobTitle: 'Gerente general' },
+  { '@type': 'Person', '@id': `${site.url}/nosotros/#chef`, name: site.chef, jobTitle: lang === 'en' ? 'Executive chef' : 'Chef ejecutiva' },
+  { '@type': 'Person', '@id': `${site.url}/nosotros/#manager`, name: site.manager, jobTitle: lang === 'en' ? 'General manager' : 'Gerente general' },
 ].filter((p) => isReal(p.name));
+// Valores del JSON-LD que dependen del idioma (T-36): el nodo base se emite en cada página con el copy correcto.
+const prefix = lang === 'en' ? '/en' : '';
 const restaurant = {
   '@context': 'https://schema.org',
   '@type': 'Restaurant',
   '@id': `${site.url}/#restaurant`,
   name: site.fullName,
   alternateName: 'Origen Jacó',
-  description: site.description,
+  description: lang === 'en' ? site.descriptionEn : site.description,
   url: site.url,
   ...(isRealPhone(site.phone) ? { telephone: site.phone } : {}),
   ...(isReal(site.email) ? { email: site.email } : {}),
   // og-image provisional (T-27, P-17): se emite ya que public/og-image.jpg responde 200.
   image: [ogImage],
-  servesCuisine: ['Mariscos', 'Parrilla', 'Costarricense'],
+  servesCuisine: lang === 'en' ? ['Seafood', 'Grill', 'Costa Rican'] : ['Mariscos', 'Parrilla', 'Costarricense'],
   priceRange: site.priceRange,
   acceptsReservations: true,
-  hasMenu: `${site.url}/menu/`,
+  hasMenu: `${site.url}${prefix}/menu/`,
   ...(employees.length > 0 ? { employee: employees } : {}),
   // maximumAttendeeCapacity (heredada de Place/Event) NO es propiedad de Restaurant para
   // rich results de Google y el PLAN la marca como incorrecta en Base.astro:33 → se retira.
@@ -71,14 +73,14 @@ const restaurant = {
     closes: site.hours.closes,
   }],
   ...(sameAs.length > 0 ? { sameAs } : {}),
-  // ReserveAction anclada al CTA visible "Reservar mesa" → /contacto/#reservar (texto 1:1).
+  // ReserveAction anclada al CTA visible ("Reservar mesa" / "Book a table") → /contacto/#reservar (texto 1:1).
   potentialAction: {
     '@type': 'ReserveAction',
-    name: 'Reservar mesa',
+    name: lang === 'en' ? 'Book a table' : 'Reservar mesa',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: `${site.url}/contacto/#reservar`,
-      inLanguage: 'es-CR',
+      urlTemplate: `${site.url}${prefix}/contacto/#reservar`,
+      inLanguage: lang === 'en' ? 'en' : 'es-CR',
     },
   },
 };
@@ -122,7 +124,7 @@ const ld = [restaurant, ...(breadcrumb ? [breadcrumb] : []), ...extra];
   <meta property="og:image" content={ogImage} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Origen — mar, tierra y fuego en Jacó, Costa Rica." />
+  <meta property="og:image:alt" content={lang === 'en' ? 'Origen — sea, land and fire in Jacó, Costa Rica.' : 'Origen — mar, tierra y fuego en Jacó, Costa Rica.'} />
   <meta property="og:locale" content={ogLocale} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />

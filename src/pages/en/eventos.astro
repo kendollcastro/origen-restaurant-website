@@ -1,32 +1,117 @@
 ---
-// TODO: traducción aprobada (P-22) — T-36 sustituye el cuerpo EN provisional.
+// T-36: página EN completa (P-22 aprobado). Espejo de /eventos/ con el copy y el formulario en inglés.
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
+import Photo from '../../components/Photo.astro';
 import { site, waLink } from '../../data/site';
 import { enPages } from '../../data/i18n/pages';
 
 const p = enPages.eventos;
 const waHref = waLink('Hello Origen, I would like to quote an event.');
+const hour12 = (t: string) => Number(t.slice(0, 2)) % 12 || 12;
+const period = (t: string) => (Number(t.slice(0, 2)) >= 12 ? 'pm' : 'am');
+const tipos = [
+  ['Tour groups', 'tour group', 'We work with tour operators in Jacó. Lunch and dinner for groups with a set menu and quick service.', 'A table set for a tour group at Origen.'],
+  ['Birthdays and anniversaries', 'birthday', 'Private tables or the whole dining room.', 'A birthday celebration in the Origen dining room.'],
+  ['Companies', 'corporate dinner', 'Team dinners, year-end parties and meetings with a set menu and electronic invoicing.', 'A team dinner served in the Origen dining room.'],
+  ['Weddings and rehearsals', 'wedding', 'Rehearsal dinners and intimate receptions steps from Jacó beach.', 'A wedding rehearsal dinner, steps from Jacó beach.'],
+];
 ---
 <Base title={p.title} description={p.description} lang="en">
-  <PageHero crumb={p.h1} script={p.script} title={p.h1} photo="mesa larga montada para evento" lead={p.lead}>
-    <a href="/en/contacto/" class="btn btn-primary" style="margin-top: 12px;">Quote my event</a>
+  <PageHero crumb={p.h1} script={p.script} title={p.h1} photo="long table set for an event"
+    lead={p.lead}>
+    <a href="#cotizar" class="btn btn-primary" style="margin-top: 12px;">Quote my event</a>
   </PageHero>
 
-  <section class="light">
-    <div class="container grid" style="--min: 220px; --gap: 32px; padding-block: 80px; text-align: center;">
-      <div class="stack" style="gap: 4px;">
-        <span style="font-family: var(--serif); font-weight: 600; font-size: 64px; line-height: 1;">{site.capacity}</span>
-        <span class="label" style="color: var(--ink-muted);">guests · space for groups and events</span>
-      </div>
+  <section class="container section stack" style="gap: 48px;" aria-labelledby="tipos-t">
+    <h2 id="tipos-t" class="display reveal" style="text-align: center;">What are we celebrating with you?</h2>
+    <div class="grid" style="--min: 260px;">
+      {tipos.map(([t, photo, d, alt], i) => (
+        <article class="stack reveal" style={`gap: 14px; --reveal-delay:${i * 0.08}s`}>
+          <Photo label={photo} alt={alt} height="300px" />
+          <h3 style="font-family: var(--serif); font-weight: 600; font-size: 30px; line-height: 1.1;">{t}</h3>
+          <p style="color: var(--soft);">{d}</p>
+        </article>
+      ))}
     </div>
   </section>
 
-  <section class="container section stack" style="gap: 24px; max-width: 820px;">
-    <p class="lead">Birthdays, weddings, company dinners and tour groups at a step from Jacó beach, with a tailor-made menu and a team experienced with groups.</p>
-    <div class="btns">
-      <a href={waHref} class="btn btn-primary" target="_blank" rel="noopener">Quote on WhatsApp</a>
-      <a href="/en/contacto/" class="btn btn-ghost">Contact us</a>
+  <section class="light">
+    <div class="container grid reveal" style="--min: 220px; --gap: 32px; padding-block: 80px; text-align: center;">
+      {[
+        [String(site.capacity), 'guests capacity'],
+        [`${hour12(site.hours.opens)}–${hour12(site.hours.closes)}`, `open from ${hour12(site.hours.opens)} ${period(site.hours.opens)} to ${hour12(site.hours.closes)} ${period(site.hours.closes)}`],
+      ].map(([n, l]) => (
+        <div class="stack" style="gap: 4px;">
+          <span style="font-family: var(--serif); font-weight: 600; font-size: 64px; line-height: 1;">{n}</span>
+          <span class="label" style="color: var(--ink-muted);">{l}</span>
+        </div>
+      ))}
+      <!-- Group menus: pending (P-09 → T-23), hidden until the real data arrives (policy §6). -->
     </div>
   </section>
+
+  <section id="cotizar" class="container section row" style="align-items: flex-start;" aria-labelledby="cot-t">
+    <div class="stack reveal" style="flex: 1 1 380px; gap: 14px;">
+      <span class="script">Let's talk</span>
+      <h2 id="cot-t" class="display">Quote your event</h2>
+      <p class="lead">Tell us the date and the number of people. We reply on WhatsApp or email with a menu proposal.</p>
+      <p class="muted" style="font-size: 14px;">WhatsApp {site.phone}<br />{site.email}</p>
+      <p class="dim">In the meantime, see the <a href="/en/menu/">menu</a>, meet <a href="/en/nosotros/">our team</a> or find us on the <a href="/en/contacto/">contact page</a>.</p>
+    </div>
+    <form id="event-form" class="form reveal" style="flex: 2 1 560px; --reveal-delay:.12s" data-wa={site.whatsapp} action={waHref} method="get" target="_blank">
+      <div class="field"><label for="e-n">Name</label><input id="e-n" name="nombre" type="text" autocomplete="name" required /></div>
+      <div class="field"><label for="e-w">WhatsApp</label><input id="e-w" name="tel" type="tel" autocomplete="tel" /></div>
+      <div class="field">
+        <label for="e-t">Event type</label>
+        <select id="e-t" name="tipo"><option>Tour group</option><option>Birthday / anniversary</option><option>Company</option><option>Wedding / rehearsal</option><option>Other</option></select>
+      </div>
+      <div class="field"><label for="e-p">Number of guests</label><input id="e-p" name="invitados" type="number" min="1" max={site.capacity} required /></div>
+      <div class="field"><label for="e-d">Date</label><input id="e-d" name="fecha" type="date" required /></div>
+      <div class="field"><label for="e-e">Email</label><input id="e-e" name="correo" type="email" autocomplete="email" /></div>
+      <div class="field full"><label for="e-m">Details</label><textarea id="e-m" name="detalles" rows="4"></textarea></div>
+      <button type="submit" class="btn btn-primary full" style="height: 54px;">Request a quote on WhatsApp</button>
+      <noscript class="full">
+        <p class="dim">Without JavaScript, enter at least a WhatsApp number or email and <a href={waHref}>send the quote on WhatsApp</a> with the event type, date and number of guests.</p>
+      </noscript>
+    </form>
+  </section>
 </Base>
+
+<script>
+  const hoyEnCR = () => {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Costa_Rica',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(new Date());
+    const get = (type: string) => parts.find((p) => p.type === type)?.value ?? '';
+    return `${get('year')}-${get('month')}-${get('day')}`;
+  };
+  const date = document.getElementById('e-d') as HTMLInputElement | null;
+  if (date) date.min = hoyEnCR();
+  const form = document.getElementById('event-form') as HTMLFormElement | null;
+  form?.addEventListener('submit', (e) => {
+    const d = new FormData(form);
+    const tel = String(d.get('tel') || '').trim();
+    const correo = String(d.get('correo') || '').trim();
+    if (tel === '' && correo === '') {
+      e.preventDefault();
+      alert('Add at least one contact channel: WhatsApp or email.');
+      return;
+    }
+    e.preventDefault();
+    const msg = [
+      'Hello Origen, I would like to quote an event:',
+      `• Name: ${d.get('nombre')}`,
+      `• Type: ${d.get('tipo')}`,
+      `• Guests: ${d.get('invitados')}`,
+      `• Date: ${d.get('fecha')}`,
+      tel ? `• WhatsApp: ${tel}` : '',
+      correo ? `• Email: ${correo}` : '',
+      d.get('detalles') ? `• Details: ${d.get('detalles')}` : '',
+    ].filter(Boolean).join('\n');
+    window.open(`https://wa.me/${form.dataset.wa}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+  });
+</script>

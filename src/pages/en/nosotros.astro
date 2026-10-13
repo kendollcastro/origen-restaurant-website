@@ -1,23 +1,87 @@
 ---
-// TODO: traducción aprobada (P-22) — T-36 sustituye el cuerpo EN provisional.
+// T-36: página EN completa (P-22 aprobado). Espejo de /nosotros/ con el copy en inglés.
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
+import Photo from '../../components/Photo.astro';
 import { site } from '../../data/site';
+import { isReal } from '../../data/placeholders';
+import { ambiente } from '../../data/photos';
 import { enPages } from '../../data/i18n/pages';
 
 const p = enPages.nosotros;
+
+// Al llegar el dato del cliente (T-22) se llena la constante y el bloque aparece (política §6).
+const duenos = ''; // anécdota o visión de los dueños
+const chefTrayectoria = ''; // trayectoria, formación y plato favorito de la chef
+const chefFrase = ''; // cita literal de la chef sobre su cocina
 ---
 <Base title={p.title} description={p.description} lang="en">
-  <PageHero crumb={p.h1} script={p.script} title={p.h1} photo="equipo en la cocina" lead={p.lead} />
+  <PageHero crumb={p.h1} script={p.script} title={p.h1} photo="team in the kitchen" lead={p.lead} />
 
   <section class="light">
-    <div class="container section stack" style="gap: 18px; max-width: 820px;">
-      <p class="lead">Origen opened in the space where Hicaco Plaza Jacó once stood, with the same kitchen and front-of-house team, the same quality and the same service, with a renewed proposal.</p>
-      <p class="lead">Chef {site.chef} leads the kitchen. Sea, land and fire: Pacific seafood, Costa Rican produce and the grill as the protagonist.</p>
-      <div class="btns" style="margin-top: 12px;">
-        <a href="/en/menu/" class="btn btn-primary">See the menu</a>
-        <a href="/en/contacto/#reservar" class="btn btn-ghost">Book a table</a>
+    <div class="container section row">
+      <div class="stack reveal" style="gap: 18px;">
+        <h2 class="display">From the old Hicaco to Origen</h2>
+        <p class="lead">Origen opened in October 2026 in the same space where Hicaco Plaza Jacó used to be. We keep the same kitchen and front-of-house team, the same quality and the same service, with a renewed proposal.</p>
+        <p class="lead">Our name says it all: back to the origin of every ingredient. Pacific seafood from local suppliers, Costa Rican fruit and vegetables, and the grill as the star.</p>
+        {isReal(duenos) && <p class="lead">{duenos}</p>}
       </div>
+      <Photo label="facade / dining room" src={ambiente[5]} alt="The dining room at Origen, in Jacó." class="reveal" height="520px" style="background-color:#2A2520;--reveal-delay:.12s" sizes="(min-width: 900px) 50vw, 100vw" widths={[480, 640, 800]} />
+    </div>
+  </section>
+
+  <section class="container section row" style="flex-wrap: wrap-reverse;" aria-labelledby="chef-t">
+    <Photo label={`chef ${site.chef} portrait`} alt={`Chef ${site.chef}, head chef at Origen.`} class="reveal" height="560px" />
+    <div class="stack reveal" style="--reveal-delay:.12s">
+      <span class="script">In the kitchen</span>
+      <h2 id="chef-t" class="display" style="font-size: 52px;">Chef {site.chef}</h2>
+      <p class="lead">Head chef at Origen and the same chef who ran the kitchen at the previous restaurant.{isReal(chefTrayectoria) && <> {chefTrayectoria}</>}</p>
+      {isReal(chefFrase) && (
+        <blockquote style="margin: 8px 0 0; font-family: var(--serif); font-style: italic; font-size: 28px; line-height: 1.3;">“{chefFrase}”</blockquote>
+      )}
+    </div>
+  </section>
+
+  <section class="dark-2" aria-labelledby="team-t">
+    <div class="container section stack" style="gap: 48px;">
+      <div class="center reveal" style="gap: 6px;">
+        <span class="script">The people</span>
+        <h2 id="team-t" class="caps" style="font-weight: 500; font-size: 34px;">Our team</h2>
+      </div>
+      <div class="grid" style="--min: 240px; --gap: 24px;">
+        {[
+          [site.chef, 'Executive chef', 'photo', `Chef ${site.chef}, executive chef at Origen.`],
+          [site.manager, 'General manager', 'photo', `Portrait of ${site.manager}, general manager at Origen.`],
+          ['Kitchen and front of house', 'The team you know', 'group photo', 'The Origen kitchen and front-of-house team.'],
+        ].map(([name, role, photo, alt], i) => (
+          <div class="stack reveal" style={`gap: 12px; --reveal-delay:${i * 0.08}s`}>
+            <Photo label={photo} alt={alt} height="320px" />
+            <h3 style="font-family: var(--serif); font-weight: 600; font-size: 26px;">{name}</h3>
+            <span class="label">{role}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="container section stack" style="gap: 48px;" aria-labelledby="val-t">
+    <h2 id="val-t" class="display reveal" style="text-align: center;">What defines us</h2>
+    <div class="grid" style="--min: 260px; --gap: 40px;">
+      {[
+        ['Sea', 'Fish and seafood from the Costa Rican Pacific, bought from local suppliers.'],
+        ['Land', 'Fruit and vegetables from growers in the area, sauces and bases made in-house every day.'],
+        ['Fire', 'Cuts from the grill with smoked chimichurri and the flavor only the embers give.'],
+      ].map(([t, d], i) => (
+        <div class="stack reveal" style={`gap: 10px; border-top: 1px solid var(--accent); padding-top: 24px; --reveal-delay:${i * 0.08}s`}>
+          <h3 style="font-family: var(--serif); font-weight: 600; font-size: 34px;">{t}</h3>
+          <p style="color: var(--soft);">{d}</p>
+        </div>
+      ))}
+    </div>
+    <p class="dim" style="text-align: center;">Planning a celebration? Book space for your <a href="/en/eventos/">event or group</a>.</p>
+    <div class="btns">
+      <a href="/en/menu/" class="btn btn-primary">See the menu</a>
+      <a href="/en/contacto/#reservar" class="btn btn-ghost">Book a table</a>
     </div>
   </section>
 </Base>

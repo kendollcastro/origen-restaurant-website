@@ -708,3 +708,19 @@ de Facebook para confirmar que no recorta el preview.
 | **Hallazgo de implementación** | 🔴→💚 el reveal con `clip-path` **rompía** `IntersectionObserver` en Chromium (el área recortada nunca intersecta → deadlock): cambiar a `opacity`/`transform` |
 | Estrategia de test | E2E corre con `reducedMotion: 'reduce'` para que **axe mida el estado final** (la opacidad a mitad de transición generaba falsos positivos de contraste); `tests/e2e/motion.spec.ts` cubre el camino animado y el fallback sin JS |
 | Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **414/414 Playwright** (48.6 s; +6 T-57 motion, +4 T-56 galería) |
+
+# Traducción EN completa (T-36 · F5)
+
+> **Fecha:** 2026-10-13 · **Alcance:** P-22 aprobada (traducción total, 1:1 con el ES). Las 5 rutas `/en/` dejan de ser provisionales; siguen con `noindex` y fuera del sitemap hasta go-live (T-38).
+
+| Ítem | Resultado |
+|---|---|
+| Datos bilingües | 💚 `menu.ts` (`nameEn`/`descEn`/`kickerEn`/`titleEn`/`noteEn`), `faq.ts` (`qEn`/`aEn`, 8), `site.ts` (`descriptionEn`, `hours.daysEn`) |
+| Componentes con `lang` | 💚 `DishList`, `ReserveForm` (etiquetas, mensaje WhatsApp y `data-lang` EN); `Footer` usa `daysEn` |
+| Páginas `/en/` | 💚 `index`, `menu`, `nosotros`, `eventos` (formulario de cotización EN), `contacto` (FAQ EN) completas |
+| JSON-LD por idioma | 💚 `Restaurant` con `descriptionEn`/`servesCuisine` EN/`jobTitle` EN/`hasMenu` y `ReserveAction` anclada a `/en/`; `Menu` con `inLanguage:"en"`; `FAQPage` EN 1:1 con el DOM |
+| **Fugas corregidas** | 🔴→💚 JSON-LD base (descripción, `servesCuisine:["Mariscos","Parrilla","Costarricense"]`, `ReserveAction:"Reservar mesa"`, `jobTitle`) y `Footer` (`Todos los días`) emitían texto ES en `/en/`; fallbacks ES eliminados del bundle de `Header` |
+| Anti-mezcla | 💚 `i18n.spec.ts`: 5 tests escanean el texto visible de cada `/en/` contra un set de marcadores ES → 0 coincidencias |
+| Verificación | `check` 0 errores (`1` hint preexistente) · `build` 11 páginas · `gate` 0 bloqueantes · **432/432 Playwright** (40.1 s; +18 T-36) |
+
+**Pendiente T-37:** estado accesible del switcher y desbordes a 360 px con el texto EN (~20% más largo).

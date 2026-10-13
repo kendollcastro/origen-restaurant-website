@@ -1,42 +1,71 @@
 ---
-// TODO: traducción aprobada (P-22) — T-36 sustituye títulos de platos y descripciones.
-// Estructura reutilizada de /menu/ (ES): el catálogo de platos vive en src/data/menu.ts.
+// T-36: página EN completa (P-22 aprobado). Espejo de /menu/ con el catálogo en inglés.
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import DishList from '../../components/DishList.astro';
 import { menu } from '../../data/menu';
+import { site } from '../../data/site';
+import { platos } from '../../data/photos';
 import { enPages } from '../../data/i18n/pages';
 
 const p = enPages.menu;
+
+// JSON-LD del menú (solo platos confirmados), en inglés.
+const menuSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Menu',
+  '@id': `${site.url}/en/menu/#menu`,
+  name: `Menu of ${site.fullName}`,
+  inLanguage: 'en',
+  hasMenuSection: menu
+    .map((c) => ({
+      '@type': 'MenuSection',
+      name: c.titleEn ?? c.title,
+      hasMenuItem: c.dishes
+        .filter((d) => !d.name.startsWith('['))
+        .map((d) => ({
+          '@type': 'MenuItem',
+          name: d.nameEn ?? d.name,
+          ...(d.descEn ?? d.desc ? { description: d.descEn ?? d.desc } : {}),
+          ...(d.price ? { offers: { '@type': 'Offer', price: d.price, priceCurrency: 'CRC' } } : {}),
+        })),
+    }))
+    .filter((s) => s.hasMenuItem.length),
+};
 ---
-<Base title={p.title} description={p.description} lang="en">
+<Base title={p.title} description={p.description} lang="en" schema={menuSchema}>
   <PageHero
-    crumb={p.h1} script={p.script} title={p.h1} photo="mesa con platos variados"
+    crumb={p.h1} script={p.script} title={p.h1} photo="table with a variety of dishes" src={platos[6]}
     lead={p.lead}
   />
 
-  <nav class="cat-nav" aria-label={p.h1}>
+  <nav class="cat-nav" aria-label="Menu categories">
     <div class="container">
-      {menu.map((c) => <a href={`#${c.id}`}>{c.title}</a>)}
+      {menu.map((c) => <a href={`#${c.id}`}>{c.titleEn ?? c.title}</a>)}
     </div>
   </nav>
 
   <div class="container menu-cats" style="padding-block: 88px 120px;">
-    {menu.map((c) => (
-      <section id={c.id} class="stack" style="gap: 6px;" aria-labelledby={`h-${c.id}`}>
-        <span class="script" style="font-size: 24px;">{c.kicker}</span>
-        <h2 id={`h-${c.id}`} class="display" style="font-size: 46px; margin-bottom: 6px;">{c.title}</h2>
-        {c.note && <p class="dim">{c.note}</p>}
-        <DishList dishes={c.dishes} />
+    {menu.map((c, i) => (
+      <section id={c.id} class="stack reveal" style={`gap: 6px; --reveal-delay:${i * 0.06}s`} aria-labelledby={`h-${c.id}`}>
+        <span class="script" style="font-size: 24px;">{c.kickerEn ?? c.kicker}</span>
+        <h2 id={`h-${c.id}`} class="display" style="font-size: 46px; margin-bottom: 6px;">{c.titleEn ?? c.title}</h2>
+        {c.noteEn && <p class="dim">{c.noteEn}</p>}
+        <DishList dishes={c.dishes} lang="en" />
       </section>
     ))}
   </div>
 
   <section class="light">
-    <div class="container" style="padding-block: 80px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">
+    <div class="container reveal" style="padding-block: 80px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">
       <div class="stack" style="flex: 1 1 520px; gap: 8px;">
         <h2 class="display" style="font-size: 44px;">Ready to try it?</h2>
+        <p>Open {site.hours.label}. Book on WhatsApp or just walk in.</p>
+        <p class="dim">Meet <a href="/en/nosotros/" style="color: var(--accent-ink);">who cooks</a> and, if you are coming as a group, see our <a href="/en/eventos/" style="color: var(--accent-ink);">events and groups</a> options.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px;">
         <a href="/en/contacto/#reservar" class="btn btn-dark">Book a table</a>
+        <a href="/menu-origen.pdf" class="btn btn-ghost">Download menu (PDF)</a>
       </div>
     </div>
   </section>

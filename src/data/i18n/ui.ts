@@ -1,6 +1,6 @@
 // Diccionario de textos de UI por idioma.
 // · ES = cadenas actuales extraídas de Base.astro / Header.astro / Footer.astro (literales previos).
-// · EN = provisional. TODO: traducción aprobada (P-22) — T-36/T-37 sustituyen estas cadenas.
+// · EN = traducción aprobada (P-22) — T-36/T-37.
 // El copy de las páginas NO vive aquí (eso es T-36): solo el chrome del layout/header/footer.
 export type Lang = 'es' | 'en';
 
@@ -53,7 +53,6 @@ export const ui: Record<Lang, UiStrings> = {
     footer: { visit: 'Visítanos', hours: 'Horario', contact: 'Contacto' },
   },
   en: {
-    // TODO: traducción aprobada (P-22)
     skipLink: 'Skip to content',
     nav: [
       { href: '/en/', label: 'Home' },
