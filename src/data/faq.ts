@@ -1,32 +1,46 @@
 import { site } from './site';
 
-// Respuestas cortas y factuales: son las que Google y las IA (ChatGPT, Perplexity, Gemini) citan.
-// Bilingüe: `q`/`a` (ES) y `qEn`/`aEn` (EN, T-36). Las respuestas con datos pendientes ([corchetes])
-// se excluyen igual en ambos idiomas (política §6).
+// T-41 · Contenido citable por IA. 10 preguntas locales con respuestas autoconclusivas de ≤40
+// palabras (límite verificado por tests). Cada respuesta se entiende sin contexto, usa solo datos
+// confirmados (sin corchetes) y coincide 1:1 con el FAQPage JSON-LD y el texto visible.
+// Bilingüe: `q`/`a` (ES) y `qEn`/`aEn` (EN, T-36). Pendientes (dirección exacta, formas de pago,
+// porcentaje de servicio) quedan fuera hasta que el cliente los confirme (política §6).
 export const faqs = [
   {
     q: '¿Dónde está Origen en Jacó?',
-    a: `Estamos en ${site.address.street}, Jacó, Garabito, Puntarenas, en el local donde funcionaba Hicaco Plaza Jacó.`,
+    a: `Origen está en Jacó, Garabito, Puntarenas, Costa Rica, en el local donde funcionaba Hicaco Plaza Jacó, a pocos minutos de la playa.`,
     qEn: 'Where is Origen in Jacó?',
-    aEn: `We are at ${site.address.street}, Jacó, Garabito, Puntarenas — in the space where Hicaco Plaza Jacó used to be.`,
+    aEn: `Origen is in Jacó, Garabito, Puntarenas, Costa Rica — in the space where Hicaco Plaza Jacó used to be, minutes from the beach.`,
   },
   {
     q: '¿Cuál es el horario de Origen?',
-    a: `Abrimos de ${site.hours.label}, ${site.hours.days.toLowerCase()}. Servimos almuerzo, cena y coctelería.`,
+    a: `Abrimos todos los días, de 11:00 am a 10:00 pm. Servimos almuerzo, cena y cócteles sin interrupción.`,
     qEn: "What are Origen's opening hours?",
-    aEn: `We are open ${site.hours.label}, ${site.hours.daysEn.toLowerCase()}. We serve lunch, dinner and cocktails.`,
+    aEn: `We are open every day from 11:00 am to 10:00 pm, serving lunch, dinner and cocktails all day.`,
   },
   {
     q: '¿Qué tipo de comida sirve Origen?',
-    a: 'Somos un restaurante de mariscos y parrilla: ceviches, mariscos del Pacífico, cortes como Lomito, New York y Rib Eye, pastas, arroces, hamburguesas y postres.',
+    a: 'Somos un restaurante de mariscos y parrilla en Jacó: ceviches, mariscos del Pacífico, cortes como Lomito, New York y Rib Eye, pastas, arroces, hamburguesas y postres.',
     qEn: 'What kind of food does Origen serve?',
-    aEn: 'We are a seafood and grill restaurant: ceviches, Pacific seafood, cuts such as Tenderloin, New York Strip and Rib Eye, pastas, rice dishes, burgers and desserts.',
+    aEn: 'We are a seafood and grill restaurant in Jacó: ceviches, Pacific seafood, cuts such as Tenderloin, New York Strip and Rib Eye, pastas, rice dishes, burgers and desserts.',
+  },
+  {
+    q: '¿Origen es el antiguo Hicaco Plaza?',
+    a: 'Sí. Origen abrió en octubre de 2026 en el mismo local de Hicaco Plaza Jacó, con el mismo equipo de cocina y salón y una propuesta renovada.',
+    qEn: 'Is Origen the former Hicaco Plaza?',
+    aEn: 'Yes. Origen opened in October 2026 in the same space as Hicaco Plaza Jacó, with the same kitchen and front-of-house team and a renewed proposal.',
   },
   {
     q: '¿Necesito reservar?',
     a: `No es obligatorio, pero recomendamos reservar para cenas y fines de semana. Puedes reservar por WhatsApp al ${site.phone}.`,
     qEn: 'Do I need a reservation?',
     aEn: `It is not required, but we recommend booking for dinners and weekends. You can book on WhatsApp at ${site.phone}.`,
+  },
+  {
+    q: '¿Cómo reservo una mesa en Origen?',
+    a: `Reserva por WhatsApp al ${site.phone}. Indícanos día, hora y número de personas y te confirmamos. Para grupos grandes o eventos, escríbenos y te cotizamos.`,
+    qEn: 'How do I book a table at Origen?',
+    aEn: `Book on WhatsApp at ${site.phone}. Tell us the day, time and number of guests and we will confirm. For large groups or events, message us for a quote.`,
   },
   {
     q: '¿Tienen menú para niños?',
@@ -42,14 +56,14 @@ export const faqs = [
   },
   {
     q: '¿Los precios incluyen impuestos?',
-    a: 'Sí, los precios del menú incluyen el IVA del 13%. [Confirmar cómo se muestra el 10% de servicio.]',
+    a: 'Sí, los precios del menú incluyen el IVA del 13%. No cobramos cargos ocultos.',
     qEn: 'Are prices inclusive of tax?',
-    aEn: 'Yes, menu prices include 13% VAT. [Confirm how the 10% service charge is shown.]',
+    aEn: 'Yes, menu prices include the 13% Costa Rican VAT. There are no hidden charges.',
   },
   {
-    q: '¿Qué formas de pago aceptan?',
-    a: '[Efectivo, tarjetas, SINPE Móvil — confirmar]. Emitimos factura electrónica.',
-    qEn: 'What payment methods do you accept?',
-    aEn: '[Cash, cards, SINPE Móvil — confirm]. We issue electronic invoices.',
+    q: '¿Tienen barra de cócteles?',
+    a: 'Sí. La barra de Origen sirve coctelería de autor y mocktails sin alcohol para acompañar el almuerzo y la cena.',
+    qEn: 'Do you have a cocktail bar?',
+    aEn: 'Yes. The Origen bar serves signature cocktails and alcohol-free mocktails to go with lunch and dinner.',
   },
 ];

@@ -164,7 +164,7 @@ test.describe('T-39 · sitemap (estado provisional)', () => {
 // T-36 · Traducción EN completa (P-22 aprobado). Verifica que /en/ no mezcle texto ES
 // y que los datos bilingües (menú, FAQ, NAP) y el JSON-LD se emitan en inglés.
 const ES_MARKERS =
-  /\b(Todos|días|Menú|Nosotros|Eventos|Contacto|Reservar|Reserva|Horario|Ubicación|Galería|Precios|Personas|Nombre|Fecha|Invitados|Cotiza|Cumpleaños|Mariscos|Parrilla|Postres|Entradas|Coctelería|Bebidas|Síguenos|Descubre|Bienvenidos|esperamos|Dirección|Cerrar|Anterior|Siguiente|Ampliar|Momentos|Celebra|Nuestro|Nuestra|Invita|Almuerzo|Cena|Cócteles|llega|servimos|incluyen|Costarricense)\b/;
+  /\b(Inicio|Todos|días|Menú|Nosotros|Eventos|Contacto|Reservar|Reserva|Horario|Ubicación|Galería|Precios|Personas|Nombre|Fecha|Invitados|Cotiza|Cumpleaños|Mariscos|Parrilla|Postres|Entradas|Coctelería|Bebidas|Síguenos|Descubre|Bienvenidos|esperamos|Dirección|Cerrar|Anterior|Siguiente|Ampliar|Momentos|Celebra|Nuestro|Nuestra|Invita|Almuerzo|Cena|Cócteles|llega|servimos|incluyen|Costarricense)\b/;
 
 test.describe('T-36 · /en/ sin texto ES mezclado', () => {
   for (const route of EN_ROUTES) {

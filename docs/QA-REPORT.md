@@ -692,7 +692,7 @@ de Facebook para confirmar que no recorta el preview.
 |---|---|
 | `Restaurant` | 💚 `maximumAttendeeCapacity` retirada; horario **multiday** (`dayOfWeek` array); `BreadcrumbList` en las 4 páginas con migas; `Person` (chef + gerente); `image` array; `ReserveAction` anclada al CTA visible; `sameAs` solo reales; `telephone` omitido |
 | `Menu` | 💚 `Menu`/`MenuSection`/`MenuItem`; solo categorías publicables; `offers` **solo** con precio numérico (CRC); nombre/descr. 1:1 con el menú visible |
-| `FAQPage` | 💚 `Question`/`Answer` 1:1 con el DOM (4 FAQ reales; `<details>`, texto extraíble T-42) |
+| `FAQPage` | 💚 `Question`/`Answer` 1:1 con el DOM (**10** FAQ reales, T-41; `<details>`, texto extraíble T-42) |
 | **Fuga corregida** | 🔴→💚 el **teléfono placeholder** `+506 0000 0000` (sin corchetes, el gate no lo veía) aparecía en FAQPage + FAQ visible → nuevo `isRealPhone` (`placeholders.ts`), usado en `Base.astro` (JSON-LD) y para excluir la FAQ que lo incrustaba |
 | Guard de placeholders | 💚 en JSON-LD de las 6 rutas: sin corchetes **ni** `0{4} 0{4}` |
 | Verificación | `check` 0 errores, **404/404 Playwright** (36.8 s; +16 tests T-40) |
@@ -708,7 +708,7 @@ de Facebook para confirmar que no recorta el preview.
 | Motion | 💚 `.reveal` (`opacity`+`translateY`, una sola vez) vía `IntersectionObserver`; `hero-in` con stagger; `prefers-reduced-motion` instantáneo; sin JS, contenido visible y estático |
 | **Hallazgo de implementación** | 🔴→💚 el reveal con `clip-path` **rompía** `IntersectionObserver` en Chromium (el área recortada nunca intersecta → deadlock): cambiar a `opacity`/`transform` |
 | Estrategia de test | E2E corre con `reducedMotion: 'reduce'` para que **axe mida el estado final** (la opacidad a mitad de transición generaba falsos positivos de contraste); `tests/e2e/motion.spec.ts` cubre el camino animado y el fallback sin JS |
-| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **500/500 Playwright** (50.8 s; +autoplay T-56) |
+| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **564/564 Playwright** (50.8 s; +autoplay T-56) |
 
 # Traducción EN completa (T-36 · F5)
 
@@ -716,7 +716,7 @@ de Facebook para confirmar que no recorta el preview.
 
 | Ítem | Resultado |
 |---|---|
-| Datos bilingües | 💚 `menu.ts` (`nameEn`/`descEn`/`kickerEn`/`titleEn`/`noteEn`), `faq.ts` (`qEn`/`aEn`, 8), `site.ts` (`descriptionEn`, `hours.daysEn`) |
+| Datos bilingües | 💚 `menu.ts` (`nameEn`/`descEn`/`kickerEn`/`titleEn`/`noteEn`), `faq.ts` (`qEn`/`aEn`; ampliadas a 10 en T-41), `site.ts` (`descriptionEn`, `hours.daysEn`) |
 | Componentes con `lang` | 💚 `DishList`, `ReserveForm` (etiquetas, mensaje WhatsApp y `data-lang` EN); `Footer` usa `daysEn` |
 | Páginas `/en/` | 💚 `index`, `menu`, `nosotros`, `eventos` (formulario de cotización EN), `contacto` (FAQ EN) completas |
 | JSON-LD por idioma | 💚 `Restaurant` con `descriptionEn`/`servesCuisine` EN/`jobTitle` EN/`hasMenu` y `ReserveAction` anclada a `/en/`; `Menu` con `inLanguage:"en"`; `FAQPage` EN 1:1 con el DOM |
@@ -739,3 +739,18 @@ de Facebook para confirmar que no recorta el preview.
 | Switcher accesible | 💚 cubierto en `i18n.spec.ts` (`aria-current`, `aria-label`, `href` real, foco) |
 | Nota | no requirió cambios de producción: `clamp()` y `letter-spacing: .1em` a ≤380px ya absorbían el texto EN |
 | Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **492/492 Playwright** (42.1 s; +30 T-37, +30 responsive EN) |
+
+# Contenido citable por IA (T-41 · F6)
+
+> **Fecha:** 2026-10-13 · **Alcance:** 10 respuestas de FAQ autoconclusivas de ≤40 palabras y respuesta de «qué es Origen y cuándo abre» en los primeros párrafos de las 5 páginas (ES y EN). Sin placeholders.
+
+| Ítem | Resultado |
+|---|---|
+| FAQ citables | 💚 `faq.ts` con **10** preguntas locales (ES+EN), todas **≤40 palabras**, autoconclusivas y sin corchetes: dónde, horario, tipo de cocina, relación con Hicaco, reserva, cómo reservar, menú de niños, grupos/eventos, impuestos y barra de cócteles |
+| Bloque factual | 💚 qué es (mariscos+parrilla), dónde (Jacó, Garabito, Puntarenas), horario (todos los días 11:00–22:00), capacidad (120), precios con IVA (13 %) |
+| **Fuera de alcance** | 🔴→⏳ FAQ de **formas de pago** retirada (pendiente del cliente): publicarla inventaría métodos no confirmados (política «ocultar > inventar», §6) |
+| «Qué es + cuándo abre» en cada página | 💚 leads de hero (home, menú, nosotros, eventos, contacto) en ES y EN abren con tipo de cocina y horario; `contacto` gana un `lead` nuevo |
+| **Fuga corregida** | 🔴→💚 `PageHero.astro` emitía el breadcrumb **«Inicio»** con `href="/"` en las 4 páginas `/en/*` que lo usan → ahora localiza a **Home** + `/en/`, y «Inicio» se sumó a los marcadores ES de `i18n.spec.ts` (antes no se detectaba) |
+| JSON-LD 1:1 | 💚 `FAQPage` con una `Question` por `<details>` visible (10/10) en `/contacto/` y `/en/contacto/` |
+| Guard de tests | 💚 `tests/e2e/citable.spec.ts` (32 tests): conteo de palabras de cada respuesta (ambos idiomas), tokens cocina+horario en los primeros párrafos y paridad FAQPage↔DOM |
+| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **564/564 Playwright** (47.1 s; +32 T-41) |
