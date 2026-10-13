@@ -683,3 +683,16 @@ de Facebook para confirmar que no recorta el preview.
 | Sitemap | 💛 excluye `/en/` (estado provisional verificado); T-38 lo hace bilingüe en go-live |
 | Fixes | ✅ héroe `/en/` con foto real (espejo del ES); CTA eventos sin anchor muerto (`/en/contacto/#cotizar` → inexistente, ahora `/en/contacto/`); copy "guests of capacity" → "guests · space for groups and events" |
 | Verificación | `check` 0 errores, **388/388 Playwright** (36.1 s) |
+
+# JSON-LD endurecido (T-40)
+
+> **Fecha:** 2026-10-12 · **Alcance:** Restaurant + Menu + FAQPage; validado localmente lo que el Rich Results Test comprueba de forma automática. La pasada final del validador de Google queda para go-live (P-01).
+
+| Ítem | Resultado |
+|---|---|
+| `Restaurant` | 💚 `maximumAttendeeCapacity` retirada; horario **multiday** (`dayOfWeek` array); `BreadcrumbList` en las 4 páginas con migas; `Person` (chef + gerente); `image` array; `ReserveAction` anclada al CTA visible; `sameAs` solo reales; `telephone` omitido |
+| `Menu` | 💚 `Menu`/`MenuSection`/`MenuItem`; solo categorías publicables; `offers` **solo** con precio numérico (CRC); nombre/descr. 1:1 con el menú visible |
+| `FAQPage` | 💚 `Question`/`Answer` 1:1 con el DOM (4 FAQ reales; `<details>`, texto extraíble T-42) |
+| **Fuga corregida** | 🔴→💚 el **teléfono placeholder** `+506 0000 0000` (sin corchetes, el gate no lo veía) aparecía en FAQPage + FAQ visible → nuevo `isRealPhone` (`placeholders.ts`), usado en `Base.astro` (JSON-LD) y para excluir la FAQ que lo incrustaba |
+| Guard de placeholders | 💚 en JSON-LD de las 6 rutas: sin corchetes **ni** `0{4} 0{4}` |
+| Verificación | `check` 0 errores, **404/404 Playwright** (36.8 s; +16 tests T-40) |

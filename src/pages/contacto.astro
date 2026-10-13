@@ -3,11 +3,14 @@ import Base from '../layouts/Base.astro';
 import ReserveForm from '../components/ReserveForm.astro';
 import { site, telHref } from '../data/site';
 import { faqs } from '../data/faq';
-import { isReal } from '../data/placeholders';
+import { isReal, isRealPhone } from '../data/placeholders';
 
 // Solo se publican las FAQ con pregunta y respuesta reales (política §6); las pendientes
 // quedan en faq.ts como shot list hasta T-21. Si no hay ninguna, se oculta la sección y el FAQPage.
-const publicFaqs = faqs.filter((f) => isReal(f.q) && isReal(f.a));
+// Además se excluyen respuestas que incrustan el teléfono mientras siga pendiente (T-40):
+// evita publicar/basar el FAQPage en '+506 0000 0000' (placeholder sin corchetes).
+const phonePending = !isRealPhone(site.phone);
+const publicFaqs = faqs.filter((f) => isReal(f.q) && isReal(f.a) && !(phonePending && f.a.includes(site.phone)));
 const faqSchema = publicFaqs.length
   ? {
       '@context': 'https://schema.org',

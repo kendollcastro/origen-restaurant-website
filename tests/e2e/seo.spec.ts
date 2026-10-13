@@ -1,6 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { site, telHref } from '../../src/data/site';
-import { isReal } from '../../src/data/placeholders';
+import { isReal, isRealPhone } from '../../src/data/placeholders';
 
 // T-34 · Verificación cruzada NAP (site.ts ↔ Footer ↔ /contacto/ ↔ JSON-LD) y smoke
 // de wa.me / Maps / Waze. La comparación con la ficha de Google queda PENDIENTE (P-06):
@@ -176,9 +176,10 @@ test.describe('JSON-LD Restaurant coherente con site.ts', () => {
       // email siempre presente y literal
       expect(r.email).toBe(site.email);
 
-      // telephone: omitido mientras site.phone sea placeholder (política ocultar > inventar)
+      // telephone: omitido mientras site.phone sea placeholder (política ocultar > inventar).
+      // isRealPhone también descarta el relleno de ceros ('+506 0000 0000') sin corchetes (T-40).
       if ('telephone' in r) expect(r.telephone).toBe(site.phone);
-      else expect(isReal(site.phone) && !site.phone.includes('0000')).toBe(false);
+      else expect(isRealPhone(site.phone)).toBe(false);
 
       // sameAs: solo redes reales; hoy todas son placeholder ([usuario]) → se omite
       const expectedSameAs = Object.values(site.social).filter(isReal);
@@ -333,4 +334,87 @@ test.describe('integridad de enlaces locales', () => {
       }
     }
   });
+});
+
+// T-40 · JSON-LD Menu y FAQPage: estructura válida, offers solo con precio real (número)
+// y texto 1:1 con lo visible. Google Rich Results Test se completará en go-live (P-01);
+// aquí se valida localmente lo que ese validador comprueba de forma automática.
+test.describe('JSON-LD Menu 1:1 con el menú visible', () => {
+  test('/menu/ · Menu/MenuSection/MenuItem válidos y solo con platos reales', async ({ page }) => {
+    await page.goto('/menu/');
+    const nodes = await collectLd(page);
+    const menu = nodes.find((node) => node['@type'] === 'Menu') as Record<string, unknown> | undefined;
+    expect(menu, 'Sin JSON-LD Menu en /menu/').toBeTruthy();
+
+    const sections = menu!.hasMenuSection as Record<string, unknown>[];
+    expect(Array.isArray(sections)).toBe(true);
+    expect(sections.length).toBeGreaterThan(0);
+
+    const visible = await page.locator('main').innerText();
+    for (const section of sections) {
+      expect(section['@type']).toBe('MenuSection');
+      expect(visible, `Sección "${section.name}" no visible`).toContain(section.name as string);
+      const items = section.hasMenuItem as Record<string, unknown>[];
+      expect(items.length).toBeGreaterThan(0);
+      for (const item of items) {
+        expect(item['@type']).toBe('MenuItem');
+        // Nunca corchetes de placeholder como nombre de plato.
+        expect(item.name as string).not.toMatch(/\[[^\]]*\]/);
+        expect(visible, `Plato "${item.name}" no visible`).toContain(item.name as string);
+        // `offers` solo cuando hay precio real (número en colones, T-40).
+        if ('offers' in item) {
+          const offer = item.offers as Record<string, unknown>;
+          expect(typeof offer.price).toBe('number');
+          expect(offer.priceCurrency).toBe('CRC');
+          expect(visible).toContain(String(offer.price));
+        }
+      }
+    }
+  });
+});
+
+test.describe('JSON-LD FAQPage 1:1 con la FAQ visible', () => {
+  test('/contacto/ · cada Question/Answer aparece en el texto visible', async ({ page }) => {
+    await page.goto('/contacto/');
+    const nodes = await collectLd(page);
+    const faq = nodes.find((node) => node['@type'] === 'FAQPage') as Record<string, unknown> | undefined;
+    if (!faq) {
+      // Sin FAQ publicables (todo pendiente) la sección no debe montarse.
+      await expect(page.locator('main')).not.toContainText('Preguntas frecuentes');
+      test.info().annotations.push({ type: 'faq', description: 'FAQPage omitido (sin FAQs reales)' });
+      return;
+    }
+    const mainEntity = faq.mainEntity as Record<string, unknown>[];
+    expect(mainEntity.length).toBeGreaterThan(0);
+    // La FAQ vive en <details> (cerrado por defecto): su texto está en el DOM (crawlable y
+    // extraíble, T-42) aunque `innerText` lo omita con el panel colapsado → se usa textContent.
+    const domText = (await page.locator('main').textContent()) ?? '';
+    for (const q of mainEntity) {
+      expect(q['@type']).toBe('Question');
+      const answer = q.acceptedAnswer as Record<string, unknown>;
+      expect(answer['@type']).toBe('Answer');
+      expect(domText, `Pregunta no presente en el DOM: ${q.name}`).toContain(q.name as string);
+      expect(domText, `Respuesta no presente en el DOM: ${answer.text}`).toContain(answer.text as string);
+    }
+  });
+});
+
+test.describe('T-40 · ningún placeholder en el JSON-LD (incluye teléfono con ceros)', () => {
+  for (const route of ALL_ROUTES) {
+    test(`${route} · sin corchetes ni relleno de ceros en ninguna cadena`, async ({ page }) => {
+      await page.goto(route);
+      const nodes = await collectLd(page);
+      const strings: string[] = [];
+      const walk = (value: unknown) => {
+        if (typeof value === 'string') strings.push(value);
+        else if (Array.isArray(value)) value.forEach(walk);
+        else if (value && typeof value === 'object') Object.values(value).forEach(walk);
+      };
+      nodes.forEach(walk);
+      for (const value of strings) {
+        expect(value).not.toMatch(/\[[^\]]*\]/);
+        expect(value, `teléfono placeholder filtrado en JSON-LD: ${value}`).not.toMatch(/0{4}\s*0{4}/);
+      }
+    });
+  }
 });
