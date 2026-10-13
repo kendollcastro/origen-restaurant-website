@@ -696,3 +696,15 @@ de Facebook para confirmar que no recorta el preview.
 | **Fuga corregida** | 🔴→💚 el **teléfono placeholder** `+506 0000 0000` (sin corchetes, el gate no lo veía) aparecía en FAQPage + FAQ visible → nuevo `isRealPhone` (`placeholders.ts`), usado en `Base.astro` (JSON-LD) y para excluir la FAQ que lo incrustaba |
 | Guard de placeholders | 💚 en JSON-LD de las 6 rutas: sin corchetes **ni** `0{4} 0{4}` |
 | Verificación | `check` 0 errores, **404/404 Playwright** (36.8 s; +16 tests T-40) |
+
+# Galería interactiva y animaciones de entrada (T-56 + T-57 · F3)
+
+> **Fecha:** 2026-10-13 · **Alcance:** carrusel `scroll-snap` con lightbox sobre `<dialog>` (T-56) y reveal al scroll + entrada del hero como mejora progresiva (T-57). Sin dependencias nuevas.
+
+| Ítem | Resultado |
+|---|---|
+| Galería | 💚 8 slides con `scroll-snap-type: x mandatory`; flechas desplazan el track; lightbox `<dialog>` abre/navega (wrap) /cierra con teclado ←/→ y clic en backdrop; datos críticos siguen en el DOM (imágenes lazy) |
+| Motion | 💚 `.reveal` (`opacity`+`translateY`, una sola vez) vía `IntersectionObserver`; `hero-in` con stagger; `prefers-reduced-motion` instantáneo; sin JS, contenido visible y estático |
+| **Hallazgo de implementación** | 🔴→💚 el reveal con `clip-path` **rompía** `IntersectionObserver` en Chromium (el área recortada nunca intersecta → deadlock): cambiar a `opacity`/`transform` |
+| Estrategia de test | E2E corre con `reducedMotion: 'reduce'` para que **axe mida el estado final** (la opacidad a mitad de transición generaba falsos positivos de contraste); `tests/e2e/motion.spec.ts` cubre el camino animado y el fallback sin JS |
+| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **414/414 Playwright** (48.6 s; +6 T-57 motion, +4 T-56 galería) |
