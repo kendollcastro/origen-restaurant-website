@@ -244,7 +244,7 @@ Formato de respuesta sugerido: **texto plano, un dato por línea** (se vuelca di
 | P-01 | Dominio `origenjaco.com`: ¿comprado? ¿registrar? ¿quién tiene acceso al panel DNS? | T-06, T-53 |
 | P-02 | Dirección exacta (calle + número/lote + referencia turística), una sola string oficial | T-18, T-29 |
 | P-03 | Teléfono `+506` y WhatsApp (¿mismo número? ¿quién atiende?) + correo operativo | T-18, T-33 |
-| P-04 | Días y horario reales (¿igual los 7 días? ¿horario distinto de barra? ¿festivos?) y política de último pedido (¿21:30 o 22:00?) | T-18, T-21 |
+| P-04 | Días y horario reales (¿igual los 7 días? ¿horario distinto de barra? ¿festivos?) y política de último pedido (¿21:30 o 22:00?) — **horario confirmado por el cliente (2026-10-13): todos los días 11:00–22:00**; siguen abiertos barra/festivos/último pedido | T-18, T-21 |
 | P-05 | URLs exactas de Instagram, Facebook, TripAdvisor y links de la ficha de Google Maps y Waze | T-18, T-31 |
 | P-06 | Google Business Profile: crear/verificar, categoría, permisos, URL de la ficha | T-29, T-30 |
 | P-07 | Precio en colones con IVA de **todos** los platos (~24 escritos + los nuevos) | T-19 |

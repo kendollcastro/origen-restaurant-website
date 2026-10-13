@@ -21,10 +21,10 @@ export const site = {
   email: 'info@origenjaco.com', // TODO
   hours: {
     label: '11:00 am – 10:00 pm',
-    days: 'Todos los días', // TODO: confirmar días
+    days: 'Todos los días', // confirmado por el cliente (2026-10-13): los 7 días
     opens: '11:00',
     closes: '22:00',
-    schema: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], // TODO
+    schema: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'], // confirmado 2026-10-13
   },
   capacity: 120,
   reservationMax: 12, // TODO: confirmar máximo de personas para reserva directa (grupos mayores → /eventos/)

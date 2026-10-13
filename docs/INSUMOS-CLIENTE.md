@@ -73,6 +73,7 @@ Hola 👋 — voy cerrando la web de Origen y para publicarla necesito unos dato
   - **permiso por escrito** para usar las fotos (un "sí, pueden usarse en la web" por WhatsApp sirve).
 
 **6. Restaurante**
+- Horario: ✅ confirmado (todos los días, 11:00 am – 10:00 pm). Si la barra o la cocina abren/cierran distinto, avísame.
 - Capacidad: ¿confirmas que son 120 personas? ¿hay salón privado o zona separada?
 - Formas de pago y la frase exacta del 10% de servicio (¿factura electrónica sí/no?).
 - Menús para grupos (precio por persona, mínimo, opciones) y si ofrecen decoración/pastel para eventos.
