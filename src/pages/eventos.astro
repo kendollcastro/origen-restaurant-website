@@ -3,22 +3,25 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import Photo from '../components/Photo.astro';
 import { site, waLink } from '../data/site';
+import { ambiente, bebidas, platos } from '../data/photos';
+import type { ImageMetadata } from 'astro';
 
 const waHref = waLink('Hola Origen, quisiera cotizar un evento.');
 const hour12 = (t: string) => Number(t.slice(0, 2)) % 12 || 12;
 const period = (t: string) => (Number(t.slice(0, 2)) >= 12 ? 'pm' : 'am');
-const tipos = [
-  ['Grupos de tour', 'grupo de tour', 'Trabajamos con tour operadores de Jacó. Almuerzos y cenas para grupos con menú fijo y servicio ágil.', 'Mesa puesta para un grupo de tour en Origen.'],
-  ['Cumpleaños y aniversarios', 'cumpleaños', 'Mesas privadas o el salón completo.', 'Celebración de cumpleaños en el salón de Origen.'],
-  ['Empresas', 'cena corporativa', 'Cenas de equipo, fiestas de fin de año y reuniones con menú cerrado y factura electrónica.', 'Cena de equipo servida en el salón de Origen.'],
-  ['Bodas y ensayos', 'boda', 'Cenas de ensayo y recepciones íntimas a pasos de la playa de Jacó.', 'Cena de ensayo de boda, a pasos de la playa de Jacó.'],
+// Fotografías provisionales de la galería (P-16): se reemplazan al llegar las tomas de eventos.
+const tipos: [string, string, string, string, ImageMetadata][] = [
+  ['Grupos de tour', 'grupo de tour', 'Trabajamos con tour operadores de Jacó. Almuerzos y cenas para grupos con menú fijo y servicio ágil.', 'Mesa puesta para un grupo de tour en Origen.', platos[9]],
+  ['Cumpleaños y aniversarios', 'cumpleaños', 'Mesas privadas o el salón completo.', 'Celebración de cumpleaños en el salón de Origen.', bebidas[3]],
+  ['Empresas', 'cena corporativa', 'Cenas de equipo, fiestas de fin de año y reuniones con menú cerrado y factura electrónica.', 'Cena de equipo servida en el salón de Origen.', bebidas[4]],
+  ['Bodas y ensayos', 'boda', 'Cenas de ensayo y recepciones íntimas a pasos de la playa de Jacó.', 'Cena de ensayo de boda, a pasos de la playa de Jacó.', platos[10]],
 ];
 ---
 <Base
   title="Eventos y grupos en Jacó · Origen — hasta 120 invitados"
   description={`Celebra en Origen, Jacó: grupos de tour, cumpleaños, cenas de empresa y bodas. Capacidad para ${site.capacity} invitados y menú a la medida. Cotiza por WhatsApp.`}
 >
-  <PageHero crumb="Eventos" script="Celebra en Jacó" title="Eventos y grupos" photo="mesa larga montada para evento"
+  <PageHero crumb="Eventos" script="Celebra en Jacó" title="Eventos y grupos" photo="mesa larga montada para evento" src={ambiente[7]}
     lead={`Mariscos y parrilla en Jacó, con capacidad para hasta ${site.capacity} invitados, menú a la medida y un equipo con experiencia en grupos y tours. Abrimos todos los días, de 11:00 am a 10:00 pm.`}>
     <a href="#cotizar" class="btn btn-primary" style="margin-top: 12px;">Cotizar mi evento</a>
   </PageHero>
@@ -26,9 +29,9 @@ const tipos = [
   <section class="container section stack" style="gap: 48px;" aria-labelledby="tipos-t">
     <h2 id="tipos-t" class="display reveal" style="text-align: center;">¿Qué celebramos contigo?</h2>
     <div class="grid" style="--min: 260px;">
-      {tipos.map(([t, photo, d, alt], i) => (
+      {tipos.map(([t, photo, d, alt, src], i) => (
         <article class="stack reveal" style={`gap: 14px; --reveal-delay:${i * 0.08}s`}>
-          <Photo label={photo} alt={alt} height="300px" />
+          <Photo label={photo} alt={alt} src={src} height="300px" />
           <h3 style="font-family: var(--serif); font-weight: 600; font-size: 30px; line-height: 1.1;">{t}</h3>
           <p style="color: var(--soft);">{d}</p>
         </article>

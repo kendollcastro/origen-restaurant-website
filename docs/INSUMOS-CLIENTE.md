@@ -37,6 +37,7 @@ Para poder cerrar el sitio es necesario recibir estos insumos. Agrupados en dos 
 ## Notas
 
 - Hoy los valores de ejemplo restantes (correo, redes, dirección, coordenadas) siguen **ocultos** en la web hasta recibir los reales; teléfono, WhatsApp y horario ya son reales (2026-10-13).
+- **2026-10-13 — imágenes provisionales:** por indicación del cliente, las fotos de la galería rellenan los huecos decorativos: hero de `/nosotros/` y `/eventos/` (ES+EN) y las 4 tarjetas de tipo de evento (grupos/cumpleaños/empresas/bodas). Siguen **pendientes fotos reales** para el hero de portada, el **equipo** (chef, gerente, grupal) y los **logos de aliados** (P-13/P-16). El mapeo foto↔plato es provisional hasta la leyenda del cliente.
 - El sitio ya está desplegado en **preview** (acceso por login a la cuenta Vercel `kendollcastro`). Nada en producción.
 - La apertura "octubre de 2026" no está confirmada (afecta a fecha del esquema `openingHoursSpecification`).
 - Recibir P-01…P-06 desbloquea T-06/T-14/T-18…T-21/T-23 y el go-live; el resto se puede cerrar en tandas.

@@ -5,7 +5,7 @@ import PageHero from '../../components/PageHero.astro';
 import Photo from '../../components/Photo.astro';
 import { site } from '../../data/site';
 import { isReal } from '../../data/placeholders';
-import { ambiente } from '../../data/photos';
+import { ambiente, platos } from '../../data/photos';
 import { enPages } from '../../data/i18n/pages';
 
 const p = enPages.nosotros;
@@ -16,7 +16,7 @@ const chefTrayectoria = ''; // trayectoria, formación y plato favorito de la ch
 const chefFrase = ''; // cita literal de la chef sobre su cocina
 ---
 <Base title={p.title} description={p.description} lang="en">
-  <PageHero crumb={p.h1} script={p.script} title={p.h1} photo="team in the kitchen" lead={p.lead} lang="en" />
+  <PageHero crumb={p.h1} script={p.script} title={p.h1} photo="team in the kitchen" src={platos[8]} lead={p.lead} lang="en" />
 
   <section class="light">
     <div class="container section row">

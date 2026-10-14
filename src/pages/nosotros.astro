@@ -4,7 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import Photo from '../components/Photo.astro';
 import { site } from '../data/site';
 import { isReal } from '../data/placeholders';
-import { ambiente } from '../data/photos';
+import { ambiente, platos } from '../data/photos';
 
 // Al llegar el dato del cliente (T-22) se llena la constante y el bloque aparece (política §6).
 const duenos = ''; // anécdota o visión de los dueños
@@ -15,7 +15,7 @@ const chefFrase = ''; // cita literal de la chef sobre su cocina
   title="Nosotros · Origen Jacó — Historia, chef y equipo"
   description={`Origen, restaurante nuevo de mariscos y parrilla en Jacó, abierto en octubre de 2026. Conoce a la chef ${site.chef} y la cocina de mar, tierra y fuego.`}
 >
-  <PageHero crumb="Nosotros" script="Nuestra" title="Historia" photo="equipo en la cocina" lead="Un restaurante de mariscos y parrilla en Jacó, con un equipo que ya conoces. Abrimos todos los días, de 11:00 am a 10:00 pm." />
+  <PageHero crumb="Nosotros" script="Nuestra" title="Historia" photo="equipo en la cocina" src={platos[8]} lead="Un restaurante de mariscos y parrilla en Jacó, con un equipo que ya conoces. Abrimos todos los días, de 11:00 am a 10:00 pm." />
 
   <section class="light">
     <div class="container section row">

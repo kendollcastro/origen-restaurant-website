@@ -5,20 +5,23 @@ import PageHero from '../../components/PageHero.astro';
 import Photo from '../../components/Photo.astro';
 import { site, waLink } from '../../data/site';
 import { enPages } from '../../data/i18n/pages';
+import { ambiente, bebidas, platos } from '../../data/photos';
+import type { ImageMetadata } from 'astro';
 
 const p = enPages.eventos;
 const waHref = waLink('Hello Origen, I would like to quote an event.');
 const hour12 = (t: string) => Number(t.slice(0, 2)) % 12 || 12;
 const period = (t: string) => (Number(t.slice(0, 2)) >= 12 ? 'pm' : 'am');
-const tipos = [
-  ['Tour groups', 'tour group', 'We work with tour operators in Jacó. Lunch and dinner for groups with a set menu and quick service.', 'A table set for a tour group at Origen.'],
-  ['Birthdays and anniversaries', 'birthday', 'Private tables or the whole dining room.', 'A birthday celebration in the Origen dining room.'],
-  ['Companies', 'corporate dinner', 'Team dinners, year-end parties and meetings with a set menu and electronic invoicing.', 'A team dinner served in the Origen dining room.'],
-  ['Weddings and rehearsals', 'wedding', 'Rehearsal dinners and intimate receptions steps from Jacó beach.', 'A wedding rehearsal dinner, steps from Jacó beach.'],
+// Provisional gallery photos (P-16): replaced once event shots arrive.
+const tipos: [string, string, string, string, ImageMetadata][] = [
+  ['Tour groups', 'tour group', 'We work with tour operators in Jacó. Lunch and dinner for groups with a set menu and quick service.', 'A table set for a tour group at Origen.', platos[9]],
+  ['Birthdays and anniversaries', 'birthday', 'Private tables or the whole dining room.', 'A birthday celebration in the Origen dining room.', bebidas[3]],
+  ['Companies', 'corporate dinner', 'Team dinners, year-end parties and meetings with a set menu and electronic invoicing.', 'A team dinner served in the Origen dining room.', bebidas[4]],
+  ['Weddings and rehearsals', 'wedding', 'Rehearsal dinners and intimate receptions steps from Jacó beach.', 'A wedding rehearsal dinner, steps from Jacó beach.', platos[10]],
 ];
 ---
 <Base title={p.title} description={p.description} lang="en">
-  <PageHero crumb={p.h1} script={p.script} title={p.h1} photo="long table set for an event"
+  <PageHero crumb={p.h1} script={p.script} title={p.h1} photo="long table set for an event" src={ambiente[7]}
     lead={p.lead} lang="en">
     <a href="#cotizar" class="btn btn-primary" style="margin-top: 12px;">Quote my event</a>
   </PageHero>
@@ -26,9 +29,9 @@ const tipos = [
   <section class="container section stack" style="gap: 48px;" aria-labelledby="tipos-t">
     <h2 id="tipos-t" class="display reveal" style="text-align: center;">What are we celebrating with you?</h2>
     <div class="grid" style="--min: 260px;">
-      {tipos.map(([t, photo, d, alt], i) => (
+      {tipos.map(([t, photo, d, alt, src], i) => (
         <article class="stack reveal" style={`gap: 14px; --reveal-delay:${i * 0.08}s`}>
-          <Photo label={photo} alt={alt} height="300px" />
+          <Photo label={photo} alt={alt} src={src} height="300px" />
           <h3 style="font-family: var(--serif); font-weight: 600; font-size: 30px; line-height: 1.1;">{t}</h3>
           <p style="color: var(--soft);">{d}</p>
         </article>
