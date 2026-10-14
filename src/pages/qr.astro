@@ -1,0 +1,112 @@
+---
+import QRCode from 'qrcode';
+import { site } from '../data/site';
+import { isReal } from '../data/placeholders';
+import '../styles/global.css';
+
+// Página interna de QR (no enlazada desde el sitio, fuera del sitemap, noindex).
+// Genera los QR en build-time con la librería `qrcode` (offline, sin API externa).
+// Los enlaces salen de `site.ts`: al confirmar el cliente la ficha de TripAdvisor,
+// su tarjeta aparece sola (política §6: sin enlaces inventados).
+const targets = [
+  {
+    key: 'maps',
+    label: 'Google Maps',
+    url: site.mapsUrl,
+    note: 'Escanea para abrir la ubicación de Origen y trazar la ruta.',
+  },
+  {
+    key: 'tripadvisor',
+    label: 'TripAdvisor',
+    url: site.social.tripadvisor,
+    note: 'Escanea para abrir la ficha de Origen y dejar tu reseña.',
+  },
+];
+
+const opts = {
+  type: 'svg' as const,
+  margin: 1,
+  width: 320,
+  errorCorrectionLevel: 'M' as const,
+  color: { dark: '#0F0E0C', light: '#FFFFFF' },
+};
+
+const cards = await Promise.all(
+  targets.filter((t) => isReal(t.url)).map(async (t) => ({ ...t, svg: await QRCode.toString(t.url, opts) })),
+);
+const pending = targets.filter((t) => !isReal(t.url));
+---
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>QR · Google Maps y TripAdvisor · Origen Jacó</title>
+  <meta name="theme-color" content="#0F0E0C" />
+</head>
+<body class="qr-body">
+  <main class="qr">
+    <header class="qr-head">
+      <span class="qr-script">Origen</span>
+      <h1 class="qr-title">Códigos QR</h1>
+      <p class="qr-sub">Google Maps · TripAdvisor</p>
+    </header>
+
+    <ul class="qr-grid">
+      {cards.map((c) => (
+        <li class="qr-card" data-qr={c.key}>
+          <div class="qr-frame" set:html={c.svg} />
+          <h2 class="qr-label">{c.label}</h2>
+          <a class="qr-url" href={c.url} target="_blank" rel="noopener">{c.url}</a>
+          <p class="qr-note">{c.note}</p>
+        </li>
+      ))}
+    </ul>
+
+    {pending.length > 0 && (
+      <p class="qr-pending">
+        Pendiente de enlace del cliente:
+        {pending.map((p, i) => (<span> {i > 0 && '· '}{p.label}</span>))}
+      </p>
+    )}
+
+    <button class="qr-print no-print" type="button" onclick="window.print()">Imprimir</button>
+  </main>
+
+  <style>
+    .qr-body { min-height: 100vh; display: grid; place-items: center; padding: 40px 20px; }
+    main.qr { width: min(880px, 100%); display: flex; flex-direction: column; gap: 40px; }
+    .qr-head { text-align: center; display: flex; flex-direction: column; gap: 6px; align-items: center; }
+    .qr-script { font-family: var(--serif); font-size: 34px; font-style: italic; color: var(--accent); }
+    .qr-title { font-family: var(--sans); font-weight: 500; letter-spacing: .22em; text-transform: uppercase; font-size: clamp(26px, 5vw, 40px); }
+    .qr-sub { font-family: var(--sans); letter-spacing: .18em; text-transform: uppercase; font-size: 13px; color: var(--muted); }
+    .qr-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; }
+    .qr-card {
+      background: var(--cream-card); color: var(--ink); border-radius: 4px;
+      padding: 28px 24px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center;
+    }
+    .qr-frame { width: min(260px, 70vw); aspect-ratio: 1; }
+    .qr-frame :global(svg) { width: 100%; height: auto; display: block; }
+    .qr-label { font-family: var(--sans); font-weight: 500; letter-spacing: .2em; text-transform: uppercase; font-size: 15px; }
+    .qr-url { font-family: var(--sans); font-size: 12px; color: var(--accent-ink); word-break: break-all; }
+    .qr-note { font-size: 14px; color: var(--ink-muted); max-width: 30ch; }
+    .qr-pending { text-align: center; font-size: 13px; color: var(--dim); letter-spacing: .04em; }
+    .qr-print {
+      align-self: center; margin-top: 8px; padding: 14px 34px; border: 1px solid var(--accent);
+      background: transparent; color: var(--accent); border-radius: 2px; cursor: pointer;
+      font: 600 13px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase;
+      transition: background .3s var(--ease-out), color .3s var(--ease-out);
+    }
+    .qr-print:hover { background: var(--accent); color: var(--on-accent); }
+
+    @media print {
+      .qr-body { background: #fff; color: #000; padding: 0; }
+      .no-print { display: none !important; }
+      .qr-card { border: 1px solid #ddd; }
+      .qr-script { color: #9A4F1E; }
+      .qr-url { color: #333; }
+    }
+  </style>
+</body>
+</html>

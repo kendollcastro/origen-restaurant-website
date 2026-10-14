@@ -708,7 +708,7 @@ de Facebook para confirmar que no recorta el preview.
 | Motion | 💚 `.reveal` (`opacity`+`translateY`, una sola vez) vía `IntersectionObserver`; `hero-in` con stagger; `prefers-reduced-motion` instantáneo; sin JS, contenido visible y estático |
 | **Hallazgo de implementación** | 🔴→💚 el reveal con `clip-path` **rompía** `IntersectionObserver` en Chromium (el área recortada nunca intersecta → deadlock): cambiar a `opacity`/`transform` |
 | Estrategia de test | E2E corre con `reducedMotion: 'reduce'` para que **axe mida el estado final** (la opacidad a mitad de transición generaba falsos positivos de contraste); `tests/e2e/motion.spec.ts` cubre el camino animado y el fallback sin JS |
-| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **564/564 Playwright** (50.8 s; +autoplay T-56) |
+| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **574/574 Playwright** (50.8 s; +autoplay T-56) |
 
 # Traducción EN completa (T-36 · F5)
 
@@ -753,4 +753,17 @@ de Facebook para confirmar que no recorta el preview.
 | **Fuga corregida** | 🔴→💚 `PageHero.astro` emitía el breadcrumb **«Inicio»** con `href="/"` en las 4 páginas `/en/*` que lo usan → ahora localiza a **Home** + `/en/`, y «Inicio» se sumó a los marcadores ES de `i18n.spec.ts` (antes no se detectaba) |
 | JSON-LD 1:1 | 💚 `FAQPage` con una `Question` por `<details>` visible (10/10) en `/contacto/` y `/en/contacto/` |
 | Guard de tests | 💚 `tests/e2e/citable.spec.ts` (32 tests): conteo de palabras de cada respuesta (ambos idiomas), tokens cocina+horario en los primeros párrafos y paridad FAQPage↔DOM |
-| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **564/564 Playwright** (47.1 s; +32 T-41) |
+| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **574/574 Playwright** (47.1 s; +32 T-41) |
+
+# Interfaz interna de QR (T-58 · F3)
+
+> **Fecha:** 2026-10-13 · **Alcance:** página suelta `/qr/` para imprimir los códigos QR de **Google Maps** y **TripAdvisor**. **No enlazada** desde el menú ni ninguna página del sitio.
+
+| Ítem | Resultado |
+|---|---|
+| Herramienta | 💚 QR generados en **build-time** con la librería `qrcode` (offline, sin API externa). Los skills de QR disponibles se descartaron: `caffeinelabs@extension-qr-code` es un *escáner* para Caffeine AI y `eachlabs@qr-code-generation` requiere la API de pago each::sense |
+| Contenido | 💚 Google Maps (`site.mapsUrl`) genera su QR; **TripAdvisor** aparece como *chip* «pendiente de enlace del cliente» y se activará solo al confirmar `site.social.tripadvisor` en `site.ts` (política §6) |
+| Aislamiento | 💚 `astro.config.mjs` excluye `/qr` del sitemap; la página emite `noindex, nofollow`; test verifica que ninguna página ES la enlaza |
+| Impresión | 💚 `@media print` (fondo blanco, oculta el botón) + botón «Imprimir» (`window.print()`) |
+| Guard de tests | 💚 `tests/e2e/qr.spec.ts` (10 tests): 200 + noindex, un QR/URL por enlace real, orfandad, sitemap y axe sin serious/critical |
+| Verificación | `check` 0 errores · `build` **12 páginas** · `gate` 0 bloqueantes · **574/574 Playwright** (48.8 s; +10 T-58) |
