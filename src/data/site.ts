@@ -40,6 +40,11 @@ export const site = {
     tripadvisor: 'https://www.tripadvisor.com/[ficha]', // TODO
   },
   mapsUrl: 'https://maps.app.goo.gl/jojXbrhHB41TM3kMA', // confirmado 2026-10-13
+  // Enlace para dejar reseña (interfaz /qr). Confirmado 2026-10-13; TripAdvisor pendiente.
+  reviewUrl: {
+    google: 'https://maps.app.goo.gl/M4M5QesgA6nmF4oM6', // confirmado 2026-10-13
+    tripadvisor: 'https://www.tripadvisor.com/[reseña]', // TODO: enlace de reseña del cliente
+  },
   wazeUrl: 'https://waze.com/ul?q=Origen%20Jaco', // TODO
 };
 

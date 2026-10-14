@@ -5,21 +5,21 @@ import { isReal } from '../data/placeholders';
 import '../styles/global.css';
 
 // Página interna de QR (no enlazada desde el sitio, fuera del sitemap, noindex).
-// Genera los QR en build-time con la librería `qrcode` (offline, sin API externa).
-// Los enlaces salen de `site.ts`: al confirmar el cliente la ficha de TripAdvisor,
-// su tarjeta aparece sola (política §6: sin enlaces inventados).
+// Objetivo: que el cliente deje su reseña. Genera los QR en build-time con la
+// librería `qrcode` (offline, sin API externa). Los enlaces salen de `site.ts`: al
+// confirmar el cliente la ficha de TripAdvisor, su tarjeta aparece sola.
 const targets = [
   {
-    key: 'maps',
-    label: 'Google Maps',
-    url: site.mapsUrl,
-    note: 'Escanea para abrir la ubicación de Origen y trazar la ruta.',
+    key: 'google',
+    label: 'Google',
+    url: site.reviewUrl.google,
+    note: 'Escanéalo y déjanos tu reseña en Google.',
   },
   {
     key: 'tripadvisor',
     label: 'TripAdvisor',
-    url: site.social.tripadvisor,
-    note: 'Escanea para abrir la ficha de Origen y dejar tu reseña.',
+    url: site.reviewUrl.tripadvisor,
+    note: 'Escanéalo y déjanos tu reseña en TripAdvisor.',
   },
 ];
 
@@ -42,15 +42,15 @@ const pending = targets.filter((t) => !isReal(t.url));
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>QR · Google Maps y TripAdvisor · Origen Jacó</title>
+  <title>Reseñas · Google y TripAdvisor · Origen Jacó</title>
   <meta name="theme-color" content="#0F0E0C" />
 </head>
 <body class="qr-body">
   <main class="qr">
     <header class="qr-head">
       <span class="qr-script">Origen</span>
-      <h1 class="qr-title">Códigos QR</h1>
-      <p class="qr-sub">Google Maps · TripAdvisor</p>
+      <h1 class="qr-title">Déjanos tu reseña</h1>
+      <p class="qr-sub">Escanea el código de tu plataforma favorita</p>
     </header>
 
     <ul class="qr-grid">

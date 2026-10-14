@@ -3,15 +3,17 @@ import AxeBuilder from '@axe-core/playwright';
 import { site } from '../../src/data/site';
 import { isReal } from '../../src/data/placeholders';
 
-// Interfaz interna de QR (/qr/): no enlazada desde el sitio, noindex y fuera del sitemap.
+// Interfaz interna de QR (/qr/): invita al cliente a dejar su reseña en Google y
+// TripAdvisor. No enlazada desde el sitio, noindex y fuera del sitemap.
 // Es data-driven: al confirmar el cliente nuevos enlaces en `site.ts`, sus tarjetas
 // aparecen y este test lo valida sin cambios.
 
 const QR_ROUTE = '/qr/';
 const ES_ROUTES = ['/', '/menu/', '/nosotros/', '/eventos/', '/contacto/'];
 
-const realTargets = [site.mapsUrl, site.social.tripadvisor].filter(isReal);
-const pendingTargets = [site.mapsUrl, site.social.tripadvisor].filter((u) => !isReal(u));
+const reviewUrls = [site.reviewUrl.google, site.reviewUrl.tripadvisor];
+const realTargets = reviewUrls.filter(isReal);
+const pendingTargets = reviewUrls.filter((u) => !isReal(u));
 
 test.describe('Interfaz de QR (/qr/)', () => {
   test('responde 200 con noindex', async ({ page }) => {
