@@ -135,7 +135,7 @@
 | **R-22** | @seo-geo | **Corrección del PLAN**: `maximumAttendeeCapacity` **sí es válido** en schema.org para `Place` (Restaurant la hereda); PLAN §2.2-10 está equivocado (Google no la documenta para Restaurant → no daña, no enriquece). Además `Restaurant.url` sin `/` final ≠ canonical | R-22 |
 | **R-23** | @seo-geo | JSON-LD incompleto respecto a F6: faltan `BreadcrumbList`, `Person` (chef), `offers` (correcto omitir hoy) | R-23 |
 | **R-24** | @seo-geo + @ux-designer | hreflang con enfoque `canonical.replace` que rompería con `/en/about|events|contact/` → mapeo explícito (§1.2); `aria-label` del logo ≠ texto visible (`label-content-name-mismatch`) | R-24 |
-| **R-44** | @copywriter | Pass de glosario: "hasta 120" en 2 sitios, "Precios con IVA." ≠ "Precios con IVA incluido", "Chef Zugetcy Leitón" como titular, Hicaco Plaza en 3 tiempos, 2 formatos de horario | R-44 |
+| **R-44** | @copywriter | Pass de glosario: "hasta 120" en 2 sitios, "Precios con IVA." ≠ "Precios con IVA incluido", "Chef Zugetcy Leitón" como titular, 2 formatos de horario | R-44 |
 | **R-63** | @devops | Node local 23.7.0 (no LTS) frente al pin `.nvmrc` 22 → fijar `node-version: 22` en CI | R-63 |
 | **R-64** | @devops | `.gitignore` no cubre `.env.local`/`.env.*`; sin script `gate` unificado en `package.json`; identidad genérica `opencode <opencode@localhost>` en los commits | R-64 |
 
@@ -220,7 +220,7 @@ Además: `og:locale` `es_CR` ✓ · `twitter:card` presente pero sin `twitter:im
 - **Voz**: ✅ tuteo uniforme (0 "usted"), ✅ sensorial con ingredientes, ✅ sin superlativos ni anglicismos, ✅ 1 `h1`/página. ❌ CTAs: 2 de 6 flujos no nombran canal; 3 etiquetas distintas para la reserva, 4 para la cotización.
 - **Glosario**: ✅ "Origen", "Jacó" con tilde, tagline "Mar · Tierra · Fuego", "a la parrilla" ×10 (0 "grill"), "la chef Zugetcy Leitón". ⚠️ "hasta 120" en 3/5 · "Precios con IVA." en la meta de `/menu/` · titular "Chef Zugetcy Leitón" en `/nosotros/`.
 - **FAQ**: ✅ 8/8 ≤40 palabras y autoconclusivas en redacción · ❌ 3 con placeholders → no citables ni válidas para `FAQPage`.
-- **Datos**: ✅ horario/capacidad/teléfono consistentes entre páginas y schema (aunque placeholder) · ⚠️ 2 formatos de horario, `max="21:30"` vs 22:00, Hicaco en 3 tiempos, "octubre de 2026" no confirmado en §5.
+- **Datos**: ✅ horario/capacidad/teléfono consistentes entre páginas y schema (aunque placeholder) · ⚠️ 2 formatos de horario, `max="21:30"` vs 22:00, "octubre de 2026" no confirmado en §5.
 - **Recuento de placeholders por URL**: `/` 32 · `/menu/` 55 · `/nosotros/` 4 · `/eventos/` 4 · `/contacto/` 5 = **100** (más 23 en JSON-LD, 16 `href`, 30 `ph-label`, 52 `0000`, 6 `TODO`).
 
 ### 5.5 Frontend / Código (@frontend-dev)

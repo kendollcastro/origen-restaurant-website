@@ -20,7 +20,7 @@ export const site = {
   geo: { lat: 9.6141, lng: -84.6284 }, // TODO: coordenadas exactas del local
   phone: '+506 7195 5800', // confirmado por el cliente (2026-10-13); mismo número que WhatsApp
   whatsapp: '50671955800', // confirmado por el cliente (2026-10-13): wa.me/50671955800
-  email: 'info@origenjaco.com', // TODO
+  email: 'origenjaco@gmail.com', // confirmado por el cliente (2026-10-13)
   hours: {
     label: '11:00 am – 10:00 pm',
     days: 'Todos los días', // confirmado por el cliente (2026-10-13): los 7 días

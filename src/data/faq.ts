@@ -8,9 +8,9 @@ import { site } from './site';
 export const faqs = [
   {
     q: '¿Dónde está Origen en Jacó?',
-    a: `Origen está en Jacó, Garabito, Puntarenas, Costa Rica, en el local donde funcionaba Hicaco Plaza Jacó, a pocos minutos de la playa.`,
+    a: `Origen está en Jacó, Garabito, Puntarenas, Costa Rica, a pocos minutos de la playa.`,
     qEn: 'Where is Origen in Jacó?',
-    aEn: `Origen is in Jacó, Garabito, Puntarenas, Costa Rica — in the space where Hicaco Plaza Jacó used to be, minutes from the beach.`,
+    aEn: `Origen is in Jacó, Garabito, Puntarenas, Costa Rica, minutes from the beach.`,
   },
   {
     q: '¿Cuál es el horario de Origen?',
@@ -25,10 +25,10 @@ export const faqs = [
     aEn: 'We are a seafood and grill restaurant in Jacó: ceviches, Pacific seafood, cuts such as Tenderloin, New York Strip and Rib Eye, pastas, rice dishes, burgers and desserts.',
   },
   {
-    q: '¿Origen es el antiguo Hicaco Plaza?',
-    a: 'Sí. Origen abrió en octubre de 2026 en el mismo local de Hicaco Plaza Jacó, con el mismo equipo de cocina y salón y una propuesta renovada.',
-    qEn: 'Is Origen the former Hicaco Plaza?',
-    aEn: 'Yes. Origen opened in October 2026 in the same space as Hicaco Plaza Jacó, with the same kitchen and front-of-house team and a renewed proposal.',
+    q: '¿Origen es un restaurante nuevo?',
+    a: 'Sí. Origen es un restaurante de mariscos y parrilla independiente y de autor, abierto en Jacó en octubre de 2026. Es un proyecto nuevo, sin relación con otros locales.',
+    qEn: 'Is Origen a new restaurant?',
+    aEn: 'Yes. Origen is an independent, chef-driven seafood and grill restaurant that opened in Jacó in October 2026. It is a new project, with no ties to other venues.',
   },
   {
     q: '¿Necesito reservar?',

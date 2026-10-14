@@ -746,7 +746,7 @@ de Facebook para confirmar que no recorta el preview.
 
 | Ítem | Resultado |
 |---|---|
-| FAQ citables | 💚 `faq.ts` con **10** preguntas locales (ES+EN), todas **≤40 palabras**, autoconclusivas y sin corchetes: dónde, horario, tipo de cocina, relación con Hicaco, reserva, cómo reservar, menú de niños, grupos/eventos, impuestos y barra de cócteles |
+| FAQ citables | 💚 `faq.ts` con **10** preguntas locales (ES+EN), todas **≤40 palabras**, autoconclusivas y sin corchetes: dónde, horario, tipo de cocina, restaurante nuevo (independiente), reserva, cómo reservar, menú de niños, grupos/eventos, impuestos y barra de cócteles |
 | Bloque factual | 💚 qué es (mariscos+parrilla), dónde (Jacó, Garabito, Puntarenas), horario (todos los días 11:00–22:00), capacidad (120), precios con IVA (13 %) |
 | **Fuera de alcance** | 🔴→⏳ FAQ de **formas de pago** retirada (pendiente del cliente): publicarla inventaría métodos no confirmados (política «ocultar > inventar», §6) |
 | «Qué es + cuándo abre» en cada página | 💚 leads de hero (home, menú, nosotros, eventos, contacto) en ES y EN abren con tipo de cocina y horario; `contacto` gana un `lead` nuevo |

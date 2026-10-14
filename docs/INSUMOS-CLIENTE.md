@@ -29,7 +29,7 @@ Para poder cerrar el sitio es necesario recibir estos insumos. Agrupados en dos 
 | P-12 | 2–4 reseñas literales (texto, nombre publicable, estrellas, plataforma) + **permiso escrito** | Caja de reseñas (T-32) | ⏳ |
 | P-13 | Logos de ≥3–6 aliados (PNG, fondo transparente) + nombre oficial + URL | Aliados (T-32) | ⏳ |
 | P-14 | Bio de la chef (3–4 frases), su plato favorito, cita literal ≤25 palabras | Sección equipo (T-22) | ⏳ |
-| P-15 | 3–5 frases de los dueños: visión de Origen y qué heredaron de Hicaco | Sección nosotros (T-22) | ⏳ |
+| P-15 | 3–5 frases de los dueños: visión de Origen y origen del proyecto | Sección nosotros (T-22) | ⏳ |
 | P-20 | Palabras clave objetivo reales que validen el mapa SEO §1 | Títulos/descripciones (T-14) | ⏳ |
 | P-22 | Alcance de la versión EN: ¿1:1 con la ES o reducida? (hoy: 1:1 con 5 páginas) | Páginas `/en/` (T-36) | ⏳ |
 | P-19 | **Aprobador único de producción** (¿quién autoriza el go-live?) | T-53 | ⏳ |
@@ -81,6 +81,6 @@ Hola 👋 — voy cerrando la web de Origen y para publicarla necesito unos dato
 **7. Confianza y textos**
 - 2–4 reseñas literales (texto, nombre publicable, estrellas y plataforma) con permiso de uso.
 - Logos (PNG, fondo transparente) de 3–6 aliados + nombre y web de cada uno.
-- Unas frases tuyas: qué es Origen para ustedes y qué heredaron de Hicaco (3–5 frases). Y de la chef: quién es, su plato favorito y una frase corta.
+- Unas frases tuyas: qué es Origen para ustedes y cómo nació el proyecto (3–5 frases). Y de la chef: quién es, su plato favorito y una frase corta.
 
 Con **1–4 y 6** puedo cerrar el sitio y publicarlo; el resto (5, 7) se puede ir sumando después y seguir mejorando la página. Gracias 🙌

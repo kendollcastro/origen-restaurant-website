@@ -44,7 +44,7 @@ Anfitrión cálido en tuteo: sensorial e ingenuo-concreto (ingredientes, no adje
 3. **Orgullo local sin superlativos.** Ni "el mejor", ni "el número 1", ni premios inventados.
    - Sí: "Mariscos del Pacífico, comprados a proveedores locales." · No: "El mejor restaurante de Costa Rica."
 4. **Primera persona del plural.** La casa habla de sí misma en "nosotros".
-   - Sí: "Abrimos donde estuvo Hicaco Plaza, con el mismo equipo." · No: "Origen ofrece una experiencia única."
+   - Sí: "Origen es un restaurante nuevo e independiente en Jacó." · No: "Origen ofrece una experiencia única."
 5. **CTAs que nombran la acción y el canal.** El botón dice lo que pasa al tocarlo.
    - Sí: "Reservar por WhatsApp", "Ver el menú." · No: "Enviar", "Click aquí", "Confirmar reserva" (el formulario no confirma; T-24 lo corrige).
 6. **Sin jerga ni anglicismos.** Español directo, frases cortas.

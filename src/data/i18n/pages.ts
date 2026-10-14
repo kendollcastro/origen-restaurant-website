@@ -28,7 +28,7 @@ export const enPages: Record<'index' | 'menu' | 'nosotros' | 'eventos' | 'contac
   nosotros: {
     title: 'About · Origen Jacó — History, chef and team',
     description:
-      'Origen opened in Jacó on the site of the former Hicaco Plaza, with the same team. Meet chef Zugetcy Leitón and our sea, land and fire cooking.',
+      'Origen is a new seafood and grill restaurant in Jacó, opened in October 2026. Sea, land and fire cooking with chef Zugetcy Leitón.',
     script: 'Our',
     h1: 'History',
     lead: 'A seafood and grill restaurant in Jacó with a team you already know. Open every day from 11:00 am to 10:00 pm.',
