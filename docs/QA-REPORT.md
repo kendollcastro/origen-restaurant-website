@@ -708,7 +708,7 @@ de Facebook para confirmar que no recorta el preview.
 | Motion | 💚 `.reveal` (`opacity`+`translateY`, una sola vez) vía `IntersectionObserver`; `hero-in` con stagger; `prefers-reduced-motion` instantáneo; sin JS, contenido visible y estático |
 | **Hallazgo de implementación** | 🔴→💚 el reveal con `clip-path` **rompía** `IntersectionObserver` en Chromium (el área recortada nunca intersecta → deadlock): cambiar a `opacity`/`transform` |
 | Estrategia de test | E2E corre con `reducedMotion: 'reduce'` para que **axe mida el estado final** (la opacidad a mitad de transición generaba falsos positivos de contraste); `tests/e2e/motion.spec.ts` cubre el camino animado y el fallback sin JS |
-| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **574/574 Playwright** (50.8 s; +autoplay T-56) |
+| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **614/614 Playwright** (50.8 s; +autoplay T-56) |
 
 # Traducción EN completa (T-36 · F5)
 
@@ -753,7 +753,7 @@ de Facebook para confirmar que no recorta el preview.
 | **Fuga corregida** | 🔴→💚 `PageHero.astro` emitía el breadcrumb **«Inicio»** con `href="/"` en las 4 páginas `/en/*` que lo usan → ahora localiza a **Home** + `/en/`, y «Inicio» se sumó a los marcadores ES de `i18n.spec.ts` (antes no se detectaba) |
 | JSON-LD 1:1 | 💚 `FAQPage` con una `Question` por `<details>` visible (10/10) en `/contacto/` y `/en/contacto/` |
 | Guard de tests | 💚 `tests/e2e/citable.spec.ts` (32 tests): conteo de palabras de cada respuesta (ambos idiomas), tokens cocina+horario en los primeros párrafos y paridad FAQPage↔DOM |
-| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **574/574 Playwright** (47.1 s; +32 T-41) |
+| Verificación | `check` 0 errores · `build` 11 páginas · `gate` 0 bloqueantes · **614/614 Playwright** (47.1 s; +32 T-41) |
 
 # Interfaz interna de QR (T-58 · F3)
 
@@ -766,4 +766,17 @@ de Facebook para confirmar que no recorta el preview.
 | Aislamiento | 💚 `astro.config.mjs` excluye `/qr` del sitemap; la página emite `noindex, nofollow`; test verifica que ninguna página ES la enlaza |
 | Impresión | 💚 `@media print` (fondo blanco, oculta el botón) + botón «Imprimir» (`window.print()`) |
 | Guard de tests | 💚 `tests/e2e/qr.spec.ts` (10 tests): 200 + noindex, un QR/URL por enlace real, orfandad, sitemap y axe sin serious/critical |
-| Verificación | `check` 0 errores · `build` **12 páginas** · `gate` 0 bloqueantes · **574/574 Playwright** (48.8 s; +10 T-58) |
+| Verificación | `check` 0 errores · `build` **12 páginas** · `gate` 0 bloqueantes · **614/614 Playwright** (48.8 s; +10 T-58) |
+
+# SEO meta y limpieza técnica (R-05 / R-19)
+
+> **Fecha:** 2026-10-13 · **Alcance:** alinear `<title>`/`meta description` a los límites y al mapa aprobado del PLAN (§1.1 ES / §1.2 EN) y eliminar literales de plantilla sin resolver servidos en `dist/`.
+
+| Ítem | Resultado |
+|---|---|
+| `<title>` ≤ 60 | 🔴→💚 `/` 68→**48** · `/menu/` 62→**48** · `/contacto/` 77→**55**; EN 61→47, 61→50, 44, 57→55, 70→58 |
+| `description` ≤ 155 | 🔴→💚 `/menu/` 163→**129** · `/nosotros/` 158→**153**; resto dentro de rango (ES 137–148, EN 122–146) |
+| Descripción home | 💚 la home gana `description` explícita (140) sin cambiar `site.description` (que alimenta el JSON-LD/OG) |
+| **R-19** | 🔴→💚 el bloque de `hreflang` comentado servía `{canonical}` y `.replace(...)` literales en `dist/` → retirado; T-38 emitirá los `<link rel="alternate">` reales en go-live |
+| Guard de tests | 💚 `seo.spec.ts` +20 (×2 proyectos): title ≤ 60 y description ≤ 155 en 5 ES + 5 EN; y ausencia de `{...}` sin resolver fuera de `script`/`style` |
+| Verificación | `check` 0 errores · `build` 12 páginas · `gate` 0 bloqueantes · **614/614 Playwright** (51.3 s; +40 R-05/R-19) |

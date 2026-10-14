@@ -418,3 +418,39 @@ test.describe('T-40 · ningún placeholder en el JSON-LD (incluye teléfono con 
     });
   }
 });
+
+// R-05/R-19 · Límites de meta (PLAN §1.1/§1.2): <title> ≤ 60 y description ≤ 155.
+// Los valores aprobados viven en `enPages` (EN) y en cada página ES; aquí solo se validan longitudes.
+const META_ROUTES = [
+  ...ROUTES,
+  '/en/',
+  '/en/menu/',
+  '/en/nosotros/',
+  '/en/eventos/',
+  '/en/contacto/',
+];
+
+test.describe('R-05 · límites de <title> y meta description', () => {
+  for (const route of META_ROUTES) {
+    test(`${route} · title ≤ 60 y description ≤ 155`, async ({ page }) => {
+      await page.goto(route);
+      const title = await page.title();
+      const description = (await page.locator('meta[name="description"]').getAttribute('content')) ?? '';
+      expect(title.length, `title demasiado largo: ${title}`).toBeLessThanOrEqual(60);
+      expect(description.length, `description demasiado larga: ${description}`).toBeGreaterThan(0);
+      expect(description.length, `description demasiado larga: ${description}`).toBeLessThanOrEqual(155);
+    });
+  }
+});
+
+// R-19 · no servir literales de plantilla sin resolver (`{...}`) en dist/*.html.
+test.describe('R-19 · sin literales de plantilla en el HTML', () => {
+  for (const route of META_ROUTES) {
+    test(`${route} · sin '{' sin resolver`, async ({ page }) => {
+      await page.goto(route);
+      const html = await page.content();
+      const stripped = html.replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<style[\s\S]*?<\/style>/gi, '');
+      expect(stripped).not.toMatch(/\{canonical\}|\{[a-zA-Z.]+\}/);
+    });
+  }
+});
