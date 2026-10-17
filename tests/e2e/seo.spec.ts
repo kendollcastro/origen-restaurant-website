@@ -17,10 +17,10 @@ const ROUTES = ['/', '/menu/', '/nosotros/', '/eventos/', '/contacto/'];
 const NOT_FOUND_PAGE = '/404.html';
 const ALL_ROUTES = [...ROUTES, NOT_FOUND_PAGE];
 
-// Enlaces locales conocidos y bloqueados por datos de cliente. `/menu-origen.pdf` (botón
-// «Descargar menú PDF» de /menu/) dará 404 hasta que el cliente entregue el PDF (P-18 → T-28).
-// NO se corrige aquí: es un insumo externo y `src/**` está fuera del alcance de T-34.
-const KNOWN_PENDING_LOCAL_LINKS = new Set<string>(['/menu-origen.pdf']);
+// Enlaces locales conocidos y bloqueados por datos de cliente. P-18 resuelto (2026-10-13):
+// `public/menu-origen.pdf` existe y el botón «Descargar menú PDF» responde 200 → la allowlist
+// queda vacía. Si en el futuro se añade otro enlace a la espera de un insumo, listarlo aquí.
+const KNOWN_PENDING_LOCAL_LINKS = new Set<string>([]);
 
 const TOLERATED_STATUS = (status: number) => status === 405 || status === 429;
 
