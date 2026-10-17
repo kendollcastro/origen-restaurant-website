@@ -19,7 +19,7 @@
   --line-light: #CFC4B2;
   --accent: #D9844A;       /* cobre sobre fondo oscuro */
   --accent-hover: #F2B98C;
-  --accent-ink: #9A4F1E;   /* cobre para texto sobre crema (contraste AA) */
+  --accent-ink: #9A4F1E;   /* texto sobre crema — AA verified */
   --on-accent: #140F0A;
   --serif: 'Cormorant Garamond', Georgia, serif;
   --sans: 'Jost', system-ui, sans-serif;
