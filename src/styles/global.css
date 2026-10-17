@@ -30,7 +30,9 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+/* `scroll-padding-top` deja los anclajes (#reservar, #cotizar) por debajo del header
+   sticky; lo actualiza Header.astro con `--header-h` (PX-03). */
+html { scroll-behavior: smooth; scroll-padding-top: var(--header-h, 80px); }
 body {
   margin: 0; background: var(--bg); color: var(--cream);
   font-family: var(--sans); font-weight: 300; font-size: 16px; line-height: 1.6;
@@ -79,10 +81,12 @@ h1, h2, h3, p { margin: 0; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; min-height: 48px;
   padding: 0 28px; font: 500 12px/1 var(--sans); letter-spacing: .18em; text-transform: uppercase;
-  text-decoration: none; border: 1px solid transparent; cursor: pointer; transition: background .2s, color .2s;
+  text-decoration: none; border: 1px solid transparent; cursor: pointer;
+  transition: background .22s var(--ease-out), color .22s var(--ease-out), border-color .22s var(--ease-out), transform .16s var(--ease-out), box-shadow .22s var(--ease-out);
 }
+.btn:active { transform: scale(.97); }
 .btn-primary { background: var(--accent); color: var(--on-accent); font-weight: 600; }
-.btn-primary:hover { background: var(--accent-hover); color: var(--on-accent); }
+.btn-primary:hover { background: var(--accent-hover); color: var(--on-accent); box-shadow: 0 12px 28px -14px rgba(217, 132, 74, .75); }
 .btn-ghost { border-color: var(--cream); color: var(--cream); background: transparent; }
 .btn-ghost:hover { background: var(--cream); color: var(--ink); }
 .light .btn-ghost { border-color: var(--ink); color: var(--ink); }
@@ -102,8 +106,19 @@ h1, h2, h3, p { margin: 0; }
 .ph-label { position: absolute; left: 16px; bottom: 14px; font: 500 11px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); z-index: 1; }
 .overlay { position: relative; z-index: 2; }
 
-/* Header */
-.site-header { border-bottom: 1px solid var(--line); position: relative; z-index: 10; }
+/* Header (PX-03: sticky + estado reactivo al scroll, sin cambios de layout/CLS) */
+.site-header {
+  border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10;
+  background: var(--bg);
+  transition: background .3s var(--ease-out), border-color .3s var(--ease-out), box-shadow .3s var(--ease-out), backdrop-filter .3s var(--ease-out);
+}
+.site-header.is-scrolled {
+  background: rgba(15, 14, 12, .82);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-color: transparent;
+  box-shadow: 0 1px 0 rgba(242, 235, 221, .06), 0 16px 34px -26px rgba(0, 0, 0, .85);
+}
 .site-header .container { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; padding-block: 18px; }
 .logo { text-decoration: none; color: var(--cream); display: flex; flex-direction: column; line-height: 1; }
 .logo b { font-family: var(--serif); font-weight: 600; font-size: 34px; letter-spacing: .16em; }
@@ -118,9 +133,13 @@ h1, h2, h3, p { margin: 0; }
   display: none; align-items: center; justify-content: center;
   width: 44px; height: 44px; padding: 0; touch-action: manipulation;
   background: transparent; border: 1px solid var(--border); color: var(--cream); cursor: pointer;
-  transition: background .2s, color .2s, border-color .2s;
+  transition: background .2s var(--ease-out), color .2s var(--ease-out), border-color .2s var(--ease-out);
 }
 .nav-toggle:hover { color: var(--accent); border-color: var(--accent); }
+/* Hamburguesa → X (PX-02): dos líneas que giran a 45°/-45° al abrir. */
+.nav-toggle line { transform-box: fill-box; transform-origin: center; transition: transform 300ms var(--ease-out); }
+.site-header.is-open .nav-toggle .bar-top { transform: translateY(4px) rotate(45deg); }
+.site-header.is-open .nav-toggle .bar-bot { transform: translateY(-4px) rotate(-45deg); }
 .lang { display: flex; align-items: center; font-size: 12px; letter-spacing: .12em; }
 .lang a { color: var(--muted); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0 6px; }
 .lang a[aria-current="true"] { color: var(--cream); font-weight: 600; }
@@ -153,7 +172,9 @@ h1, h2, h3, p { margin: 0; }
 .tab {
   min-height: 44px; padding: 0 20px; font: 500 12px/1 var(--sans); letter-spacing: .16em; text-transform: uppercase;
   cursor: pointer; border: 1px solid var(--border); background: transparent; color: var(--cream);
+  transition: background .2s var(--ease-out), color .2s var(--ease-out), border-color .2s var(--ease-out), transform .16s var(--ease-out);
 }
+.tab:active { transform: scale(.97); }
 .tab[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 html:not(.js) .tabs { display: none; }
 .js .panel-title { display: none; }
@@ -162,11 +183,11 @@ html:not(.js) .tabs { display: none; }
 .dish-head { display: flex; align-items: baseline; gap: 14px; }
 .dish-name { font-family: var(--serif); font-weight: 600; font-size: 25px; line-height: 1.2; }
 .dish-dots { flex: 1; border-bottom: 1px dotted var(--border); transform: translateY(-6px); }
-.dish-price { font-size: 15px; color: var(--accent); white-space: nowrap; }
+.dish-price { font-size: 15px; color: var(--accent); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .dish-desc { font-size: 15px; color: var(--muted); }
 .dish-group { padding: 22px 0 2px; }
 .dish-group .caps { font-size: 12px; letter-spacing: .18em; color: var(--accent); }
-.cat-nav { position: sticky; top: 0; z-index: 5; background: var(--surface); border-bottom: 1px solid rgba(242,235,221,.08); }
+.cat-nav { position: sticky; top: var(--header-h, 80px); z-index: 5; background: var(--surface); border-bottom: 1px solid rgba(242,235,221,.08); }
 .cat-nav .container { display: flex; flex-wrap: wrap; gap: 4px 26px; padding-block: 8px; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; font-weight: 500; }
 .cat-nav a { color: var(--soft); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0; }
 .cat-nav a:hover { color: var(--accent); }
@@ -264,9 +285,26 @@ html.js .gallery-toggle { display: inline-flex; }
     display: flex; flex-direction: column; align-items: stretch; gap: 0;
     flex: 1 0 100%; order: 3; margin-top: 4px; padding: 2px 0;
     background: var(--surface); border: 1px solid var(--line); position: relative; z-index: 1;
+    animation: nav-panel-in 260ms var(--ease-out) both;
   }
   .js .main-nav a { min-height: 48px; padding: 0 16px; border-bottom: 1px solid var(--line); }
   .js .main-nav a:last-child { border-bottom: 0; }
+  /* Entrada escalonada de los enlaces (PX-02). */
+  .js .site-header.is-open .main-nav a { animation: nav-item-in 320ms var(--ease-out) both; }
+  .js .site-header.is-open .main-nav a:nth-child(1) { animation-delay: 30ms; }
+  .js .site-header.is-open .main-nav a:nth-child(2) { animation-delay: 70ms; }
+  .js .site-header.is-open .main-nav a:nth-child(3) { animation-delay: 110ms; }
+  .js .site-header.is-open .main-nav a:nth-child(4) { animation-delay: 150ms; }
+  .js .site-header.is-open .main-nav a:nth-child(5) { animation-delay: 190ms; }
+}
+
+@keyframes nav-panel-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes nav-item-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: none; }
 }
 
 @media (max-width: 640px) {
@@ -292,6 +330,23 @@ html.js .reveal {
 }
 html.js .reveal[data-visible] { opacity: 1; transform: none; }
 
+/* Hover-lift de tarjetas (PX-07): solo con puntero fino. Se usa la propiedad
+   independiente `translate` (compone con el `transform` del reveal) para que
+   revelado y elevación no se pisen. Las `.reveal.element` necesitan una
+   transición propia (mayor especificidad) que respete el delay del reveal. */
+html.js .reveal.element {
+  transition: opacity 600ms var(--ease-out) var(--reveal-delay, 0s),
+    transform 600ms var(--ease-out) var(--reveal-delay, 0s),
+    translate 320ms var(--ease-out), box-shadow 320ms var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .review { transition: translate 320ms var(--ease-out), box-shadow 320ms var(--ease-out); }
+  .element:hover, .review:hover {
+    translate: 0 -6px;
+    box-shadow: 0 30px 60px -34px rgba(0, 0, 0, .5);
+  }
+}
+
 /* Entrada del hero — animación CSS predeterminada (off-main-thread), stagger 60ms.
    Solo con JS; `prefers-reduced-motion` la vuelve instantánea (bloque global abajo). */
 @media (prefers-reduced-motion: no-preference) {
@@ -310,6 +365,10 @@ html.js .reveal[data-visible] { opacity: 1; transform: none; }
   to { opacity: 1; transform: none; }
 }
 
+/* PX-01 · Transiciones de vista nativas entre documentos (cross-document, cero JS).
+   Chrome/Edge 126+; en el resto la navegación es normal (mejora progresiva pura). */
+@view-transition { navigation: auto; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   html.js .reveal { opacity: 1; transform: none; transition: none; }
@@ -317,5 +376,9 @@ html.js .reveal[data-visible] { opacity: 1; transform: none; }
     transition-duration: .01ms !important;
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
+  }
+  /* Sin transición de vista si se pide menos movimiento. */
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) {
+    animation: none !important;
   }
 }

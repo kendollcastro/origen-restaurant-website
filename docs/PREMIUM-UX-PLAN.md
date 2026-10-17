@@ -2,12 +2,23 @@
 
 > Research + plan para elevar la **percepción de calidad** del sitio de Origen sin tocar la marca
 > (ya definida: fondo carbón `#0F0E0C`, crema, cobre `#D9844A`, Cormorant Garamond + Jost) ni el
-> rendimiento/accesibilidad ya conseguidos. **Pendiente de autorización del cliente** para pasar a ejecución.
+> rendimiento/accesibilidad ya conseguidos. **Tanda 1 autorizada y ejecutada**; el resto, pendiente de nuevas tandas.
 >
 > Estado base hoy: `astro@7` como **MPA clásico**, reveal por `IntersectionObserver`, entra del hero por
-> keyframes, galería `scroll-snap` + lightbox, FAQ `<details>`, menú móvil = toggle de `display` **instantáneo**
-> (sin animación). 614 tests Playwright en verde · gate de placeholders en 0 · `prefers-reduced-motion` y
-> fallback sin JS ya implementados.
+> keyframes, galería `scroll-snap` + lightbox, FAQ `<details>`, menú móvil animado (PX-02). 626 tests
+> Playwright en verde · gate de placeholders en 0 · `prefers-reduced-motion` y fallback sin JS ya implementados.
+
+## 0. Estado de ejecución
+
+| Ítem | Estado | Notas |
+|------|--------|-------|
+| PX-01 · Page transitions nativas | ✅ Hecho | Se eligió la vía **nativa cero-JS** (`@view-transition { navigation: auto }`), no `ClientRouter`: mismo fundido entre documentos sin re-montar ni refactorizar los `<script>`. `ClientRouter` queda como opción futura si se quiere SPA. |
+| PX-02 · Menú móvil premium | ✅ Hecho | Panel con `opacity`+`translateY` y **stagger de enlaces**, **hamburguesa→X** (morph SVG). Sin scroll-lock ni backdrop para no romper el test de "clic fuera cierra" (`main h1`). |
+| PX-03 · Header reactivo | ✅ Hecho | `position: sticky` + `.is-scrolled` (fondo translúcido + `backdrop-filter: blur`). **Sin compactar padding** (evita CLS). Publica `--header-h` para `scroll-padding-top` y el offset de `.cat-nav`. |
+| PX-06 · Botones/tabs | ✅ Hecho | `:active { transform: scale(.97) }`, hover cobre con sombra, easing con tokens. |
+| PX-07 · Hover-lift de tarjetas | ✅ Hecho | `.element`/`.review` con `translate: 0 -6px` (propiedad independiente para convivir con el `transform` del reveal) + sombra. Solo `(hover:hover) and (pointer:fine)`. |
+| PX-18 · Numerales tabulares | ✅ Hecho | `font-variant-numeric: tabular-nums` en `.dish-price`. |
+| Tanda 2 (PX-11/15/16/19) y siguientes | ⏳ Pendiente | Requieren nueva autorización. |
 
 ---
 

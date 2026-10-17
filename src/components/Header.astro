@@ -35,7 +35,7 @@ const langLinks = {
     </nav>
     <div class="header-actions">
       <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label={ui.menuToggleOpen} data-label-open={ui.menuToggleOpen} data-label-close={ui.menuToggleClose}>
-        <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+        <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><line class="bar-top" x1="4" y1="8" x2="20" y2="8" /><line class="bar-bot" x1="4" y1="16" x2="20" y2="16" /></svg>
       </button>
       <div class="lang" aria-label={ui.language}>
         <a href={langLinks.es.href} aria-current={langLinks.es.current ? 'true' : undefined} hreflang="es" aria-label={langLinks.es.label}>ES</a>
@@ -48,7 +48,7 @@ const langLinks = {
 </header>
 
 <script>
-  const header = document.querySelector('.site-header');
+  const header = document.querySelector<HTMLElement>('.site-header');
   const toggle = header?.querySelector<HTMLButtonElement>('.nav-toggle');
   const nav = header?.querySelector<HTMLElement>('#main-nav');
   if (header && toggle && nav) {
@@ -56,11 +56,22 @@ const langLinks = {
     const labelOpen = toggle.dataset.labelOpen ?? '';
     const labelClose = toggle.dataset.labelClose ?? '';
     const isOpen = () => toggle.getAttribute('aria-expanded') === 'true';
+
+    // Altura real del header para el offset del sticky (`scroll-padding-top`, `.cat-nav`).
+    const setHeaderVar = () => {
+      document.documentElement.style.setProperty('--header-h', `${header.offsetHeight}px`);
+    };
+
     const setOpen = (open: boolean) => {
       header.classList.toggle('is-open', open);
       toggle.setAttribute('aria-expanded', String(open));
       toggle.setAttribute('aria-label', open ? labelClose : labelOpen);
+      setHeaderVar();
     };
+
+    // Header reactivo (PX-03): fondo translúcido + blur tras un pequeño scroll.
+    const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+
     toggle.addEventListener('click', () => setOpen(!isOpen()));
     nav.addEventListener('click', (e) => {
       if ((e.target as HTMLElement).closest('a')) setOpen(false);
@@ -77,5 +88,10 @@ const langLinks = {
     window.matchMedia('(max-width: 760px)').addEventListener('change', (e) => {
       if (!e.matches) setOpen(false);
     });
+
+    setHeaderVar();
+    onScroll();
+    window.addEventListener('resize', setHeaderVar, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
   }
 </script>

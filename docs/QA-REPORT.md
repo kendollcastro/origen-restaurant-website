@@ -797,3 +797,19 @@ de Facebook para confirmar que no recorta el preview.
 | Bug corregido | 💡 el `<h2>` de categoría (`46px`) desbordaba a 360px ("Acompañamientos de parrilla") → ahora `clamp(32px, 9vw, 46px)` + `overflow-wrap: break-word` en `.display`; 0 desborde a 320/360px |
 | Guard de tests | 💚 `seo.spec.ts` compara `offers.price` contra `formatPrice` (separadores es-CR); FAQ de menú de niños alineada |
 | Verificación | `check` 0 errores · `build` 12 páginas · `gate` 0 bloqueantes · **614/614 Playwright** (56.5 s) |
+
+# Pulido premium — Tanda 1 (PX-01/02/03/06/07/18)
+
+> **Fecha:** 2026-10-16 · **Plan:** `docs/PREMIUM-UX-PLAN.md` §0. Cambios de UI/UX/animación sin tocar la marca.
+
+| Ítem | Resultado |
+|---|---|
+| **PX-01** View transitions | 💚 **Nativas y cero-JS**: `@view-transition { navigation: auto }` en `global.css` (fundido entre documentos en Chrome/Edge 126+; el resto navega normal). Se descartó `ClientRouter` para no refactorizar los `<script>` ni re-montar Header/Footer; queda como opción futura |
+| **PX-02** Menú móvil | 💚 Panel con `opacity`+`translateY` (`nav-panel-in`) y **stagger** de enlaces (`nav-item-in`, 30–190 ms); **hamburguesa→X** con dos líneas SVG giradas 45°/-45°. Sin scroll-lock/backdrop para no romper el test de "clic fuera cierra (`main h1`)" |
+| **PX-03** Header reactivo | 💚 `position: sticky; top: 0` + `.is-scrolled` (fondo `rgba(15,14,12,.82)` + `backdrop-filter: blur(12px)` + sombra). **Sin compactar padding** (evita CLS). Publica `--header-h` (para `scroll-padding-top` y el offset de `.cat-nav`) |
+| **PX-06** Botones/tabs | 💚 `.btn:active`/`.tab:active` → `scale(.97)`; hover cobre con sombra; easing con tokens `--ease-out` |
+| **PX-07** Hover-lift | 💚 `.element`/`.review` con `translate: 0 -6px` (propiedad independiente que compone con el `transform` del reveal) + sombra; solo `(hover:hover) and (pointer:fine)` |
+| **PX-18** Numerales | 💚 `font-variant-numeric: tabular-nums` en `.dish-price` (los `₡` ya no “bailan”) |
+| Transversal | 💚 `prefers-reduced-motion` desactiva animaciones **y** view-transitions; sin JS no cambia nada; foco/Escape intactos |
+| Guard de tests | 💚 nuevo `tests/e2e/premium-ux.spec.ts` (**+12**, ×2 proyectos): sticky/`.is-scrolled`, `--header-h`, menú `.is-open`, `transition-property` de botones, `tabular-nums`, y `@view-transition` presente en la hoja |
+| Verificación | `check` 0 errores · `build` 12 páginas · `gate` 0 bloqueantes · **626/626 Playwright** (1.1 m) |

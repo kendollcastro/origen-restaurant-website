@@ -345,4 +345,17 @@ Una fase se cierra cuando **todas** sus casillas están `[x]`, el gate global pa
 | F7 | 🟡 7/10 (T-45…T-48, T-50, T-51, T-52) | `feat:` 888a662 · `docs:` 13c3acd, ca840ba, 2818cdb · `ci:` 1cd25f9 · `test:` 4f024ea · `devops:` (T-52, pendiente commit) | QA UX multi-dispositivo (0 trampas, 0 contraste, 0 desbordes 360/768/1440, LCP lab 532 ms, forms WhatsApp interceptados) → **614 tests** (T-36 traducción EN + T-37 paridad EN + T-39 i18n + T-57 motion). T-52: proyecto Vercel `origen-web`, preview SSO-protegido, producción vacía, git desconectado | ⚠️ T-53 (DNS) requiere aprobación explícita |
 | F8 | ✅ 1/1 (T-55) | `chore:` 9421d0d | `astro@7.3.8` (cerradas 9 críticas XSS/RCE/SSRF); `@astrojs/sitemap@3.7.4`, `engines.node ≥22.12 <24`; check/build/gate/336 tests en verde; `audit` restante = devDeps `@lhci/cli` solo | — |
 
+---
+
+## 9. Pulido premium (post-F8 · ver `docs/PREMIUM-UX-PLAN.md`)
+
+Mejoras de UI/UX/animación sobre lo ya entregado, sin cambiar la marca. Se ejecutan por **tandas**.
+
+| Tanda | Ítems | Estado | Notas |
+|---|---|---|---|
+| **Tanda 1 — "primera impresión"** | PX-01, PX-02, PX-03, PX-06, PX-07, PX-18 | ✅ Hecho | PX-01 por la vía **nativa cero-JS** (`@view-transition`), PX-02 menú móvil (panel animado + hamburguesa→X), PX-03 header `sticky` + `.is-scrolled` (+ `--header-h` para anclajes/`.cat-nav`), PX-06 botones/tabs (`:active` + easing), PX-07 hover-lift, PX-18 `tabular-nums`. **626 tests** (`premium-ux.spec.ts` +12) · gate 0 · sin cambios de marca |
+| Tanda 2 — "scroll y media" | PX-11, PX-15, PX-16, PX-19 | ⏳ Pendiente | Requiere nueva autorización |
+| Tanda 3 — "encanto" | PX-09, PX-04, PX-12, PX-13, PX-10, PX-17 | ⏳ Pendiente | Requiere nueva autorización |
+| Tanda 4 — "experimental" | PX-05, PX-14, PX-20, PX-08, PX-21 | ⏳ Pendiente | A decidir |
+
 > **Recordatorio operativo**: antes de `git push`, cualquier deploy o cambio de DNS → **avisar al usuario y esperar confirmación**.
