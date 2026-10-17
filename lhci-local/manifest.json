@@ -1,0 +1,62 @@
+[
+  {
+    "url": "http://localhost:4173/",
+    "isRepresentativeRun": true,
+    "htmlPath": "/Users/macbookpro/Downloads/origen-web/lhci-local/localhost--2026_10_17_03_38_34.report.html",
+    "jsonPath": "/Users/macbookpro/Downloads/origen-web/lhci-local/localhost--2026_10_17_03_38_34.report.json",
+    "summary": {
+      "performance": 0.93,
+      "accessibility": 1,
+      "best-practices": 0.96,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:4173/menu/",
+    "isRepresentativeRun": true,
+    "htmlPath": "/Users/macbookpro/Downloads/origen-web/lhci-local/localhost-menu_-2026_10_17_03_38_45.report.html",
+    "jsonPath": "/Users/macbookpro/Downloads/origen-web/lhci-local/localhost-menu_-2026_10_17_03_38_45.report.json",
+    "summary": {
+      "performance": 0.95,
+      "accessibility": 1,
+      "best-practices": 0.96,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:4173/nosotros/",
+    "isRepresentativeRun": true,
+    "htmlPath": "/Users/macbookpro/Downloads/origen-web/lhci-local/localhost-nosotros_-2026_10_17_03_38_56.report.html",
+    "jsonPath": "/Users/macbookpro/Downloads/origen-web/lhci-local/localhost-nosotros_-2026_10_17_03_38_56.report.json",
+    "summary": {
+      "performance": 0.94,
+      "accessibility": 1,
+      "best-practices": 0.96,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:4173/eventos/",
+    "isRepresentativeRun": true,
+    "htmlPath": "/Users/macbookpro/Downloads/origen-web/lhci-local/localhost-eventos_-2026_10_17_03_39_06.report.html",
+    "jsonPath": "/Users/macbookpro/Downloads/origen-web/lhci-local/localhost-eventos_-2026_10_17_03_39_06.report.json",
+    "summary": {
+      "performance": 0.93,
+      "accessibility": 1,
+      "best-practices": 0.96,
+      "seo": 1
+    }
+  },
+  {
+    "url": "http://localhost:4173/contacto/",
+    "isRepresentativeRun": true,
+    "htmlPath": "/Users/macbookpro/Downloads/origen-web/lhci-local/localhost-contacto_-2026_10_17_03_39_16.report.html",
+    "jsonPath": "/Users/macbookpro/Downloads/origen-web/lhci-local/localhost-contacto_-2026_10_17_03_39_16.report.json",
+    "summary": {
+      "performance": 0.9,
+      "accessibility": 1,
+      "best-practices": 0.96,
+      "seo": 1
+    }
+  }
+]
