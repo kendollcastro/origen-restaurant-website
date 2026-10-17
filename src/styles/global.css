@@ -108,6 +108,8 @@ h1, h2, h3, p { margin: 0; }
 .logo { text-decoration: none; color: var(--cream); display: flex; flex-direction: column; line-height: 1; }
 .logo b { font-family: var(--serif); font-weight: 600; font-size: 34px; letter-spacing: .16em; }
 .logo small { font-size: 10px; letter-spacing: .38em; text-transform: uppercase; color: var(--accent); margin-top: 6px; }
+.logo img { display: block; height: 46px; width: auto; }
+.site-footer .logo img { height: 68px; }
 .main-nav { display: flex; flex-wrap: wrap; gap: 6px 28px; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; font-weight: 400; }
 .main-nav a { color: var(--cream); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0; }
 .main-nav a[aria-current="page"], .main-nav a:hover { color: var(--accent); }
@@ -253,6 +255,7 @@ html.js .gallery-toggle { display: inline-flex; }
   .site-header .container { gap: 12px 16px; padding-block: 14px; }
   .logo b { font-size: 28px; }
   .logo small { font-size: 9px; letter-spacing: .3em; }
+  .logo img { height: 38px; }
   .header-actions { gap: 8px; }
   .site-header .btn { padding: 0 16px; font-size: 11px; }
   .js .nav-toggle { display: inline-flex; }

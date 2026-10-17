@@ -65,8 +65,9 @@ const faqSchema = publicFaqs.length
     </div>
   </section>
 
-  <!-- TODO: reemplazar por el iframe de Google Maps de la ficha de Origen -->
-  <div id="mapa" class="ph" style="height: 420px;"><span class="ph-label">Mapa · Google Maps embebido con el pin de Origen</span></div>
+  <div id="mapa" style="width: 100%; height: 420px;">
+    <iframe src={site.mapEmbed} title="Ubicación de Origen en Jacó, Costa Rica — Google Maps" width="100%" height="420" style="border: 0; display: block;" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </div>
 
   {publicFaqs.length > 0 && (
     <section class="light" aria-labelledby="faq-t">

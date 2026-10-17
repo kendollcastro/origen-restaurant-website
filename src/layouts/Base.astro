@@ -46,6 +46,7 @@ const restaurant = {
   ...(isReal(site.email) ? { email: site.email } : {}),
   // og-image provisional (T-27, P-17): se emite ya que public/og-image.jpg responde 200.
   image: [ogImage],
+  logo: `${site.url}/logo-origen.png`, // emblema del restaurante (P-16, 2026-10-13)
   servesCuisine: lang === 'en' ? ['Seafood', 'Grill', 'Costa Rican'] : ['Mariscos', 'Parrilla', 'Costarricense'],
   priceRange: site.priceRange,
   acceptsReservations: true,

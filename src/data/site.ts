@@ -17,7 +17,7 @@ export const site = {
     country: 'CR',
     countryName: 'Costa Rica',
   },
-  geo: { lat: 9.6141, lng: -84.6284 }, // TODO: coordenadas exactas del local
+  geo: { lat: 9.62103, lng: -84.638029 }, // coordenadas reales (P-05, 2026-10-16) desde el embed de la ficha "Origen Restaurante Jaco"
   phone: '+506 7195 5800', // confirmado por el cliente (2026-10-13); mismo número que WhatsApp
   whatsapp: '50671955800', // confirmado por el cliente (2026-10-13): wa.me/50671955800
   email: 'origenjaco@gmail.com', // confirmado por el cliente (2026-10-13)
@@ -39,7 +39,10 @@ export const site = {
     facebook: 'https://facebook.com/[pagina]', // TODO
     tripadvisor: 'https://www.tripadvisor.com/[ficha]', // TODO
   },
-  mapsUrl: 'https://maps.app.goo.gl/jojXbrhHB41TM3kMA', // confirmado 2026-10-13
+  mapsUrl: 'https://maps.app.goo.gl/iL9J4qoP8pwXs8dx6', // confirmado 2026-10-16 (ficha "Origen Restaurante Jaco")
+  // Embed de la ficha de Google Maps (P-05). La variante EN sustituye `!1ses!`→`!1sen!` (idioma del mapa).
+  mapEmbed:
+    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3933.7005682721165!2d-84.63802872409428!3d9.621029779439182!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa1c77faa3e73cf%3A0xec929faa711c937!2sOrigen%20Restaurante%20Jaco!5e0!3m2!1ses!2scr!4v1792205371723!5m2!1ses!2scr',
   // Enlace para dejar reseña (interfaz /qr). Confirmado 2026-10-13; TripAdvisor pendiente.
   reviewUrl: {
     google: 'https://maps.app.goo.gl/M4M5QesgA6nmF4oM6', // confirmado 2026-10-13
