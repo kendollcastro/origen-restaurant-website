@@ -780,3 +780,20 @@ de Facebook para confirmar que no recorta el preview.
 | **R-19** | 🔴→💚 el bloque de `hreflang` comentado servía `{canonical}` y `.replace(...)` literales en `dist/` → retirado; T-38 emitirá los `<link rel="alternate">` reales en go-live |
 | Guard de tests | 💚 `seo.spec.ts` +20 (×2 proyectos): title ≤ 60 y description ≤ 155 en 5 ES + 5 EN; y ausencia de `{...}` sin resolver fuera de `script`/`style` |
 | Verificación | `check` 0 errores · `build` 12 páginas · `gate` 0 bloqueantes · **614/614 Playwright** (51.3 s; +40 R-05/R-19) |
+
+# Menú completo con precios (T-19 / T-20)
+
+> **Fecha:** 2026-10-13 · **Fuente:** menú oficial impreso del cliente (`docs/PRECIOS-MENU.md`). Volcado a `src/data/menu.ts` (fuente única ES+EN).
+
+| Ítem | Resultado |
+|---|---|
+| Categorías | 💚 **11** (antes 6): Entradas · A la parrilla · **Acompañamientos de parrilla** · Mariscos · Pastas y arroces · Hamburguesas · **Almuerzos** · Menú de niños · Postres · Coctelería y mocktails |
+| Platos publicados | 💚 **84** platos con precio en colones con IVA (antes 24 sin precio) |
+| Precios | 💚 `price` numérico → render `₡` es-CR y `offers` (`priceCurrency: CRC`) por item; sin precios inventados |
+| Coctelería | 💚 subencabezados *Cócteles Origen / Especiales / Tradicionales* (campo `group` en `DishList`) + nota de mocktails |
+| `pending()` | 💚 eliminado: 0 platos en espera; `pending` queda solo para futuras categorías |
+| `priceRange` | 💚 `site.ts` → `₡₡₡` (P-11); coincide con el JSON-LD `Restaurant` |
+| Bilingüe | 💚 `nameEn`/`descEn`/`groupEn` para los 84 platos; `i18n.spec` sigue en verde |
+| Bug corregido | 💡 el `<h2>` de categoría (`46px`) desbordaba a 360px ("Acompañamientos de parrilla") → ahora `clamp(32px, 9vw, 46px)` + `overflow-wrap: break-word` en `.display`; 0 desborde a 320/360px |
+| Guard de tests | 💚 `seo.spec.ts` compara `offers.price` contra `formatPrice` (separadores es-CR); FAQ de menú de niños alineada |
+| Verificación | `check` 0 errores · `build` 12 páginas · `gate` 0 bloqueantes · **614/614 Playwright** (56.5 s) |

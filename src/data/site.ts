@@ -33,7 +33,7 @@ export const site = {
   reservationMax: 12, // TODO: confirmar máximo de personas para reserva directa (grupos mayores → /eventos/)
   chef: 'Zugetcy Leitón',
   manager: 'Genesis Chinchilla',
-  priceRange: '₡₡', // TODO
+  priceRange: '₡₡₡', // confirmado por el cliente (2026-10-13): plato fuerte + bebida ≈ ₡12 000–20 000
   social: {
     instagram: 'https://instagram.com/[usuario]', // TODO
     facebook: 'https://facebook.com/[pagina]', // TODO

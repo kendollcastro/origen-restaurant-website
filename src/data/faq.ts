@@ -44,9 +44,9 @@ export const faqs = [
   },
   {
     q: '¿Tienen menú para niños?',
-    a: 'Sí. El menú de niños incluye Dedos de Pescado, Dedos de Pollo, Pasta con Mantequilla y Pizza de Queso.',
+    a: 'Sí. El menú de niños incluye dedos de pescado, dedos de pollo, pasta y pizza de jamón y hongos.',
     qEn: 'Do you have a kids menu?',
-    aEn: 'Yes. The kids menu includes Fish Fingers, Chicken Fingers, Butter Pasta and Cheese Pizza.',
+    aEn: 'Yes. The kids menu includes fish fingers, chicken fingers, pasta and ham & mushroom pizza.',
   },
   {
     q: '¿Reciben grupos y eventos privados?',

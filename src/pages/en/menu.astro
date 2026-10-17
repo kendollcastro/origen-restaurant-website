@@ -49,7 +49,7 @@ const menuSchema = {
     {menu.map((c, i) => (
       <section id={c.id} class="stack reveal" style={`gap: 6px; --reveal-delay:${i * 0.06}s`} aria-labelledby={`h-${c.id}`}>
         <span class="script" style="font-size: 24px;">{c.kickerEn ?? c.kicker}</span>
-        <h2 id={`h-${c.id}`} class="display" style="font-size: 46px; margin-bottom: 6px;">{c.titleEn ?? c.title}</h2>
+        <h2 id={`h-${c.id}`} class="display" style="font-size: clamp(32px, 9vw, 46px); margin-bottom: 6px;">{c.titleEn ?? c.title}</h2>
         {c.noteEn && <p class="dim">{c.noteEn}</p>}
         <DishList dishes={c.dishes} lang="en" />
       </section>

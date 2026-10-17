@@ -7,22 +7,32 @@ const Tag = headingTag;
 const visible = dishes.filter(hasDish);
 const dishName = (d: Dish) => (lang === 'en' ? d.nameEn ?? d.name : d.name);
 const dishDesc = (d: Dish) => (lang === 'en' ? d.descEn ?? d.desc : d.desc);
+const dishGroup = (d: Dish) => (lang === 'en' ? d.groupEn ?? d.group : d.group);
+let prevGroup: string | undefined;
 ---
 {visible.length > 0 && (
   <ul class="dishes">
-    {visible.map((d) => (
-      <li class="dish">
-        <div class="dish-head">
-          <Tag class="dish-name">{dishName(d)}</Tag>
-          {d.price ? (
-            <>
-              <span class="dish-dots" aria-hidden="true"></span>
-              <span class="dish-price">{formatPrice(d.price)}</span>
-            </>
-          ) : null}
-        </div>
-        {dishDesc(d) && <p class="dish-desc">{dishDesc(d)}</p>}
-      </li>
-    ))}
+    {visible.map((d) => {
+      const g = dishGroup(d);
+      const openGroup = g && g !== prevGroup;
+      prevGroup = g;
+      return (
+        <>
+          {openGroup && <li class="dish-group"><span class="caps">{g}</span></li>}
+          <li class="dish">
+            <div class="dish-head">
+              <Tag class="dish-name">{dishName(d)}</Tag>
+              {d.price ? (
+                <>
+                  <span class="dish-dots" aria-hidden="true"></span>
+                  <span class="dish-price">{formatPrice(d.price)}</span>
+                </>
+              ) : null}
+            </div>
+            {dishDesc(d) && <p class="dish-desc">{dishDesc(d)}</p>}
+          </li>
+        </>
+      );
+    })}
   </ul>
 )}

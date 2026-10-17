@@ -1,5 +1,6 @@
 import { test, expect, type Page } from '@playwright/test';
 import { site, telHref } from '../../src/data/site';
+import { formatPrice } from '../../src/data/menu';
 import { isReal, isRealPhone } from '../../src/data/placeholders';
 
 // T-34 · Verificación cruzada NAP (site.ts ↔ Footer ↔ /contacto/ ↔ JSON-LD) y smoke
@@ -366,7 +367,8 @@ test.describe('JSON-LD Menu 1:1 con el menú visible', () => {
           const offer = item.offers as Record<string, unknown>;
           expect(typeof offer.price).toBe('number');
           expect(offer.priceCurrency).toBe('CRC');
-          expect(visible).toContain(String(offer.price));
+          // El precio visible va formateado (₡1.234); comparar contra `formatPrice`.
+          expect(visible, `Precio ${String(offer.price)} no visible`).toContain(formatPrice(offer.price as number));
         }
       }
     }
