@@ -99,13 +99,13 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
       <span class="script" style="font-size: 48px;">Three elements</span>
       <h2 id="el-t" class="caps" style="font-weight: 500;">One kitchen</h2>
     </div>
-    <div class="grid" style="--min: 300px;">
+    <div class="grid reveal" data-stagger style="--min: 300px;">
       {[
         ['01', 'Sea', 'Ceviche Diablo', 'Ceviche Diablo, Pacific Pearls, sea bass and salmon carpaccio, lobster bisque.'],
         ['02', 'Land', 'Caprese di Bufala', 'Local and seasonal produce: fresh leaves, grilled pineapple, roasted corn, sweet tostones.'],
         ['03', 'Fire', 'Rib Eye on the grill', 'Tenderloin, New York Strip and Rib Eye from the grill, with smoked chimichurri and a side of your choice.'],
-      ].map(([n, t, photo, text], i) => (
-        <Photo label={photo} class="element reveal" style={`--reveal-delay:${i * 0.09}s`}>
+      ].map(([n, t, photo, text]) => (
+        <Photo label={photo} class="element">
           <article class="overlay stack" style="gap: 10px;">
             <span class="script">{n}</span>
             <h3>{t}</h3>

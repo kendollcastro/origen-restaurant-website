@@ -354,7 +354,7 @@ Mejoras de UI/UX/animación sobre lo ya entregado, sin cambiar la marca. Se ejec
 | Tanda | Ítems | Estado | Notas |
 |---|---|---|---|
 | **Tanda 1 — "primera impresión"** | PX-01, PX-02, PX-03, PX-06, PX-07, PX-18 | ✅ Hecho | PX-01 por la vía **nativa cero-JS** (`@view-transition`), PX-02 menú móvil (panel animado + hamburguesa→X), PX-03 header `sticky` + `.is-scrolled` (+ `--header-h` para anclajes/`.cat-nav`), PX-06 botones/tabs (`:active` + easing), PX-07 hover-lift, PX-18 `tabular-nums`. **626 tests** (`premium-ux.spec.ts` +12) · gate 0 · sin cambios de marca |
-| Tanda 2 — "scroll y media" | PX-11, PX-15, PX-16, PX-19 | ⏳ Pendiente | Requiere nueva autorización |
+| Tanda 2 — "scroll y media" | PX-11, PX-15, PX-16, PX-19 | ✅ Hecho | PX-11 reveal con stagger (`[data-stagger]`, `animation` para no pisar el hover), PX-15 fade-in de imágenes no-LCP (`.ph-img`+`.is-loaded`, LQIP del `.ph`), PX-16 skeleton del mapa (`map-shimmer` + fundido del iframe), PX-19 transición de panel `[role="tabpanel"]`. **634 tests** (`premium-ux.spec.ts` +4 features) · gate 0 · sin cambios de marca |
 | Tanda 3 — "encanto" | PX-09, PX-04, PX-12, PX-13, PX-10, PX-17 | ⏳ Pendiente | Requiere nueva autorización |
 | Tanda 4 — "experimental" | PX-05, PX-14, PX-20, PX-08, PX-21 | ⏳ Pendiente | A decidir |
 

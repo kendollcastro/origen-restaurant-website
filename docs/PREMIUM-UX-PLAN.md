@@ -2,10 +2,10 @@
 
 > Research + plan para elevar la **percepción de calidad** del sitio de Origen sin tocar la marca
 > (ya definida: fondo carbón `#0F0E0C`, crema, cobre `#D9844A`, Cormorant Garamond + Jost) ni el
-> rendimiento/accesibilidad ya conseguidos. **Tanda 1 autorizada y ejecutada**; el resto, pendiente de nuevas tandas.
+> rendimiento/accesibilidad ya conseguidos. **Tandas 1 y 2 autorizadas y ejecutadas**; el resto, pendiente de nuevas tandas.
 >
 > Estado base hoy: `astro@7` como **MPA clásico**, reveal por `IntersectionObserver`, entra del hero por
-> keyframes, galería `scroll-snap` + lightbox, FAQ `<details>`, menú móvil animado (PX-02). 626 tests
+> keyframes, galería `scroll-snap` + lightbox, FAQ `<details>`, menú móvil animado (PX-02). 634 tests
 > Playwright en verde · gate de placeholders en 0 · `prefers-reduced-motion` y fallback sin JS ya implementados.
 
 ## 0. Estado de ejecución
@@ -18,7 +18,17 @@
 | PX-06 · Botones/tabs | ✅ Hecho | `:active { transform: scale(.97) }`, hover cobre con sombra, easing con tokens. |
 | PX-07 · Hover-lift de tarjetas | ✅ Hecho | `.element`/`.review` con `translate: 0 -6px` (propiedad independiente para convivir con el `transform` del reveal) + sombra. Solo `(hover:hover) and (pointer:fine)`. |
 | PX-18 · Numerales tabulares | ✅ Hecho | `font-variant-numeric: tabular-nums` en `.dish-price`. |
-| Tanda 2 (PX-11/15/16/19) y siguientes | ⏳ Pendiente | Requieren nueva autorización. |
+| Tanda 2 (PX-11/15/16/19) | ✅ Hecho | Ver §0.1. |
+| Tanda 3 (PX-09/04/12/13/10/17) y siguientes | ⏳ Pendiente | Requieren nueva autorización. |
+
+### 0.1 Tanda 2 — "scroll y media" (PX-11/15/16/19)
+
+| Ítem | Estado | Notas |
+|------|--------|-------|
+| PX-11 · Reveal con stagger | ✅ Hecho | Utilidad `[data-stagger]` sobre `.reveal`: el contenedor anima a sus hijos escalonados (40 ms) con **`animation`** (no `transition`) para no pisar la transición propia del hijo (hover de `.element`). Aplicado a los grids "Mar/Tierra/Fuego" (`/`, `/en/`) y "tipos de evento" (`/eventos/`, `/en/eventos/`); hijos ya no llevan `.reveal` ni `--reveal-delay`. Reduced-motion y no-JS → hijos visibles. |
+| PX-15 · Fade-in de imágenes + LQIP | ✅ Hecho | Las imágenes **no-`priority`** reciben `.ph-img` en `Photo.astro`; CSS `html.js .ph-img { opacity:0 }` + `.is-loaded { opacity:1 }`; `Base.astro` añade `is-loaded` en `load`/`error` (y si `img.complete`). El fondo `.ph` hace de LQIP. **El hero `priority` no se atenúa** para no dañar el LCP. |
+| PX-16 · Skeleton del mapa | ✅ Hecho | `.map-frame` con shimmer (`@keyframes map-shimmer`) tras el iframe de Google; el iframe funde (`opacity` 0→1) cuando dispara `load`. Aplicado a `/contacto/` y `/en/contacto/`. |
+| PX-19 · Transición entre categorías del menú | ✅ Hecho | `html.js [role="tabpanel"] { animation: panel-in … }` (fade + `translateY(8px)`): el panel re-entra al quitar `hidden`. Scope `html.js` respeta el no-JS. |
 
 ---
 

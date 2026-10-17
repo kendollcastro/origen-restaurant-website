@@ -28,9 +28,9 @@ const tipos: [string, string, string, string, ImageMetadata][] = [
 
   <section class="container section stack" style="gap: 48px;" aria-labelledby="tipos-t">
     <h2 id="tipos-t" class="display reveal" style="text-align: center;">What are we celebrating with you?</h2>
-    <div class="grid" style="--min: 260px;">
-      {tipos.map(([t, photo, d, alt, src], i) => (
-        <article class="stack reveal" style={`gap: 14px; --reveal-delay:${i * 0.08}s`}>
+    <div class="grid reveal" data-stagger style="--min: 260px;">
+      {tipos.map(([t, photo, d, alt, src]) => (
+        <article class="stack" style="gap: 14px;">
           <Photo label={photo} alt={alt} src={src} height="300px" />
           <h3 style="font-family: var(--serif); font-weight: 600; font-size: 30px; line-height: 1.1;">{t}</h3>
           <p style="color: var(--soft);">{d}</p>

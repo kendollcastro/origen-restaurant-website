@@ -84,3 +84,57 @@ test.describe('PX-01 · view transitions nativas entre documentos', () => {
     expect(hasRule).toBe(true);
   });
 });
+
+// Tanda 2 del plan de pulido premium (PX-11/15/16/19).
+
+test.describe('PX-11 · reveal por sección con stagger', () => {
+  test.use({ reducedMotion: 'no-preference' });
+
+  test('el grid escalona a sus hijos al entrar en vista', async ({ page }) => {
+    await page.goto('/');
+    const grid = page.locator('[data-stagger]').first();
+    await expect(grid).toHaveCount(1);
+    await grid.scrollIntoViewIfNeeded();
+    await expect(grid).toHaveAttribute('data-visible', '');
+
+    const child = page.locator('[data-stagger] > *').first();
+    const anim = await child.evaluate((el) => getComputedStyle(el).animationName);
+    expect(anim).toContain('stagger-in');
+    await expect(child).toHaveCSS('opacity', '1');
+  });
+});
+
+test.describe('PX-15 · fade-in de imágenes al cargar', () => {
+  test('las imágenes diferidas revelan con .is-loaded', async ({ page }) => {
+    await page.goto('/');
+    const img = page.locator('.ph-img').first();
+    await expect(img).toHaveCount(1);
+    await img.scrollIntoViewIfNeeded();
+    await expect(img).toHaveClass(/is-loaded/, { timeout: 8000 });
+    await expect(img).toHaveCSS('opacity', '1');
+  });
+});
+
+test.describe('PX-16 · skeleton del mapa', () => {
+  test('el mapa envuelve el iframe con contenedor y fundido', async ({ page }) => {
+    await page.goto('/contacto/');
+    const frame = page.locator('.map-frame');
+    await expect(frame).toHaveCount(1);
+    const iframe = frame.locator('iframe');
+    await expect(iframe).toHaveCount(1);
+    const transition = await iframe.evaluate((el) => getComputedStyle(el).transitionProperty);
+    expect(transition).toContain('opacity');
+  });
+});
+
+test.describe('PX-19 · transición entre categorías del menú', () => {
+  test.use({ reducedMotion: 'no-preference' });
+
+  test('el panel activo entra con animación', async ({ page }) => {
+    await page.goto('/');
+    const panel = page.locator('[role="tabpanel"]').first();
+    await expect(panel).toBeVisible();
+    const anim = await panel.evaluate((el) => getComputedStyle(el).animationName);
+    expect(anim).toContain('panel-in');
+  });
+});

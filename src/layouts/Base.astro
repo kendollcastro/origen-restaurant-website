@@ -159,6 +159,21 @@ const ld = [restaurant, ...(breadcrumb ? [breadcrumb] : []), ...extra];
       );
       reveals.forEach((el) => io.observe(el));
     }
+
+    // PX-15 · Fade-in de imágenes al cargar (evita el "pop" desde el placeholder).
+    document.querySelectorAll<HTMLImageElement>('.ph-img').forEach((img) => {
+      const done = () => img.classList.add('is-loaded');
+      if (img.complete) done();
+      else {
+        img.addEventListener('load', done, { once: true });
+        img.addEventListener('error', done, { once: true });
+      }
+    });
+
+    // PX-16 · El mapa revela su contenido cuando el iframe termina de cargar.
+    document.querySelectorAll<HTMLIFrameElement>('.map-frame > iframe').forEach((frame) => {
+      frame.addEventListener('load', () => frame.parentElement?.classList.add('is-loaded'), { once: true });
+    });
   </script>
 </body>
 </html>

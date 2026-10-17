@@ -106,6 +106,26 @@ h1, h2, h3, p { margin: 0; }
 .ph-label { position: absolute; left: 16px; bottom: 14px; font: 500 11px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); z-index: 1; }
 .overlay { position: relative; z-index: 2; }
 
+/* PX-15 · Fade-in de imágenes al cargar (evita el "pop"; el fondo de `.ph` hace de LQIP).
+   Solo imágenes no-LCP; el hero `priority` pinta directo para no dañar el LCP. */
+html.js .ph-img { opacity: 0; transition: opacity .6s var(--ease-out); }
+html.js .ph-img.is-loaded { opacity: 1; }
+
+/* PX-16 · Skeleton del mapa: shimmer mientras carga el iframe y fundido al entrar. */
+.map-frame { position: relative; overflow: hidden; background: var(--surface); }
+.map-frame::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(100deg, transparent 25%, rgba(242, 235, 221, .06) 50%, transparent 75%);
+  background-size: 220% 100%; animation: map-shimmer 1.6s linear infinite;
+}
+.map-frame.is-loaded::before { opacity: 0; transition: opacity .4s var(--ease-out); }
+html.js .map-frame iframe { opacity: 0; transition: opacity .5s var(--ease-out); }
+html.js .map-frame.is-loaded iframe { opacity: 1; }
+@keyframes map-shimmer {
+  from { background-position: 130% 0; }
+  to { background-position: -130% 0; }
+}
+
 /* Header (PX-03: sticky + estado reactivo al scroll, sin cambios de layout/CLS) */
 .site-header {
   border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10;
@@ -187,6 +207,12 @@ html:not(.js) .tabs { display: none; }
 .dish-desc { font-size: 15px; color: var(--muted); }
 .dish-group { padding: 22px 0 2px; }
 .dish-group .caps { font-size: 12px; letter-spacing: .18em; color: var(--accent); }
+/* PX-19 · Transición al cambiar de categoría (pestañas del menú): fundido/desliz corto. */
+html.js [role="tabpanel"] { animation: panel-in 320ms var(--ease-out); }
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
 .cat-nav { position: sticky; top: var(--header-h, 80px); z-index: 5; background: var(--surface); border-bottom: 1px solid rgba(242,235,221,.08); }
 .cat-nav .container { display: flex; flex-wrap: wrap; gap: 4px 26px; padding-block: 8px; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; font-weight: 500; }
 .cat-nav a { color: var(--soft); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0; }
@@ -331,20 +357,32 @@ html.js .reveal {
 html.js .reveal[data-visible] { opacity: 1; transform: none; }
 
 /* Hover-lift de tarjetas (PX-07): solo con puntero fino. Se usa la propiedad
-   independiente `translate` (compone con el `transform` del reveal) para que
-   revelado y elevación no se pisen. Las `.reveal.element` necesitan una
-   transición propia (mayor especificidad) que respete el delay del reveal. */
-html.js .reveal.element {
-  transition: opacity 600ms var(--ease-out) var(--reveal-delay, 0s),
-    transform 600ms var(--ease-out) var(--reveal-delay, 0s),
-    translate 320ms var(--ease-out), box-shadow 320ms var(--ease-out);
-}
+   independiente `translate` (compone con el `transform` del reveal). */
 @media (hover: hover) and (pointer: fine) {
-  .review { transition: translate 320ms var(--ease-out), box-shadow 320ms var(--ease-out); }
+  .element, .review { transition: translate 320ms var(--ease-out), box-shadow 320ms var(--ease-out); }
   .element:hover, .review:hover {
     translate: 0 -6px;
     box-shadow: 0 30px 60px -34px rgba(0, 0, 0, .5);
   }
+}
+
+/* PX-11 · Reveal por sección con stagger: el contenedor `.reveal[data-stagger]`
+   anima a sus hijos escalonados (30–40 ms). Usa `animation` —no `transition`—
+   para no pisar la transición propia de cada hijo (p. ej. el hover de `.element`). */
+html.js .reveal[data-stagger] { opacity: 1; transform: none; transition: none; }
+html.js .reveal[data-stagger] > * { opacity: 0; }
+html.js .reveal[data-stagger][data-visible] > * { animation: stagger-in 600ms var(--ease-out) both; }
+html.js .reveal[data-stagger][data-visible] > *:nth-child(1) { animation-delay: 0ms; }
+html.js .reveal[data-stagger][data-visible] > *:nth-child(2) { animation-delay: 40ms; }
+html.js .reveal[data-stagger][data-visible] > *:nth-child(3) { animation-delay: 80ms; }
+html.js .reveal[data-stagger][data-visible] > *:nth-child(4) { animation-delay: 120ms; }
+html.js .reveal[data-stagger][data-visible] > *:nth-child(5) { animation-delay: 160ms; }
+html.js .reveal[data-stagger][data-visible] > *:nth-child(6) { animation-delay: 200ms; }
+html.js .reveal[data-stagger][data-visible] > *:nth-child(7) { animation-delay: 240ms; }
+html.js .reveal[data-stagger][data-visible] > *:nth-child(8) { animation-delay: 280ms; }
+@keyframes stagger-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
 }
 
 /* Entrada del hero — animación CSS predeterminada (off-main-thread), stagger 60ms.
@@ -372,6 +410,7 @@ html.js .reveal.element {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   html.js .reveal { opacity: 1; transform: none; transition: none; }
+  html.js .reveal[data-stagger] > * { opacity: 1; animation: none; }
   *, *::before, *::after {
     transition-duration: .01ms !important;
     animation-duration: .01ms !important;

@@ -43,6 +43,7 @@ const fetchpriority = priority ? 'high' : 'auto';
       <Picture
         src={asset}
         alt={imgAlt}
+        class={priority ? undefined : 'ph-img'}
         formats={['avif', 'webp']}
         widths={widths}
         sizes={sizes}
@@ -53,7 +54,7 @@ const fetchpriority = priority ? 'high' : 'auto';
       {hasOverlay && <span class="ph-scrim" aria-hidden="true"></span>}
     </>
   ) : stringSrc ? (
-    <img src={stringSrc} alt={imgAlt} loading={load} decoding="async" fetchpriority={fetchpriority} />
+    <img src={stringSrc} alt={imgAlt} class={priority ? undefined : 'ph-img'} loading={load} decoding="async" fetchpriority={fetchpriority} />
   ) : null}
   <slot />
 </div>

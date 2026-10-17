@@ -813,3 +813,17 @@ de Facebook para confirmar que no recorta el preview.
 | Transversal | 💚 `prefers-reduced-motion` desactiva animaciones **y** view-transitions; sin JS no cambia nada; foco/Escape intactos |
 | Guard de tests | 💚 nuevo `tests/e2e/premium-ux.spec.ts` (**+12**, ×2 proyectos): sticky/`.is-scrolled`, `--header-h`, menú `.is-open`, `transition-property` de botones, `tabular-nums`, y `@view-transition` presente en la hoja |
 | Verificación | `check` 0 errores · `build` 12 páginas · `gate` 0 bloqueantes · **626/626 Playwright** (1.1 m) |
+
+# Pulido premium — Tanda 2 (PX-11/15/16/19)
+
+> **Fecha:** 2026-10-16 · **Plan:** `docs/PREMIUM-UX-PLAN.md` §0.1. "Scroll y media": sin tocar la marca ni el LCP.
+
+| Ítem | Resultado |
+|---|---|
+| **PX-11** Reveal con stagger | 💚 Utilidad `[data-stagger]` sobre `.reveal`: el contenedor anima a sus hijos con `@keyframes stagger-in` a **40 ms** de separación. Se usa **`animation`** (no `transition`) para no pisar la transición propia del hijo (hover de `.element`). Aplicado a los grids "Mar/Tierra/Fuego" (`/`, `/en/`) y "tipos de evento" (`/eventos/`, `/en/eventos/`); los hijos ya no llevan `.reveal` ni `--reveal-delay` |
+| **PX-15** Fade-in de imágenes + LQIP | 💚 Las imágenes **no-`priority`** reciben `.ph-img` (`Photo.astro`); `html.js .ph-img { opacity:0 }` → `.is-loaded { opacity:1 }` (`Base.astro` marca `is-loaded` en `load`/`error`, o de inmediato si `img.complete`). El fondo `.ph` hace de LQIP. **El hero `priority` no se atenúa** (protege el LCP; verificado por `ux.spec.ts`) |
+| **PX-16** Skeleton del mapa | 💚 `.map-frame` con shimmer (`@keyframes map-shimmer`) tras el iframe de Google; el iframe funde (`opacity` 0→1) al disparar `load`. Aplicado a `/contacto/` y `/en/contacto/`. En no-JS el iframe es visible |
+| **PX-19** Transición entre categorías | 💚 `html.js [role="tabpanel"] { animation: panel-in … }` (fade + `translateY(8px)`); re-entra al quitar `hidden`. Scope `html.js` respeta el no-JS |
+| Transversal | 💚 `prefers-reduced-motion` también neutraliza el stagger (hijos visibles, sin animación); sin JS los hijos son visibles y las imágenes/iframe pintan directo |
+| Guard de tests | 💚 `tests/e2e/premium-ux.spec.ts` **+4 features** (×2 proyectos = +8): `data-stagger` y `stagger-in`, `.ph-img`→`.is-loaded`, `.map-frame` con transición de `opacity`, y `panel-in` en `[role="tabpanel"]` |
+| Verificación | `check` 0 errores · `build` 12 páginas · `gate` 0 bloqueantes · **634/634 Playwright** (1.2 m) · CSS de `dist` con `stagger-in`/`panel-in`/`map-shimmer`/`ph-img`/`is-loaded` |
