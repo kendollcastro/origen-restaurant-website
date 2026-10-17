@@ -111,15 +111,15 @@ h1, h2, h3, p { margin: 0; }
 html.js .ph-img { opacity: 0; transition: opacity .6s var(--ease-out); }
 html.js .ph-img.is-loaded { opacity: 1; }
 
-/* PX-16 · Skeleton del mapa: shimmer mientras carga el iframe y fundido al entrar.
-   Se anima con `transform` (compositor, no bloquea el main thread) y se detiene al cargar. */
+/* PX-16 · Skeleton del mapa: shimmer (con `transform`, compositor) que solo corre
+   cuando el mapa entra en pantalla, y se detiene al cargar el iframe. */
 .map-frame { position: relative; overflow: hidden; background: var(--surface); }
 .map-frame::before {
-  content: ''; position: absolute; inset: 0;
+  content: ''; position: absolute; inset: 0; opacity: 0;
   background: linear-gradient(100deg, transparent 35%, rgba(242, 235, 221, .06) 50%, transparent 65%);
-  transform: translateX(-100%); animation: map-shimmer 1.8s var(--ease-in-out) infinite;
+  transform: translateX(-100%); transition: opacity .4s var(--ease-out);
 }
-.map-frame.is-loaded::before { opacity: 0; animation: none; transition: opacity .4s var(--ease-out); }
+html.js .map-frame.is-loading::before { opacity: 1; animation: map-shimmer 1.8s var(--ease-in-out) infinite; }
 html.js .map-frame iframe { opacity: 0; transition: opacity .5s var(--ease-out); }
 html.js .map-frame.is-loaded iframe { opacity: 1; }
 @keyframes map-shimmer {

@@ -170,9 +170,39 @@ const ld = [restaurant, ...(breadcrumb ? [breadcrumb] : []), ...extra];
       }
     });
 
-    // PX-16 · El mapa revela su contenido cuando el iframe termina de cargar.
-    document.querySelectorAll<HTMLIFrameElement>('.map-frame > iframe').forEach((frame) => {
-      frame.addEventListener('load', () => frame.parentElement?.classList.add('is-loaded'), { once: true });
+    // PX-16 · El mapa revela el skeleton solo cuando entra en pantalla y lo detiene
+    // al cargar el iframe (así el shimmer no consume main thread si no se ve).
+    document.querySelectorAll<HTMLElement>('.map-frame').forEach((frame) => {
+      const iframe = frame.querySelector('iframe');
+      let started = false;
+      const start = () => {
+        if (started || frame.classList.contains('is-loaded')) return;
+        started = true;
+        frame.classList.add('is-loading');
+        window.setTimeout(() => frame.classList.remove('is-loading'), 12000);
+      };
+      iframe?.addEventListener(
+        'load',
+        () => {
+          frame.classList.remove('is-loading');
+          frame.classList.add('is-loaded');
+        },
+        { once: true },
+      );
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                start();
+                io.disconnect();
+              }
+            }
+          },
+          { rootMargin: '200px' },
+        );
+        io.observe(frame);
+      }
     });
   </script>
 </body>
