@@ -77,7 +77,7 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
         <a href="/nosotros/" class="link-caps">Conoce nuestra historia</a>
       </div>
       <div class="grid reveal" style="--min: 180px; --gap: 16px; --reveal-delay:.12s">
-        <Photo label={`chef ${site.chef}`} alt={`La chef ${site.chef} al frente de la cocina de Origen.`} height="440px" style="background-color:#2A2520" />
+        <Photo label="salón de Origen" src={ambiente[5]} alt="El salón de Origen, en Jacó." height="440px" style="background-color:#2A2520" sizes="(min-width: 900px) 520px, 90vw" widths={[320, 480, 640]} />
         <div class="stack" style="padding-top: 64px;">
           <Photo label="plato insignia" src={platos[0]} alt="Plato de la cocina de Origen." height="240px" style="background-color:#2A2520" sizes="(min-width: 900px) 520px, 90vw" widths={[320, 480, 640]} />
           <div style="background: var(--ink); color: var(--cream); padding: 24px;">
@@ -96,11 +96,11 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
     </div>
     <div class="grid reveal" data-stagger style="--min: 300px;">
       {[
-        ['01', 'Mar', 'Ceviche Diablo', 'Ceviche Diablo, Perlas del Pacífico, carpaccio de corvina y salmón, crema de langosta.'],
-        ['02', 'Tierra', 'Caprese di Bufala', 'Producto local y de temporada: hojas frescas, piña a la parrilla, maíz rostizado, tostones dulces.'],
-        ['03', 'Fuego', 'Rib Eye en la parrilla', 'Lomito, New York y Rib Eye a la parrilla, con chimichurri ahumado y guarnición a elegir.'],
-      ].map(([n, t, photo, text]) => (
-        <Photo label={photo} class="element">
+        { n: '01', t: 'Mar', dish: 'Ceviche Diablo', text: 'Ceviche Diablo, Perlas del Pacífico, carpaccio de corvina y salmón, crema de langosta.', img: platos[6] },
+        { n: '02', t: 'Tierra', dish: 'Caprese di Bufala', text: 'Producto local y de temporada: hojas frescas, piña a la parrilla, maíz rostizado, tostones dulces.', img: platos[7] },
+        { n: '03', t: 'Fuego', dish: 'Rib Eye en la parrilla', text: 'Lomito, New York y Rib Eye a la parrilla, con chimichurri ahumado y guarnición a elegir.', img: platos[8] },
+      ].map(({ n, t, dish, text, img }) => (
+        <Photo label={dish} src={img} alt="Plato de la cocina de Origen, Jacó." class="element" sizes="(min-width: 900px) 33vw, 100vw" widths={[480, 640, 800]}>
           <article class="overlay stack" style="gap: 10px;">
             <span class="script">{n}</span>
             <h3>{t}</h3>

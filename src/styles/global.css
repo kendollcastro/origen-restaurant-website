@@ -141,11 +141,11 @@ html.js .map-frame.is-loaded iframe { opacity: 1; }
   box-shadow: 0 1px 0 rgba(242, 235, 221, .06), 0 16px 34px -26px rgba(0, 0, 0, .85);
 }
 .site-header .container { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; padding-block: 18px; }
-.logo { text-decoration: none; color: var(--cream); display: flex; flex-direction: column; line-height: 1; }
+.logo { text-decoration: none; color: var(--cream); display: flex; flex-direction: column; align-items: flex-start; line-height: 1; }
 .logo b { font-family: var(--serif); font-weight: 600; font-size: 34px; letter-spacing: .16em; }
 .logo small { font-size: 10px; letter-spacing: .38em; text-transform: uppercase; color: var(--accent); margin-top: 6px; }
-.logo img { display: block; height: 46px; width: auto; }
-.site-footer .logo img { height: 68px; }
+.logo img { display: block; height: 56px; width: auto; }
+.site-footer .logo img { height: 72px; }
 .main-nav { display: flex; flex-wrap: wrap; gap: 6px 28px; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; font-weight: 400; }
 .main-nav a { color: var(--cream); text-decoration: none; display: inline-flex; align-items: center; min-height: 44px; padding: 0; }
 .main-nav a[aria-current="page"], .main-nav a:hover { color: var(--accent); }
@@ -168,6 +168,14 @@ html.js .map-frame.is-loaded iframe { opacity: 1; }
 
 /* Hero */
 .hero { min-height: 760px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 120px 24px; }
+/* Legibilidad del texto sobre foto: scrim reforzado (viñeta central + base oscura)
+   y sombra suave en el copy — sin afectar a los otros héroes con foto. */
+.hero-top .ph-scrim {
+  background:
+    radial-gradient(ellipse 95% 75% at 50% 42%, rgba(10, 9, 7, .52), transparent 72%),
+    linear-gradient(180deg, rgba(10, 9, 7, .4), rgba(10, 9, 7, .55) 50%, rgba(10, 9, 7, .72));
+}
+.hero-top .inner :is(.script, .hero-title, .hero-sub, .lead) { text-shadow: 0 2px 20px rgba(0, 0, 0, .45); }
 .hero-sm { min-height: 460px; padding: 96px 24px; }
 .hero .inner { max-width: 820px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
 .hero-title { font-family: var(--serif); font-weight: 600; font-size: clamp(64px, 11vw, 148px); line-height: .9; letter-spacing: .12em; }
@@ -303,7 +311,7 @@ html.js .gallery-toggle { display: inline-flex; }
   .site-header .container { gap: 12px 16px; padding-block: 14px; }
   .logo b { font-size: 28px; }
   .logo small { font-size: 9px; letter-spacing: .3em; }
-  .logo img { height: 38px; }
+  .logo img { height: 44px; }
   .header-actions { gap: 8px; }
   .site-header .btn { padding: 0 16px; font-size: 11px; }
   .js .nav-toggle { display: inline-flex; }
