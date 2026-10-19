@@ -2,25 +2,25 @@
 @import './fonts.css';
 
 :root {
-  --bg: #FAFAF9;             /* liquid glass base */ 
-  --surface: #EBEBE6;        /* elevated surface */
-  --footer: #DBDBD8;         /* footer level tone */
-  --ph: #FFFFFF;             /* highlight plane */
-  --cream: #1C1917;          /* primary text (now on light) */
-  --cream-card: #D2D0CC;     /* cards/muted text */
-  --ink: #E5E3DF;            /* secondary text */
-  --ink-soft: #AFA89C;       /* tertiary/legend */
-  --ink-muted: #8F877A;      /* dim content */
-  --soft: #6B6255;           /* softer descriptions */
-  --muted: #5B544A;          /* muted metadata */
-  --dim: #4A443B;            /* borders/lines */
-  --border: rgba(28, 25, 23, .09);  /* subtle separation */
-  --line: rgba(28, 25, 23, .06);     /* grid lines */
-  --line-light: #CFC4B2;     /* alternative borders */
-  --accent: #CCA48A;         /* cobalt glass accent */
-  --accent-hover: #B58E70;   /* hover glow */
-  --accent-ink: #6A3D1F;     /* text on dark surfaces */
-  --on-accent: #FFFFFF;      /* contrast guarantee */
+  --bg: #0F0E0C;
+  --surface: #15130F;
+  --footer: #0A0908;
+  --ph: #221F1B;
+  --cream: #F2EBDD;
+  --cream-card: #FBF7F0;
+  --ink: #1C1915;
+  --ink-soft: #3D3830;
+  --ink-muted: #6B6255;
+  --soft: #D8D0C2;
+  --muted: #A89F90;
+  --dim: #8F877A;
+  --border: #4A443B;
+  --line: rgba(242, 235, 221, .12);
+  --line-light: #CFC4B2;
+  --accent: #D9844A;       /* cobre sobre fondo oscuro */
+  --accent-hover: #F2B98C;
+  --accent-ink: #9A4F1E;   /* texto sobre crema — AA verified */
+  --on-accent: #140F0A;
   --serif: 'Cormorant Garamond', Georgia, serif;
   --sans: 'Jost', system-ui, sans-serif;
   --max: 1240px;
