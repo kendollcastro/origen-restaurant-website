@@ -29,9 +29,12 @@
 ### 1. Registrar el visto bueno
 
 ```text
-Aprobador: [nombre]
-Fecha: [fecha]
-Firma del go-live (acuerdo de alcance, dominio y aprobador): ______________
+Aprobador: Kendoll Castro (cuenta Vercel `kendollcastro`)
+Fecha: 2026-10-20
+Decisión registrada: reconexión git (push a `main` → producción; PR → preview SSO),
+dominio P-01 comprado en name.com y DNS verificado con Vercel el 2026-10-20
+(`vercel domains verify` → `configured_correctly` para apex y www).
+Firma del go-live (acuerdo de alcance, dominio y aprobador): Kendoll Castro — 2026-10-20
 ```
 
 ### 2. Dominio en Vercel
@@ -103,6 +106,8 @@ curl -sI http://origenjaco.com/ | grep -i '^location'   # → 301 a https://www.
   cliente, revisar con el aprobador antes de tocar producción.
 
 ## Notas
+
+- **2026-10-20 — GO-LIVE (T-53 ejecutado):** DNS configurado en name.com (apex A `216.198.79.1` + `64.29.17.1`, CNAME `www` → `5303caf225893c27.vercel-dns-017.com.`, TTL 300); `vercel domains verify` → `configured_correctly` (apex y www); certificado HTTPS emitido (http-01); git reconectado → push a `main` despliega producción (PR → preview SSO); primer deploy de producción `READY`. **Verificación en vivo:** `https://www.origenjaco.com/` → 200; `https://origenjaco.com/` → 308 a `www`; `http://` → https; `robots.txt`/`sitemap-index.xml`/`og-image.jpg`/`menu-origen.pdf` → 200; headers HSTS/nosniff/referrer/permissions ✅; gate 0 placeholders; **634/634 Playwright**. **Protección:** SSO `all_except_custom_domains` (previews protegidos, producción pública). **Pendiente post-live (T-54):** alta en Search Console + Rich Results Test + smoke completo registrado en `QA-REPORT.md`.
 
 - Mantener `/.vercel/` y `.env.local` fuera de git (ya en `.gitignore`).
 - La CSP de `vercel.json` ya no depende de Google Fonts (T-28·parte); no re-añadir `fonts.googleapis.com`.

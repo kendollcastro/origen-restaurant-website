@@ -8,7 +8,7 @@ export const site = {
     'Restaurante Origen: mariscos y parrilla en Jacó, Costa Rica. Mariscos frescos del Pacífico, cortes a la parrilla y coctelería de autor.',
   descriptionEn:
     'Origen Restaurant: seafood and grill in Jacó, Costa Rica. Fresh Pacific seafood, grilled cuts and signature cocktails.', // T-36
-  url: 'https://www.origenjaco.com', // TODO: dominio real
+  url: 'https://www.origenjaco.com',
   address: {
     street: '[Dirección exacta]', // TODO
     locality: 'Jacó',

@@ -6,7 +6,7 @@ Para poder cerrar el sitio es necesario recibir estos insumos. Agrupados en dos 
 
 | ID | Insumo | Dónde se usa | Estado |
 |----|--------|--------------|--------|
-| P-01 | **Dominio definitivo** (`origenjaco.com`) + credenciales del registrador | go-live (T-53), mails, canonical | ⏳ |
+| P-01 | ~~**Dominio definitivo**~~ ✅ `origenjaco.com` comprado en **name.com** (2026-10-20); DNS verificado con Vercel (A apex + CNAME `www`) | go-live (T-53), mails, canonical | ✅ 2026-10-20 |
 | P-02 | Nombre oficial del restaurante y del local (fachada) | NAP global (T-18) | ⏳ (hoy "Origen.") |
 | P-03 | ~~**Teléfono real**~~ ✅ `+506 7195 5800` (2026-10-13) | NAP global, JSON-LD, botones | ✅ |
 | P-04 | ~~**WhatsApp real**~~ ✅ `50671955800` (2026-10-13) + etiqueta oficial *(falta confirmar etiqueta)* | Botón reservar/cotizar, footer | ✅ |
@@ -32,7 +32,7 @@ Para poder cerrar el sitio es necesario recibir estos insumos. Agrupados en dos 
 | P-15 | 3–5 frases de los dueños: visión de Origen y origen del proyecto | Sección nosotros (T-22) | ⏳ |
 | P-20 | Palabras clave objetivo reales que validen el mapa SEO §1 | Títulos/descripciones (T-14) | ⏳ |
 | P-22 | Alcance de la versión EN: ¿1:1 con la ES o reducida? (hoy: 1:1 con 5 páginas) | Páginas `/en/` (T-36) | ⏳ |
-| P-19 | **Aprobador único de producción** (¿quién autoriza el go-live?) | T-53 | ⏳ |
+| P-19 | ✅ **Aprobador único de producción**: **Kendoll Castro** (registrado en `RUNBOOK-DNS.md`, 2026-10-20) | T-53 | ✅ 2026-10-20 |
 
 ## Notas
 

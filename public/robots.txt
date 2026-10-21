@@ -24,4 +24,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://www.origen-mar-tierra-y-fuego.com/sitemap-index.xml
+Sitemap: https://www.origenjaco.com/sitemap-index.xml
