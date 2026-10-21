@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import { site, nav } from '../data/site';
 import { isReal, isRealPhone } from '../data/placeholders';
 import { getUi, type Lang } from '../data/i18n/ui';
+import { ROUTES } from '../data/i18n/routes';
 
 interface Props {
   title: string;
@@ -18,9 +19,10 @@ const { title, description = site.description, image = '/og-image.jpg', schema, 
 const ui = getUi(lang);
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const ogLocale = lang === 'en' ? 'en_US' : 'es_CR';
-// Las páginas /en/ aún no están traducidas ni aprobadas (P-22 → T-36). No indexar
-// hasta go-live: T-38 emitirá hreflang/indexación, y el sitemap las excluye (astro.config.mjs).
-const robotsNoIndex = lang === 'en';
+// T-38 (go-live 2026-10-20): /en/ se indexa y se emiten pares hreflang recíprocos.
+// Solo para las rutas mapeadas en ROUTES (404 y páginas fuera del mapa no declaran alternate).
+const pair = ROUTES.find((r) => r.es === Astro.url.pathname || r.en === Astro.url.pathname);
+const alternate = (path: string) => new URL(path, Astro.site ?? site.url).href;
 const ogImage = new URL(image, Astro.site ?? site.url).href;
 
 // JSON-LD base del restaurante (va en todas las páginas).
@@ -109,10 +111,15 @@ const ld = [restaurant, ...(breadcrumb ? [breadcrumb] : []), ...extra];
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title}</title>
   <meta name="description" content={description} />
-  {robotsNoIndex && <meta name="robots" content="noindex, nofollow" />}
   <link rel="canonical" href={canonical} />
+  {pair && (
+    <>
+      <link rel="alternate" hreflang="es" href={alternate(pair.es)} />
+      <link rel="alternate" hreflang="en" href={alternate(pair.en)} />
+      <link rel="alternate" hreflang="x-default" href={alternate(pair.es)} />
+    </>
+  )}
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <!-- hreflang: T-38 (go-live) emite los <link rel="alternate"> con mapeo explícito de rutas (PLAN §1.2). -->
   <meta name="theme-color" content="#0F0E0C" />
 
   <meta property="og:type" content="website" />
@@ -125,6 +132,7 @@ const ld = [restaurant, ...(breadcrumb ? [breadcrumb] : []), ...extra];
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content={lang === 'en' ? 'Origen — sea, land and fire in Jacó, Costa Rica.' : 'Origen — mar, tierra y fuego en Jacó, Costa Rica.'} />
   <meta property="og:locale" content={ogLocale} />
+  <meta property="og:locale:alternate" content={lang === 'en' ? 'es_CR' : 'en_US'} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />

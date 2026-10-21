@@ -5,11 +5,10 @@ import { site } from '../../src/data/site';
 import { faqs } from '../../src/data/faq';
 import { isReal, isRealPhone } from '../../src/data/placeholders';
 
-// T-35 · Arquitectura i18n: rutas /en/, prop lang, noindex y switcher ES↔EN.
-// El contenido EN es provisional (TODO P-22); estas aserciones validan estructura y navegación,
-// no copy. T-36/T-37 sustituirán el texto; T-38 hará hreflang/indexación final y el sitemap bilingüe.
-// T-39 · QA i18n: 1 h1, títulos/descripciones del mapa §1.2 (enPages), axe en /en/,
-// switcher bidireccional en los 5 pares y sitemap sin /en/ hasta go-live.
+// T-35/T-39 · Arquitectura i18n y QA: rutas /en/, prop lang, switcher ES↔EN, 1 h1,
+// títulos/descripciones del mapa §1.2 (enPages) y axe en /en/.
+// T-38 (go-live 2026-10-20): /en/ indexable (sin noindex), pares hreflang recíprocos,
+// og:locale:alternate y sitemap bilingüe con alternates.
 
 const ES_ROUTES = ['/', '/menu/', '/nosotros/', '/eventos/', '/contacto/'];
 const EN_ROUTES = ['/en/', '/en/menu/', '/en/nosotros/', '/en/eventos/', '/en/contacto/'];
@@ -37,9 +36,9 @@ test.describe('/en/ · rutas y lang', () => {
       await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     });
 
-    test(`${route} emite robots noindex (traducción pendiente P-22)`, async ({ page }) => {
+    test(`${route} es indexable tras go-live (T-38): sin robots noindex`, async ({ page }) => {
       await page.goto(route);
-      await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', /noindex/);
+      await expect(page.locator('meta[name="robots"][content*="noindex"]')).toHaveCount(0);
     });
   }
 });
@@ -145,8 +144,8 @@ test.describe('T-39 · axe en /en/ (sin serious/critical)', () => {
   }
 });
 
-test.describe('T-39 · sitemap (estado provisional)', () => {
-  test('excluye /en/ hasta go-live; solo las 5 URLs ES del dominio', async ({ request }) => {
+test.describe('T-38 · sitemap bilingüe', () => {
+  test('incluye las 10 URLs (5 ES + 5 EN), excluye /qr/ y declara alternates', async ({ request }) => {
     const index = await request.get('/sitemap-index.xml');
     expect(index.status()).toBe(200);
     expect(await index.text()).toContain('sitemap-0.xml');
@@ -154,11 +153,41 @@ test.describe('T-39 · sitemap (estado provisional)', () => {
     const map = await request.get('/sitemap-0.xml');
     expect(map.status()).toBe(200);
     const body = await map.text();
-    for (const es of ES_ROUTES) {
-      expect(body).toContain(`https://www.origenjaco.com${es === '/' ? '' : es}`);
+    for (const route of [...ES_ROUTES, ...EN_ROUTES]) {
+      expect(body).toContain(`https://www.origenjaco.com${route === '/' ? '' : route}`);
     }
-    expect(body).not.toContain('/en/');
+    expect(body).not.toContain('/qr');
+    // Pares hreflang del sitemap (es-CR ↔ en-US) — T-38
+    expect(body).toContain('hreflang="es-CR"');
+    expect(body).toContain('hreflang="en-US"');
   });
+});
+
+test.describe('T-38 · hreflang y señales internacionales', () => {
+  const abs = (route: string) => `https://www.origenjaco.com${route}`;
+  const pairs: [string, string][] = [
+    ['/', '/en/'],
+    ['/menu/', '/en/menu/'],
+    ['/nosotros/', '/en/nosotros/'],
+    ['/eventos/', '/en/eventos/'],
+    ['/contacto/', '/en/contacto/'],
+  ];
+  for (const [es, en] of pairs) {
+    for (const route of [es, en]) {
+      test(`${route} · par hreflang recíproco, x-default al ES y canónica propia`, async ({ page }) => {
+        await page.goto(route);
+        await expect(page.locator('link[rel="alternate"][hreflang="es"]')).toHaveAttribute('href', abs(es));
+        await expect(page.locator('link[rel="alternate"][hreflang="en"]')).toHaveAttribute('href', abs(en));
+        await expect(page.locator('link[rel="alternate"][hreflang="x-default"]')).toHaveAttribute('href', abs(es));
+        // Sin bucles de canónica: apunta a la URL propia del idioma
+        await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', abs(route));
+        // og:locale del idioma actual + el otro idioma como alternate
+        const isEs = route === es;
+        await expect(page.locator('meta[property="og:locale"]')).toHaveAttribute('content', isEs ? 'es_CR' : 'en_US');
+        await expect(page.locator('meta[property="og:locale:alternate"]')).toHaveAttribute('content', isEs ? 'en_US' : 'es_CR');
+      });
+    }
+  }
 });
 
 // T-36 · Traducción EN completa (P-22 aprobado). Verifica que /en/ no mezcle texto ES
