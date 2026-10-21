@@ -4,7 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import Photo from '../components/Photo.astro';
 import { site } from '../data/site';
 import { isReal } from '../data/placeholders';
-import { ambiente, platos } from '../data/photos';
+import { ambiente, equipo, platos } from '../data/photos';
 
 // Al llegar el dato del cliente (T-22) se llena la constante y el bloque aparece (política §6).
 const duenos = ''; // anécdota o visión de los dueños
@@ -30,7 +30,7 @@ const chefFrase = ''; // cita literal de la chef sobre su cocina
   </section>
 
   <section class="container section row" style="flex-wrap: wrap-reverse;" aria-labelledby="chef-t">
-    <Photo label={`retrato chef ${site.chef}`} alt={`La chef ${site.chef}, jefa de cocina de Origen.`} class="reveal" height="560px" />
+    <Photo label={`retrato chef ${site.chef}`} src={equipo[0]} alt={`La chef ${site.chef}, jefa de cocina de Origen.`} class="reveal" height="560px" sizes="(min-width: 900px) 50vw, 100vw" widths={[480, 640, 800, 1024]} />
     <div class="stack reveal" style="--reveal-delay:.12s">
       <span class="script">En la cocina</span>
       <h2 id="chef-t" class="display" style="font-size: 52px;">Chef {site.chef}</h2>

@@ -5,7 +5,7 @@ import PageHero from '../../components/PageHero.astro';
 import Photo from '../../components/Photo.astro';
 import { site } from '../../data/site';
 import { isReal } from '../../data/placeholders';
-import { ambiente, platos } from '../../data/photos';
+import { ambiente, equipo, platos } from '../../data/photos';
 import { enPages } from '../../data/i18n/pages';
 
 const p = enPages.nosotros;
@@ -31,7 +31,7 @@ const chefFrase = ''; // cita literal de la chef sobre su cocina
   </section>
 
   <section class="container section row" style="flex-wrap: wrap-reverse;" aria-labelledby="chef-t">
-    <Photo label={`chef ${site.chef} portrait`} alt={`Chef ${site.chef}, head chef at Origen.`} class="reveal" height="560px" />
+    <Photo label={`chef ${site.chef} portrait`} src={equipo[0]} alt={`Chef ${site.chef}, head chef at Origen.`} class="reveal" height="560px" sizes="(min-width: 900px) 50vw, 100vw" widths={[480, 640, 800, 1024]} />
     <div class="stack reveal" style="--reveal-delay:.12s">
       <span class="script">In the kitchen</span>
       <h2 id="chef-t" class="display" style="font-size: 52px;">Chef {site.chef}</h2>
