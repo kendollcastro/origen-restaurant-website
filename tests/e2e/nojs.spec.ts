@@ -25,15 +25,15 @@ test.describe('sin JavaScript', () => {
     await expect(page.locator('#tab-entradas')).toBeHidden();
   });
 
-  test('/ · enlace wa.me visible y form con action a wa.me', async ({ page }) => {
+  test('/ · sin JS: reserva con enlace directo a OpenTable y WhatsApp visible', async ({ page }) => {
     await page.goto('/');
-    const form = page.locator('form[action*="wa.me"]');
-    await expect(form).toHaveCount(1);
-    await expect(form).toHaveAttribute('method', 'get');
-    const action = await form.getAttribute('action');
-    expect(action?.startsWith('https://wa.me/')).toBe(true);
-    await expect(form.locator('a[href*="wa.me"]')).toBeVisible();
-    await expect(page.locator('a[href*="wa.me"]').first()).toBeVisible();
+    // Sin JavaScript el widget no se inyecta: el <noscript> deja el enlace directo.
+    const reserve = page.locator('#reservar a[href^="https://www.opentable.com/booking/"]').first();
+    await expect(reserve).toBeVisible();
+    await expect(reserve).toHaveAttribute('href', /rid=1562890/);
+    await expect(page.locator('#reservar a[href*="wa.me"]').first()).toBeVisible();
+    // Ya no hay formulario de reserva en el home (OpenTable es el canal principal).
+    await expect(page.locator('form[action*="wa.me"]')).toHaveCount(0);
   });
 
   test('/eventos/ · enlace wa.me visible y form con action a wa.me', async ({ page }) => {
@@ -71,17 +71,15 @@ test.describe('tabs con JavaScript', () => {
 });
 
 test.describe('date.min en hora de Costa Rica', () => {
-  test('/ y /eventos/ · min es hoy en America/Costa_Rica', async ({ page }) => {
-    await page.goto('/');
-    await expect(page.locator('.reserve-form input[type="date"]')).toHaveAttribute('min', hoyEnCR());
+  test('/eventos/ · min es hoy en America/Costa_Rica', async ({ page }) => {
     await page.goto('/eventos/');
     await expect(page.locator('#e-d')).toHaveAttribute('min', hoyEnCR());
   });
 
-  test('/ · 18:00 y 23:59 en CR (día siguiente en UTC) siguen ofreciendo hoy', async ({ page }) => {
-    const min = page.locator('.reserve-form input[type="date"]');
+  test('/eventos/ · 18:00 y 23:59 en CR (día siguiente en UTC) siguen ofreciendo hoy', async ({ page }) => {
+    const min = page.locator('#e-d');
     await page.clock.install({ time: new Date('2026-01-11T00:00:00.000Z') });
-    await page.goto('/');
+    await page.goto('/eventos/');
     await expect(min).toHaveAttribute('min', '2026-01-10');
 
     await page.clock.setSystemTime(new Date('2026-01-11T05:59:00.000Z'));

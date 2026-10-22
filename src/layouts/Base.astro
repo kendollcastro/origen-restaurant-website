@@ -168,6 +168,45 @@ const ld = [restaurant, ...(breadcrumb ? [breadcrumb] : []), ...extra];
       reveals.forEach((el) => io.observe(el));
     }
 
+    // Reservas · OpenTable: el loader (script de terceros) se inyecta solo cuando el
+    // widget está a ~600 px del viewport, para no penalizar LCP/TBT. Sin JS queda el
+    // enlace directo de respaldo que renderiza el componente.
+    const otWidgets = document.querySelectorAll<HTMLElement>('[data-ot-src]');
+    if (otWidgets.length > 0) {
+      const loadWidget = (el: HTMLElement) => {
+        if (el.dataset.otLoaded || !el.dataset.otSrc) return;
+        el.dataset.otLoaded = '1';
+        const loader = document.createElement('script');
+        loader.src = el.dataset.otSrc;
+        loader.async = true;
+        el.appendChild(loader);
+        // El iframe de OpenTable no trae `title`: se lo añadimos al insertarse (axe frame-title).
+        const label = el.dataset.otLabel ?? 'OpenTable';
+        const nameFrames = () =>
+          el.querySelectorAll('iframe').forEach((frame) => {
+            if (!frame.title) frame.title = label;
+          });
+        nameFrames();
+        new MutationObserver(nameFrames).observe(el, { childList: true, subtree: true });
+      };
+      if ('IntersectionObserver' in window) {
+        const otObserver = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                otObserver.unobserve(entry.target);
+                loadWidget(entry.target as HTMLElement);
+              }
+            }
+          },
+          { rootMargin: '600px 0px' },
+        );
+        otWidgets.forEach((el) => otObserver.observe(el));
+      } else {
+        otWidgets.forEach(loadWidget);
+      }
+    }
+
     // PX-15 · Fade-in de imágenes al cargar (evita el "pop" desde el placeholder).
     document.querySelectorAll<HTMLImageElement>('.ph-img').forEach((img) => {
       const done = () => img.classList.add('is-loaded');

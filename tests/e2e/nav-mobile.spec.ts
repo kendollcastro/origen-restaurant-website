@@ -5,7 +5,10 @@ const ROUTES = ['/', '/menu/', '/nosotros/', '/eventos/', '/contacto/', '/404.ht
 function trackErrors(page: Page): string[] {
   const errors: string[] = [];
   page.on('console', (message: ConsoleMessage) => {
-    if (message.type() === 'error') errors.push(message.text());
+    if (message.type() !== 'error') return;
+    // El widget de reservas es de terceros (OpenTable): su CDN puede fallar en el runner.
+    if (/opentable\.com|otstatic\.com|akamaihd\.net/.test(message.location()?.url ?? '')) return;
+    errors.push(message.text());
   });
   page.on('pageerror', (error) => errors.push(`pageerror: ${error.message}`));
   return errors;

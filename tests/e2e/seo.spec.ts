@@ -106,8 +106,9 @@ test.describe('/contacto/ · bloque de dirección y contacto', () => {
     await expect(tel).toHaveAttribute('href', telHref(site.phone));
     await expect(tel).toHaveText(site.phone);
 
+    // Bloque de contacto + enlace secundario de reservas ("Escríbenos")
     const wa = main.locator(`a[href="https://wa.me/${site.whatsapp}"]`);
-    await expect(wa).toHaveCount(1);
+    await expect(wa).toHaveCount(2);
 
     const mail = main.locator('a[href^="mailto:"]');
     await expect(mail).toHaveCount(1);
@@ -145,12 +146,15 @@ test.describe('enlaces de contacto', () => {
     );
   });
 
-  test('formularios wa.me incluyen ?text= y el whatsapp de site.ts', async ({ page }) => {
+  test('reservas: widget OpenTable (rid del cliente) y formulario de eventos con wa.me', async ({ page }) => {
     await page.goto('/contacto/');
-    const reserve = page.locator('form.reserve-form').first();
-    const reserveAction = (await reserve.getAttribute('action')) ?? '';
-    expect(reserveAction.startsWith(`https://wa.me/${site.whatsapp}?`)).toBe(true);
-    expect(reserveAction).toContain('text=');
+    const widget = page.locator('#reservar [data-ot-src]');
+    await expect(widget).toHaveAttribute('data-ot-src', /rid=1562890/);
+    await expect(widget).toHaveAttribute('data-ot-src', /iframe=true/);
+    await expect(page.locator('#reservar a.ot-fallback')).toHaveAttribute(
+      'href',
+      /opentable\.com\/booking\/restref\/availability\?rid=1562890/,
+    );
 
     await page.goto('/eventos/');
     const event = page.locator('#event-form');

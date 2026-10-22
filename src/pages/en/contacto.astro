@@ -1,7 +1,7 @@
 ---
 // T-36: página EN completa (P-22 aprobado). Espejo de /contacto/ con la FAQ y el formulario en inglés.
 import Base from '../../layouts/Base.astro';
-import ReserveForm from '../../components/ReserveForm.astro';
+import OpenTableWidget from '../../components/OpenTableWidget.astro';
 import { site, telHref } from '../../data/site';
 import { faqs } from '../../data/faq';
 import { isReal, isRealPhone } from '../../data/placeholders';
@@ -57,9 +57,13 @@ const faqSchema = publicFaqs.length
         </p>
       </div>
     </div>
-    <div class="reveal" style="flex: 1 1 520px; --reveal-delay:.12s">
-      <ReserveForm variant="card" id="c" lang="en" />
-      <p class="dim" style="margin-top: 12px;">For groups of more than {site.reservationMax} people, see <a href="/en/eventos/">Events and groups</a>.</p>
+    <div class="reveal stack" style="flex: 1 1 520px; gap: 18px; --reveal-delay:.12s">
+      <h2 class="display" style="font-size: 36px;">Book your table</h2>
+      <div style="padding: 18px 18px 14px; background: rgba(242,235,221,.04); border: 1px solid rgba(242,235,221,.08); width: fit-content;">
+        <OpenTableWidget lang="en" />
+      </div>
+      <p class="dim">Prefer WhatsApp? <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener">Message us</a> · {site.phone}</p>
+      <p class="dim" style="margin-top: -8px;">For groups of more than {site.reservationMax} people, see <a href="/en/eventos/">Events and groups</a>.</p>
       <p class="dim">First time here? See the <a href="/en/menu/">menu</a> and read <a href="/en/nosotros/">our story</a>.</p>
     </div>
   </section>

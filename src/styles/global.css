@@ -127,6 +127,23 @@ html.js .map-frame.is-loaded iframe { opacity: 1; }
   to { transform: translateX(100%); }
 }
 
+/* Reservas · OpenTable: el widget llega por script diferido; se reserva su altura
+   (224×301 tarjeta, 210×113 botón) para no provocar CLS al insertarse el iframe. */
+.ot-reserve { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.ot-widget {
+  display: flex; flex-direction: column; align-items: flex-start;
+  min-height: 301px;
+}
+.ot-widget-button { min-height: 113px; }
+.ot-widget iframe { display: block; max-width: 100%; border: 0; }
+.ot-fallback {
+  font-size: 11px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted); text-decoration: underline; text-underline-offset: 3px;
+}
+.ot-fallback:hover { color: var(--soft); }
+.light .ot-fallback { color: var(--accent-ink); }
+.light .ot-fallback:hover { color: var(--ink, #0F0E0C); }
+
 /* Header (PX-03: sticky + estado reactivo al scroll, sin cambios de layout/CLS) */
 .site-header {
   border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10;
@@ -194,7 +211,6 @@ html.js .map-frame.is-loaded iframe { opacity: 1; }
 .field textarea { height: auto; padding: 12px 14px; resize: vertical; }
 .dark-2 .field input, .dark-2 .field select { background: var(--bg); }
 .form .full { grid-column: 1 / -1; }
-.card-form { background: var(--surface); border: 1px solid rgba(242,235,221,.08); padding: 36px; align-content: start; }
 
 /* Menú */
 .tabs { display: flex; flex-wrap: wrap; gap: 8px; }

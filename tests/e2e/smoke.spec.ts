@@ -6,9 +6,11 @@ const NOT_FOUND_ROUTE = '/esta-ruta-no-existe/';
 function trackErrors(page: Page): string[] {
   const errors: string[] = [];
   page.on('console', (message: ConsoleMessage) => {
-    if (message.type() === 'error') {
-      errors.push(`${message.text()} @ ${message.location()?.url ?? ''}`);
-    }
+    if (message.type() !== 'error') return;
+    const from = message.location()?.url ?? '';
+    // El widget de reservas es de terceros (OpenTable): su CDN puede fallar en el runner.
+    if (/opentable\.com|otstatic\.com|akamaihd\.net/.test(from)) return;
+    errors.push(`${message.text()} @ ${from}`);
   });
   page.on('pageerror', (error) => {
     errors.push(`pageerror: ${error.message}`);

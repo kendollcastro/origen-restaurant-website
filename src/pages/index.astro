@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Photo from '../components/Photo.astro';
-import ReserveForm from '../components/ReserveForm.astro';
+import OpenTableWidget from '../components/OpenTableWidget.astro';
 import DishList from '../components/DishList.astro';
 import { site, waLink } from '../data/site';
 import { menu, type Category } from '../data/menu';
@@ -23,7 +23,7 @@ const categoryById = (id: string): Category => {
 
 const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => categoryById(id));
 ---
-<Base title="Origen Jacó · Restaurante de mariscos y parrilla" description="Mariscos frescos del Pacífico, cortes a la parrilla y cócteles de autor en Jacó, Costa Rica. Abierto de 11 am a 10 pm. Reserva por WhatsApp.">
+<Base title="Origen Jacó · Restaurante de mariscos y parrilla" description="Mariscos frescos del Pacífico, cortes a la parrilla y cócteles de autor en Jacó, Costa Rica. Abierto de 11 am a 10 pm. Reserva en línea.">
 
   <Photo label="parrilla encendida / mesa frente al mar" src={platos[5]} alt="Cocina de mar y tierra servida en Origen, Jacó." priority class="hero hero-top" sizes="(min-width: 900px) 100vw, 100vw" widths={[480, 640, 800, 1080, 1440]}>
     <div class="inner overlay">
@@ -34,16 +34,22 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
       <p class="lead" style="max-width: 560px;">Cocina del Pacífico costarricense a la parrilla, mariscos frescos y cócteles de autor, en el corazón de Jacó. Abrimos todos los días, de 11:00 am a 10:00 pm.</p>
       <div class="btns" style="margin-top: 14px;">
         <a href="/menu/" class="btn btn-ghost">Ver el menú</a>
-        <a href={waLink('Hola Origen, quisiera reservar una mesa.')} class="btn btn-primary" target="_blank" rel="noopener">Reservar por WhatsApp</a>
+        <a href="#reservar" class="btn btn-primary">Reservar mesa</a>
       </div>
     </div>
   </Photo>
 
   <section id="reservar" class="dark-2" aria-labelledby="res-t" style="border-bottom: 1px solid rgba(242,235,221,.08);">
-    <div class="container stack" style="max-width: 1100px; padding-block: 48px; gap: 18px;">
-      <h2 id="res-t" class="label">Reserva tu mesa</h2>
-      <ReserveForm id="home" />
-      <p class="dim">Confirmamos por WhatsApp · {site.phone}</p>
+    <div class="container row" style="max-width: 1100px; padding-block: 56px; gap: 48px; align-items: center;">
+      <div class="stack reveal" style="flex: 1 1 320px; gap: 10px;">
+        <h2 id="res-t" class="label">Reserva tu mesa</h2>
+        <p class="display" style="font-size: 40px;">Reserva en línea</p>
+        <p class="lead">Consulta la disponibilidad en tiempo real y reserva con OpenTable.</p>
+        <p class="dim">¿Prefieres WhatsApp? <a href={waLink('Hola Origen, quisiera reservar una mesa.')} target="_blank" rel="noopener">Escríbenos</a> · {site.phone}</p>
+      </div>
+      <div class="reveal" style="flex: 0 0 auto; padding: 18px 18px 14px; background: rgba(242,235,221,.04); border: 1px solid rgba(242,235,221,.08); --reveal-delay:.12s">
+        <OpenTableWidget lang="es" />
+      </div>
     </div>
   </section>
 

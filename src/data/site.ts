@@ -49,6 +49,15 @@ export const site = {
     tripadvisor: 'https://www.tripadvisor.com/[reseña]', // TODO: enlace de reseña del cliente
   },
   wazeUrl: 'https://waze.com/ul?q=Origen%20Jaco', // TODO
+  // OpenTable (reservas en línea). `rid` entregado por el cliente (2026-10-21).
+  // `url` es el enlace directo de respaldo (sin JS y "abrir en OpenTable").
+  openTable: {
+    rid: '1562890',
+    url: {
+      es: 'https://www.opentable.com/booking/restref/availability?rid=1562890&restref=1562890&lang=es-MX&color=3&dark=false&ot_source=Restaurant%20website',
+      en: 'https://www.opentable.com/booking/restref/availability?rid=1562890&restref=1562890&lang=en-US&color=3&dark=false&ot_source=Restaurant%20website',
+    },
+  },
 };
 
 export const nav = [

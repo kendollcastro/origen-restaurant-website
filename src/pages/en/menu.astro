@@ -3,6 +3,7 @@
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import DishList from '../../components/DishList.astro';
+import OpenTableWidget from '../../components/OpenTableWidget.astro';
 import { menu } from '../../data/menu';
 import { site } from '../../data/site';
 import { platos } from '../../data/photos';
@@ -60,11 +61,11 @@ const menuSchema = {
     <div class="container reveal" style="padding-block: 80px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">
       <div class="stack" style="flex: 1 1 520px; gap: 8px;">
         <h2 class="display" style="font-size: 44px;">Ready to try it?</h2>
-        <p>Open {site.hours.label}. Book on WhatsApp or just walk in.</p>
+        <p>Open {site.hours.label}. Book online or just walk in.</p>
         <p class="dim">Meet <a href="/en/nosotros/" style="color: var(--accent-ink);">who cooks</a> and, if you are coming as a group, see our <a href="/en/eventos/" style="color: var(--accent-ink);">events and groups</a> options.</p>
       </div>
-      <div style="display: flex; flex-wrap: wrap; gap: 12px;">
-        <a href="/en/contacto/#reservar" class="btn btn-dark">Book a table</a>
+      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
+        <OpenTableWidget type="button" lang="en" />
         <a href="/menu-origen.pdf" class="btn btn-ghost">Download menu (PDF)</a>
       </div>
     </div>

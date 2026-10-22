@@ -1,0 +1,42 @@
+---
+// Widget de reservas de OpenTable (rid del cliente). El loader se inyecta de forma
+// diferida desde Base.astro (IntersectionObserver) para no bloquear el LCP.
+// Sin JS —o si el widget falla— queda el enlace directo de respaldo.
+import { site } from '../data/site';
+import type { Lang } from '../data/i18n/ui';
+
+interface Props {
+  type?: 'standard' | 'button';
+  lang?: Lang;
+  class?: string;
+}
+const { type = 'standard', lang = 'es', class: className } = Astro.props;
+
+const params = new URLSearchParams({
+  rid: site.openTable.rid,
+  type,
+  theme: 'standard',
+  color: '3',
+  dark: 'false',
+  iframe: 'true',
+  domain: 'com',
+  lang: lang === 'en' ? 'en-US' : 'es-MX',
+  newtab: 'false',
+  ot_source: 'Restaurant website',
+  cfe: 'true',
+});
+const src = `https://www.opentable.com/widget/reservation/loader?${params}`;
+const href = site.openTable.url[lang];
+const t =
+  lang === 'en'
+    ? { fallback: 'Open the reservation page on OpenTable' }
+    : { fallback: 'Abrir la reserva en OpenTable' };
+---
+<div class="ot-reserve">
+  <div class:list={['ot-widget', `ot-widget-${type}`, className]} data-ot-src={src} data-ot-label={lang === 'en' ? 'Table reservation with OpenTable' : 'Reserva de mesa con OpenTable'}>
+    <noscript>
+      <a href={href} class="btn btn-primary" target="_blank" rel="noopener">{type === 'button' ? (lang === 'en' ? 'Book now' : 'Reservar ahora') : t.fallback}</a>
+    </noscript>
+  </div>
+  <a class="ot-fallback" href={href} target="_blank" rel="noopener">{t.fallback}</a>
+</div>

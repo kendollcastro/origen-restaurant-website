@@ -32,15 +32,15 @@ export const faqs = [
   },
   {
     q: '¿Necesito reservar?',
-    a: `No es obligatorio, pero recomendamos reservar para cenas y fines de semana. Puedes reservar por WhatsApp al ${site.phone}.`,
+    a: `No es obligatorio, pero recomendamos reservar para cenas y fines de semana. Puedes reservar en línea con OpenTable o por WhatsApp al ${site.phone}.`,
     qEn: 'Do I need a reservation?',
-    aEn: `It is not required, but we recommend booking for dinners and weekends. You can book on WhatsApp at ${site.phone}.`,
+    aEn: `It is not required, but we recommend booking for dinners and weekends. You can book online with OpenTable or on WhatsApp at ${site.phone}.`,
   },
   {
     q: '¿Cómo reservo una mesa en Origen?',
-    a: `Reserva por WhatsApp al ${site.phone}. Indícanos día, hora y número de personas y te confirmamos. Para grupos grandes o eventos, escríbenos y te cotizamos.`,
+    a: `Reserva en línea con OpenTable o por WhatsApp al ${site.phone}. Indícanos día, hora y número de personas y te confirmamos. Para grupos grandes o eventos, escríbenos y te cotizamos.`,
     qEn: 'How do I book a table at Origen?',
-    aEn: `Book on WhatsApp at ${site.phone}. Tell us the day, time and number of guests and we will confirm. For large groups or events, message us for a quote.`,
+    aEn: `Book online with OpenTable or on WhatsApp at ${site.phone}. Tell us the day, time and number of guests and we will confirm. For large groups or events, message us for a quote.`,
   },
   {
     q: '¿Tienen menú para niños?',

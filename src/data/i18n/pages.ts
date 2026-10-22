@@ -12,7 +12,7 @@ export const enPages: Record<'index' | 'menu' | 'nosotros' | 'eventos' | 'contac
   index: {
     title: 'Origen · Seafood Restaurant in Jacó, Costa Rica',
     description:
-      'Fresh Pacific seafood, grilled steaks and craft cocktails in Jacó, Costa Rica. Open 11 am–10 pm daily. Reserve via WhatsApp or visit us in town.',
+      'Fresh Pacific seafood, grilled steaks and craft cocktails in Jacó, Costa Rica. Open 11 am–10 pm daily. Reserve online with OpenTable or visit us in town.',
     script: 'Welcome to',
     h1: 'Seafood and grill restaurant in Jacó',
     lead: 'Pacific coast cooking from the grill, fresh seafood and signature cocktails in the heart of Jacó. Open every day from 11:00 am to 10:00 pm.',
@@ -44,9 +44,9 @@ export const enPages: Record<'index' | 'menu' | 'nosotros' | 'eventos' | 'contac
   contacto: {
     title: 'Contact & Reservations · Origen Jacó — Hours & Map',
     description:
-      'Reserve a table at Origen, Jacó via WhatsApp. Address, hours (11 am–10 pm), map and answers to frequently asked questions.',
+      'Reserve a table online at Origen, Jacó. Address, hours (11 am–10 pm), map and answers to frequently asked questions.',
     script: 'We are waiting',
     h1: 'Reservations and contact',
-    lead: 'Seafood and grill in Jacó, Costa Rica. Open every day from 11:00 am to 10:00 pm. Book by WhatsApp or message us for events and groups.',
+    lead: 'Seafood and grill in Jacó, Costa Rica. Open every day from 11:00 am to 10:00 pm. Book online with OpenTable or message us for events and groups.',
   },
 };

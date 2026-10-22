@@ -13,7 +13,14 @@ const WHATSAPP = site.whatsapp;
 
 async function noConsoleErrors(page: Page): Promise<string[]> {
   const errors: string[] = [];
-  page.on('console', (m: ConsoleMessage) => m.type() === 'error' && errors.push(m.text()));
+  page.on('console', (m: ConsoleMessage) => {
+    if (m.type() !== 'error') return;
+    // El widget de reservas es de terceros (OpenTable): si su CDN falla en el runner,
+    // no es un error del sitio. El resto de errores sí deben estar a 0.
+    const from = m.location()?.url ?? '';
+    if (/opentable\.com|otstatic\.com|akamaihd\.net/.test(from)) return;
+    errors.push(m.text());
+  });
   page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
   return errors;
 }
@@ -460,9 +467,9 @@ test.describe('rendimiento lab y consola (T-51)', () => {
   }
 });
 
-// --- 5. Formularios → WhatsApp ----------------------------------------------
+// --- 5. Reservas → OpenTable + formulario de eventos -------------------------
 
-test.describe('formularios → WhatsApp (T-51)', () => {
+test.describe('reservas → OpenTable (widget) y WhatsApp secundario', () => {
   const interceptOpen = (page: Page) =>
     page.evaluate(() => {
       (window as unknown as { __opened: { url: string; target: string; features: string }[] }).__opened = [];
@@ -480,49 +487,56 @@ test.describe('formularios → WhatsApp (T-51)', () => {
       () => (window as unknown as { __opened: { url: string; target: string; features: string }[] }).__opened,
     );
 
-  test('/ · bar form: window.open con wa.me/<whatsapp> y el mensaje con personas/fecha/hora', async ({
-    page,
-  }) => {
+  test('/ · widget standard: rid del cliente, idioma es-MX y respaldo directo', async ({ page }) => {
     await page.goto('/');
-    await interceptOpen(page);
-    const form = page.locator('.reserve-form').first();
-    await form.locator('select[name="personas"]').selectOption('4');
-    await form.locator('input[name="fecha"]').fill('2026-12-01');
-    await form.locator('input[name="hora"]').fill('19:00');
-    await form.locator('input[name="nombre"]').fill('Ana Piera');
-    await form.locator('button[type="submit"]').click();
-
-    const calls = await opened(page);
-    expect(calls).toHaveLength(1);
-    const url = calls[0].url;
-    expect(url.startsWith(`https://wa.me/${WHATSAPP}?text=`)).toBe(true);
-    expect(calls[0].target).toBe('_blank');
-    const text = decodeURIComponent(url.split('?text=')[1] ?? '');
-    expect(text).toContain('Ana Piera');
-    expect(text).toContain('4 personas');
-    expect(text).toContain('2026-12-01');
-    expect(text).toContain('19:00');
-    test.info().annotations.push({ type: 'wa.me', description: text });
+    const widget = page.locator('#reservar .ot-widget');
+    await expect(widget).toHaveCount(1);
+    await expect(widget).toHaveAttribute('data-ot-src', /rid=1562890/);
+    await expect(widget).toHaveAttribute('data-ot-src', /type=standard/);
+    await expect(widget).toHaveAttribute('data-ot-src', /lang=es-MX/);
+    await expect(widget).toHaveAttribute('data-ot-src', /iframe=true/);
+    // Enlace de respaldo (sin JS o si el widget no carga)
+    await expect(page.locator('#reservar a.ot-fallback')).toHaveAttribute(
+      'href',
+      /opentable\.com\/booking\/restref\/availability\?rid=1562890/,
+    );
+    // WhatsApp sigue disponible como alternativa
+    await expect(page.locator('#reservar a[href^="https://wa.me/"]')).toHaveCount(1);
+    await expect(page.locator('#reservar')).toContainText('WhatsApp');
   });
 
-  test('/contacto/ · card form: window.open con los datos de la reserva', async ({ page }) => {
-    await page.goto('/contacto/');
-    await interceptOpen(page);
-    const form = page.locator('form.reserve-form.card-form');
-    await form.locator('input[name="nombre"]').fill('Luis Mora');
-    await form.locator('select[name="personas"]').selectOption('6');
-    await form.locator('input[name="fecha"]').fill('2026-12-02');
-    await form.locator('input[name="hora"]').fill('20:00');
-    await form.locator('button[type="submit"]').click();
+  test('/en/ · widget en inglés (lang=en-US) y CTA "Book a table"', async ({ page }) => {
+    await page.goto('/en/');
+    const widget = page.locator('#reservar .ot-widget');
+    await expect(widget).toHaveAttribute('data-ot-src', /lang=en-US/);
+    await expect(page.locator('#reservar a.ot-fallback')).toHaveAttribute(
+      'href',
+      /opentable\.com\/booking\/restref\/availability\?rid=1562890/,
+    );
+    await expect(page.locator('.hero a[href="#reservar"]')).toHaveText('Book a table');
+  });
 
-    const calls = await opened(page);
-    expect(calls).toHaveLength(1);
-    expect(calls[0].url.startsWith(`https://wa.me/${WHATSAPP}?text=`)).toBe(true);
-    const text = decodeURIComponent(calls[0].url.split('?text=')[1] ?? '');
-    expect(text).toContain('Luis Mora');
-    expect(text).toContain('6 personas');
-    expect(text).toContain('2026-12-02');
-    expect(text).toContain('20:00');
+  test('/contacto/ · widget + WhatsApp como enlace secundario', async ({ page }) => {
+    await page.goto('/contacto/');
+    const widget = page.locator('#reservar .ot-widget');
+    await expect(widget).toHaveCount(1);
+    await expect(widget).toHaveAttribute('data-ot-src', /lang=es-MX/);
+    // Contacto (bloque NAP) + enlace secundario "Escríbenos"
+    await expect(page.locator('#reservar a[href^="https://wa.me/"]')).toHaveCount(2);
+    await expect(page.locator('#reservar')).toContainText('Escríbenos');
+    await expect(page.locator('form.reserve-form')).toHaveCount(0);
+  });
+
+  test('/menu/ · botón "Reservar ahora" y carga diferida al hacer scroll', async ({ page }) => {
+    await page.goto('/menu/');
+    const widget = page.locator('.ot-widget-button');
+    await expect(widget).toHaveAttribute('data-ot-src', /type=button/);
+    const loader = widget.locator('script[src*="opentable.com/widget/reservation/loader"]');
+    // Al final de la página: no se inyecta hasta acercarse al viewport.
+    await expect(loader).toHaveCount(0);
+    await widget.scrollIntoViewIfNeeded();
+    await expect(loader).toHaveCount(1);
+    await expect(loader).toHaveAttribute('src', /type=button/);
   });
 
   test('/eventos/ · cotización: sin canal no abre y avisa; con tel sí entrega tipo/invitados/fecha/canal', async ({

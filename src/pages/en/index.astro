@@ -2,7 +2,7 @@
 // T-36: cuerpo EN completo (P-22 aprobado). Espejo de /index.astro con el copy en inglés.
 import Base from '../../layouts/Base.astro';
 import Photo from '../../components/Photo.astro';
-import ReserveForm from '../../components/ReserveForm.astro';
+import OpenTableWidget from '../../components/OpenTableWidget.astro';
 import DishList from '../../components/DishList.astro';
 import { site, waLink } from '../../data/site';
 import { menu, type Category } from '../../data/menu';
@@ -40,16 +40,22 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
       <p class="lead" style="max-width: 560px;">{p.lead}</p>
       <div class="btns" style="margin-top: 14px;">
         <a href="/en/menu/" class="btn btn-ghost">See the menu</a>
-        <a href={waHref} class="btn btn-primary" target="_blank" rel="noopener">Book on WhatsApp</a>
+        <a href="#reservar" class="btn btn-primary">Book a table</a>
       </div>
     </div>
   </Photo>
 
   <section id="reservar" class="dark-2" aria-labelledby="res-t" style="border-bottom: 1px solid rgba(242,235,221,.08);">
-    <div class="container stack" style="max-width: 1100px; padding-block: 48px; gap: 18px;">
-      <h2 id="res-t" class="label">Book your table</h2>
-      <ReserveForm id="home" lang="en" />
-      <p class="dim">We confirm on WhatsApp · {site.phone}</p>
+    <div class="container row" style="max-width: 1100px; padding-block: 56px; gap: 48px; align-items: center;">
+      <div class="stack reveal" style="flex: 1 1 320px; gap: 10px;">
+        <h2 id="res-t" class="label">Book your table</h2>
+        <p class="display" style="font-size: 40px;">Book online</p>
+        <p class="lead">Check live availability and reserve with OpenTable.</p>
+        <p class="dim">Prefer WhatsApp? <a href={waHref} target="_blank" rel="noopener">Message us</a> · {site.phone}</p>
+      </div>
+      <div class="reveal" style="flex: 0 0 auto; padding: 18px 18px 14px; background: rgba(242,235,221,.04); border: 1px solid rgba(242,235,221,.08); --reveal-delay:.12s">
+        <OpenTableWidget lang="en" />
+      </div>
     </div>
   </section>
 
