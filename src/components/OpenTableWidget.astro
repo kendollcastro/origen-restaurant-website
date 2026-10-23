@@ -7,15 +7,16 @@ import type { Lang } from '../data/i18n/ui';
 
 interface Props {
   type?: 'standard' | 'button';
+  theme?: 'standard' | 'wide';
   lang?: Lang;
   class?: string;
 }
-const { type = 'standard', lang = 'es', class: className } = Astro.props;
+const { type = 'standard', theme = 'standard', lang = 'es', class: className } = Astro.props;
 
 const params = new URLSearchParams({
   rid: site.openTable.rid,
   type,
-  theme: 'standard',
+  theme,
   color: '3',
   dark: 'false',
   iframe: 'true',
@@ -27,16 +28,17 @@ const params = new URLSearchParams({
 });
 const src = `https://www.opentable.com/widget/reservation/loader?${params}`;
 const href = site.openTable.url[lang];
+const isWide = theme === 'wide';
 const t =
   lang === 'en'
     ? { fallback: 'Open the reservation page on OpenTable' }
     : { fallback: 'Abrir la reserva en OpenTable' };
 ---
 <div class="ot-reserve">
-  <div class:list={['ot-widget', `ot-widget-${type}`, className]} data-ot-src={src} data-ot-label={lang === 'en' ? 'Table reservation with OpenTable' : 'Reserva de mesa con OpenTable'}>
+  <div class:list={['ot-widget', `ot-widget-${isWide ? 'wide' : type}`, className]} data-ot-src={src} data-ot-label={lang === 'en' ? 'Table reservation with OpenTable' : 'Reserva de mesa con OpenTable'}>
     <noscript>
-      <a href={href} class="btn btn-primary" target="_blank" rel="noopener">{type === 'button' ? (lang === 'en' ? 'Book now' : 'Reservar ahora') : t.fallback}</a>
+      <a href={href} class="btn btn-primary" target="_blank" rel="noopener">{isWide || type === 'standard' ? t.fallback : lang === 'en' ? 'Book now' : 'Reservar ahora'}</a>
     </noscript>
   </div>
-  <a class="ot-fallback" href={href} target="_blank" rel="noopener">{t.fallback}</a>
+  {!isWide && <a class="ot-fallback" href={href} target="_blank" rel="noopener">{t.fallback}</a>}
 </div>

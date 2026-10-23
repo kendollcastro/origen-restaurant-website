@@ -135,6 +135,11 @@ html.js .map-frame.is-loaded iframe { opacity: 1; }
   min-height: 301px;
 }
 .ot-widget-button { min-height: 113px; }
+/* `theme=wide`: 840×350 desde 840px de ventana; por debajo cae a la tarjeta 224×301. */
+.ot-widget-wide { min-height: 301px; }
+@media (min-width: 840px) {
+  .ot-widget-wide { min-height: 350px; }
+}
 .ot-widget iframe { display: block; max-width: 100%; border: 0; }
 .ot-fallback {
   font-size: 11px; letter-spacing: .08em; text-transform: uppercase;

@@ -527,16 +527,32 @@ test.describe('reservas → OpenTable (widget) y WhatsApp secundario', () => {
     await expect(page.locator('form.reserve-form')).toHaveCount(0);
   });
 
-  test('/menu/ · botón "Reservar ahora" y carga diferida al hacer scroll', async ({ page }) => {
+  test('/menu/ · formulario wide (es-MX) y carga diferida al hacer scroll', async ({ page }) => {
     await page.goto('/menu/');
-    const widget = page.locator('.ot-widget-button');
-    await expect(widget).toHaveAttribute('data-ot-src', /type=button/);
+    const widget = page.locator('.ot-widget-wide');
+    await expect(widget).toHaveAttribute('data-ot-src', /theme=wide/);
+    await expect(widget).toHaveAttribute('data-ot-src', /type=standard/);
+    await expect(widget).toHaveAttribute('data-ot-src', /lang=es-MX/);
+    // Enlace directo en la copy (respaldo si el widget no carga).
+    await expect(
+      page.locator('.light a[href*="opentable.com/booking/restref/availability"]'),
+    ).toHaveCount(1);
     const loader = widget.locator('script[src*="opentable.com/widget/reservation/loader"]');
     // Al final de la página: no se inyecta hasta acercarse al viewport.
     await expect(loader).toHaveCount(0);
     await widget.scrollIntoViewIfNeeded();
     await expect(loader).toHaveCount(1);
-    await expect(loader).toHaveAttribute('src', /type=button/);
+    await expect(loader).toHaveAttribute('src', /theme=wide/);
+  });
+
+  test('/en/menu/ · formulario wide en inglés (en-US)', async ({ page }) => {
+    await page.goto('/en/menu/');
+    const widget = page.locator('.ot-widget-wide');
+    await expect(widget).toHaveAttribute('data-ot-src', /lang=en-US/);
+    await expect(widget).toHaveAttribute('data-ot-src', /theme=wide/);
+    await expect(
+      page.locator('.light a[href*="opentable.com/booking/restref/availability"]'),
+    ).toHaveCount(1);
   });
 
   test('/eventos/ · cotización: sin canal no abre y avisa; con tel sí entrega tipo/invitados/fecha/canal', async ({

@@ -58,16 +58,13 @@ const menuSchema = {
   </div>
 
   <section class="light">
-    <div class="container reveal" style="padding-block: 80px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between;">
-      <div class="stack" style="flex: 1 1 520px; gap: 8px;">
+    <div class="container reveal" style="padding-block: 80px; display: flex; flex-direction: column; gap: 24px;">
+      <div class="stack" style="gap: 8px; max-width: 820px;">
         <h2 class="display" style="font-size: 44px;">Ready to try it?</h2>
         <p>Open {site.hours.label}. Book online or just walk in.</p>
-        <p class="dim">Meet <a href="/en/nosotros/" style="color: var(--accent-ink);">who cooks</a> and, if you are coming as a group, see our <a href="/en/eventos/" style="color: var(--accent-ink);">events and groups</a> options.</p>
+        <p class="dim">Meet <a href="/en/nosotros/" style="color: var(--accent-ink);">who cooks</a>, see the <a href="/en/eventos/" style="color: var(--accent-ink);">events and groups</a> options, <a href="/menu-origen.pdf" style="color: var(--accent-ink);">download the menu (PDF)</a> or <a href={site.openTable.url.en} target="_blank" rel="noopener" style="color: var(--accent-ink);">book directly on OpenTable</a>.</p>
       </div>
-      <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
-        <OpenTableWidget type="button" lang="en" />
-        <a href="/menu-origen.pdf" class="btn btn-ghost">Download menu (PDF)</a>
-      </div>
+      <OpenTableWidget theme="wide" lang="en" />
     </div>
   </section>
 </Base>
