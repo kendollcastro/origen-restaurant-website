@@ -58,14 +58,12 @@ const faqSchema = publicFaqs.length
         </p>
       </div>
     </div>
-    <div class="reveal stack" style="flex: 1 1 520px; gap: 18px; --reveal-delay:.12s">
-      <h2 class="display" style="font-size: 36px;">Reserva tu mesa</h2>
-      <div style="padding: 18px 18px 14px; background: rgba(242,235,221,.04); border: 1px solid rgba(242,235,221,.08); width: fit-content;">
-        <OpenTableWidget lang="es" />
-      </div>
-      <p class="dim">¿Prefieres WhatsApp? <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener">Escríbenos</a> · {site.phone}</p>
-      <p class="dim" style="margin-top: -8px;">Para grupos de más de {site.reservationMax} personas, visita <a href="/eventos/">Eventos y grupos</a>.</p>
-      <p class="dim">¿Primera vez? Mira el <a href="/menu/">menú</a> y conoce <a href="/nosotros/">nuestra historia</a>.</p>
+    <div class="reveal stack" style="flex: 1 1 520px; gap: 16px; --reveal-delay:.12s; align-items: center; text-align: center;">
+      <h2 class="display" style="font-size: 36px; margin: 0;">Reserva tu mesa</h2>
+      <OpenTableWidget lang="es" />
+      <p class="dim" style="margin: 0;">¿Prefieres WhatsApp? <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener">Escríbenos</a> · {site.phone}</p>
+      <p class="dim" style="margin: 0;">Para grupos de más de {site.reservationMax} personas, visita <a href="/eventos/">Eventos y grupos</a>.</p>
+      <p class="dim" style="margin: 0;">¿Primera vez? Mira el <a href="/menu/">menú</a> y conoce <a href="/nosotros/">nuestra historia</a>.</p>
     </div>
   </section>
 

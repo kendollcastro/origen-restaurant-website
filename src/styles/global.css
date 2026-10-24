@@ -129,7 +129,7 @@ html.js .map-frame.is-loaded iframe { opacity: 1; }
 
 /* Reservas · OpenTable: el widget llega por script diferido; se reserva su altura
    (224×301 tarjeta, 210×113 botón) para no provocar CLS al insertarse el iframe. */
-.ot-reserve { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.ot-reserve { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .ot-widget {
   display: flex; flex-direction: column; align-items: flex-start;
   min-height: 301px;

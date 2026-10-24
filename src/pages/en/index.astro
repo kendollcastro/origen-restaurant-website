@@ -46,16 +46,12 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
   </Photo>
 
   <section id="reservar" class="dark-2" aria-labelledby="res-t" style="border-bottom: 1px solid rgba(242,235,221,.08);">
-    <div class="container row" style="max-width: 1100px; padding-block: 56px; gap: 48px; align-items: center;">
-      <div class="stack reveal" style="flex: 1 1 320px; gap: 10px;">
-        <h2 id="res-t" class="label">Book your table</h2>
-        <p class="display" style="font-size: 40px;">Book online</p>
-        <p class="lead">Check live availability and reserve with OpenTable.</p>
-        <p class="dim">Prefer WhatsApp? <a href={waHref} target="_blank" rel="noopener">Message us</a> · {site.phone}</p>
-      </div>
-      <div class="reveal" style="flex: 0 0 auto; padding: 18px 18px 14px; background: rgba(242,235,221,.04); border: 1px solid rgba(242,235,221,.08); --reveal-delay:.12s">
-        <OpenTableWidget lang="en" />
-      </div>
+    <div class="container center reveal" style="max-width: 1100px; padding-block: 64px; gap: 16px;">
+      <h2 id="res-t" class="label" style="margin: 0;">Book your table</h2>
+      <p class="display" style="font-size: 44px; margin: 0;">Book online</p>
+      <p class="lead" style="max-width: 520px; margin: 0;">Check live availability and reserve with OpenTable.</p>
+      <OpenTableWidget lang="en" />
+      <p class="dim" style="margin: 0;">Prefer WhatsApp? <a href={waHref} target="_blank" rel="noopener">Message us</a> · {site.phone}</p>
     </div>
   </section>
 

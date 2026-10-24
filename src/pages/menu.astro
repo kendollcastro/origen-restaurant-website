@@ -58,12 +58,11 @@ const menuSchema = {
   </div>
 
   <section class="light">
-    <div class="container reveal" style="padding-block: 80px; display: flex; flex-direction: column; gap: 24px;">
-      <div class="stack" style="gap: 8px; max-width: 820px;">
-        <h2 class="display" style="font-size: 44px;">¿Listo para probarlo?</h2>
-        <p>Abierto de {site.hours.label}. Reserva en línea o llega directo.</p>
-        <p class="dim">Conoce a <a href="/nosotros/" style="color: var(--accent-ink);">quién cocina</a>, mira las opciones de <a href="/eventos/" style="color: var(--accent-ink);">eventos y grupos</a>, <a href="/menu-origen.pdf" style="color: var(--accent-ink);">descarga el menú en PDF</a> o <a href={site.openTable.url.es} target="_blank" rel="noopener" style="color: var(--accent-ink);">reserva directamente en OpenTable</a>.</p>
-      </div>
+    <div class="container center reveal" style="padding-block: 80px 56px; gap: 18px;">
+      <span class="script" style="font-size: 28px;">¿Te decidiste?</span>
+      <h2 class="display" style="font-size: 46px; margin: 0;">Reserva tu mesa</h2>
+      <p class="lead" style="max-width: 540px; margin: 0;">Abierto de {site.hours.label}. Reserva en línea o llega directo.</p>
+      <p class="dim" style="max-width: 700px; margin: 0;">Conoce <a href="/nosotros/" style="color: var(--accent-ink);">quién cocina</a>, mira las opciones de <a href="/eventos/" style="color: var(--accent-ink);">eventos y grupos</a>, <a href="/menu-origen.pdf" style="color: var(--accent-ink);">descarga el menú en PDF</a> o <a href={site.openTable.url.es} target="_blank" rel="noopener" style="color: var(--accent-ink);">reserva directo en OpenTable</a>.</p>
       <OpenTableWidget theme="wide" lang="es" />
     </div>
   </section>
