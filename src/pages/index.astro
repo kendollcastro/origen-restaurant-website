@@ -39,13 +39,13 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
     </div>
   </Photo>
 
-  <section id="reservar" class="dark-2" aria-labelledby="res-t" style="border-bottom: 1px solid rgba(242,235,221,.08);">
-    <div class="container center reveal" style="max-width: 1100px; padding-block: 64px; gap: 16px;">
-      <h2 id="res-t" class="label" style="margin: 0;">Reserva tu mesa</h2>
+  <section id="reservar" class="light" aria-labelledby="res-t" style="border-bottom: 1px solid rgba(28,25,21,.08);">
+    <div class="container center reveal" style="max-width: 1100px; padding-block: 80px 56px; gap: 16px;">
+      <h2 id="res-t" class="label" style="margin: 0; color: var(--accent-ink);">Reserva tu mesa</h2>
       <p class="display" style="font-size: 44px; margin: 0;">Reserva en línea</p>
-      <p class="lead" style="max-width: 520px; margin: 0;">Consulta la disponibilidad en tiempo real y reserva con OpenTable.</p>
-      <OpenTableWidget lang="es" />
-      <p class="dim" style="margin: 0;">¿Prefieres WhatsApp? <a href={waLink('Hola Origen, quisiera reservar una mesa.')} target="_blank" rel="noopener">Escríbenos</a> · {site.phone}</p>
+      <p class="lead" style="max-width: 540px; margin: 0;">Consulta la disponibilidad en tiempo real y reserva con OpenTable.</p>
+      <OpenTableWidget theme="wide" lang="es" />
+      <p class="dim" style="margin: 0;">¿Prefieres WhatsApp? <a href={waLink('Hola Origen, quisiera reservar una mesa.')} target="_blank" rel="noopener" style="color: var(--accent-ink);">Escríbenos</a> · {site.phone}</p>
     </div>
   </section>
 

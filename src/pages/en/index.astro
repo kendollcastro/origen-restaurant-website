@@ -45,13 +45,13 @@ const featured = ['entradas', 'parrilla', 'ninos', 'postres'].map((id) => catego
     </div>
   </Photo>
 
-  <section id="reservar" class="dark-2" aria-labelledby="res-t" style="border-bottom: 1px solid rgba(242,235,221,.08);">
-    <div class="container center reveal" style="max-width: 1100px; padding-block: 64px; gap: 16px;">
-      <h2 id="res-t" class="label" style="margin: 0;">Book your table</h2>
+  <section id="reservar" class="light" aria-labelledby="res-t" style="border-bottom: 1px solid rgba(28,25,21,.08);">
+    <div class="container center reveal" style="max-width: 1100px; padding-block: 80px 56px; gap: 16px;">
+      <h2 id="res-t" class="label" style="margin: 0; color: var(--accent-ink);">Book your table</h2>
       <p class="display" style="font-size: 44px; margin: 0;">Book online</p>
-      <p class="lead" style="max-width: 520px; margin: 0;">Check live availability and reserve with OpenTable.</p>
-      <OpenTableWidget lang="en" />
-      <p class="dim" style="margin: 0;">Prefer WhatsApp? <a href={waHref} target="_blank" rel="noopener">Message us</a> · {site.phone}</p>
+      <p class="lead" style="max-width: 540px; margin: 0;">Check live availability and reserve with OpenTable.</p>
+      <OpenTableWidget theme="wide" lang="en" />
+      <p class="dim" style="margin: 0;">Prefer WhatsApp? <a href={waHref} target="_blank" rel="noopener" style="color: var(--accent-ink);">Message us</a> · {site.phone}</p>
     </div>
   </section>
 

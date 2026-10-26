@@ -487,32 +487,25 @@ test.describe('reservas → OpenTable (widget) y WhatsApp secundario', () => {
       () => (window as unknown as { __opened: { url: string; target: string; features: string }[] }).__opened,
     );
 
-  test('/ · widget standard: rid del cliente, idioma es-MX y respaldo directo', async ({ page }) => {
+  test('/ · widget wide: rid del cliente, idioma es-MX y WhatsApp secundario', async ({ page }) => {
     await page.goto('/');
     const widget = page.locator('#reservar .ot-widget');
     await expect(widget).toHaveCount(1);
     await expect(widget).toHaveAttribute('data-ot-src', /rid=1562890/);
+    await expect(widget).toHaveAttribute('data-ot-src', /theme=wide/);
     await expect(widget).toHaveAttribute('data-ot-src', /type=standard/);
     await expect(widget).toHaveAttribute('data-ot-src', /lang=es-MX/);
     await expect(widget).toHaveAttribute('data-ot-src', /iframe=true/);
-    // Enlace de respaldo (sin JS o si el widget no carga)
-    await expect(page.locator('#reservar a.ot-fallback')).toHaveAttribute(
-      'href',
-      /opentable\.com\/booking\/restref\/availability\?rid=1562890/,
-    );
     // WhatsApp sigue disponible como alternativa
     await expect(page.locator('#reservar a[href^="https://wa.me/"]')).toHaveCount(1);
     await expect(page.locator('#reservar')).toContainText('WhatsApp');
   });
 
-  test('/en/ · widget en inglés (lang=en-US) y CTA "Book a table"', async ({ page }) => {
+  test('/en/ · widget wide en inglés (en-US) y CTA "Book a table"', async ({ page }) => {
     await page.goto('/en/');
     const widget = page.locator('#reservar .ot-widget');
     await expect(widget).toHaveAttribute('data-ot-src', /lang=en-US/);
-    await expect(page.locator('#reservar a.ot-fallback')).toHaveAttribute(
-      'href',
-      /opentable\.com\/booking\/restref\/availability\?rid=1562890/,
-    );
+    await expect(widget).toHaveAttribute('data-ot-src', /theme=wide/);
     await expect(page.locator('.hero a[href="#reservar"]')).toHaveText('Book a table');
   });
 
