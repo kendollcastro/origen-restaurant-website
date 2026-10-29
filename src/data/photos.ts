@@ -21,3 +21,20 @@ export const ambiente = collect('ambiente');
 export const equipo = collect('equipo');
 export const eventos = collect('eventos');
 export const hero = collect('hero');
+
+// Tríptico conceptual mar · tierra · fuego (home). Imágenes de Unsplash, licencia
+// libre: https://unsplash.com/license. Fuentes (CDN de Unsplash):
+// - mar.jpg: photo-1494791368093-85217fbbf8de (mar en tempestad)
+// - tierra.jpg: photo-1492496913980-501348b61469 (manos con tierra fértil)
+// - fuego.jpg: photo-1475738972911-5b44ce984c42 (fogata y chispas)
+const elemento = (file: string): ImageMetadata => {
+  const entry = Object.entries(modules).find(([path]) => path.endsWith(`/elementos/${file}`));
+  if (!entry) throw new Error(`No se encontró src/assets/images/elementos/${file}`);
+  return entry[1];
+};
+
+export const elementos = {
+  mar: elemento('mar.jpg'),
+  tierra: elemento('tierra.jpg'),
+  fuego: elemento('fuego.jpg'),
+};

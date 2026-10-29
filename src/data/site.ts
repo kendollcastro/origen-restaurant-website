@@ -37,16 +37,20 @@ export const site = {
   social: {
     instagram: 'https://instagram.com/[usuario]', // TODO
     facebook: 'https://facebook.com/[pagina]', // TODO
-    tripadvisor: 'https://www.tripadvisor.com/[ficha]', // TODO
+    // Ficha confirmada 2026-10-28 (TripAdvisor location id 34738553). Ancla #REVIEWS para abrir directo en reseñas.
+    tripadvisor:
+      'https://www.tripadvisor.com/Restaurant_Review-g309271-d34738553-Reviews-Origen_Mar_Tierra_y_Fuego-Jaco_Jaco_District_Garabito_Municipality_Province_of_P.html#REVIEWS',
   },
   mapsUrl: 'https://maps.app.goo.gl/iL9J4qoP8pwXs8dx6', // confirmado 2026-10-16 (ficha "Origen Restaurante Jaco")
   // Embed de la ficha de Google Maps (P-05). La variante EN sustituye `!1ses!`→`!1sen!` (idioma del mapa).
   mapEmbed:
     'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3933.7005682721165!2d-84.63802872409428!3d9.621029779439182!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa1c77faa3e73cf%3A0xec929faa711c937!2sOrigen%20Restaurante%20Jaco!5e0!3m2!1ses!2scr!4v1792205371723!5m2!1ses!2scr',
-  // Enlace para dejar reseña (interfaz /qr). Confirmado 2026-10-13; TripAdvisor pendiente.
+  // Enlaces para dejar reseña (interfaz /qr/). Google confirmado 2026-10-28;
+  // TripAdvisor confirmado 2026-10-28 (formulario UserReview de la ficha 34738553).
   reviewUrl: {
-    google: 'https://maps.app.goo.gl/M4M5QesgA6nmF4oM6', // confirmado 2026-10-13
-    tripadvisor: 'https://www.tripadvisor.com/[reseña]', // TODO: enlace de reseña del cliente
+    google: 'https://g.page/r/CTfJEaf6KckOECE/review', // confirmado 2026-10-28
+    tripadvisor:
+      'https://www.tripadvisor.com/Restaurant_Review-g309271-d34738553-Reviews-Origen_Mar_Tierra_y_Fuego-Jaco_Jaco_District_Garabito_Municipality_Province_of_P.html#REVIEWS',
   },
   wazeUrl: 'https://waze.com/ul?q=Origen%20Jaco', // TODO
   // OpenTable (reservas en línea). `rid` entregado por el cliente (2026-10-21).

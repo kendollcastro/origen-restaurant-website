@@ -3,10 +3,11 @@ import AxeBuilder from '@axe-core/playwright';
 import { site } from '../../src/data/site';
 import { isReal } from '../../src/data/placeholders';
 
-// Interfaz interna de QR (/qr/): invita al cliente a dejar su reseña en Google y
-// TripAdvisor. No enlazada desde el sitio, noindex y fuera del sitemap.
+// Interfaz interna de reseñas (/qr/): invita al cliente a dejar su reseña en
+// Google y TripAdvisor. No enlazada desde el sitio, noindex y fuera del sitemap.
 // Es data-driven: al confirmar el cliente nuevos enlaces en `site.ts`, sus tarjetas
 // aparecen y este test lo valida sin cambios.
+// Bilingüe en una sola URL: un interruptor ES/EN cambia el copy sin navegar.
 
 const QR_ROUTE = '/qr/';
 const ES_ROUTES = ['/', '/menu/', '/nosotros/', '/eventos/', '/contacto/'];
@@ -31,12 +32,37 @@ test.describe('Interfaz de QR (/qr/)', () => {
     for (const url of realTargets) {
       await expect(page.locator(`.qr-card a[href="${url}"]`)).toBeVisible();
     }
-    await expect(page.locator('.qr-card svg')).toHaveCount(realTargets.length);
+    await expect(page.locator('.qr-frame svg')).toHaveCount(realTargets.length);
+    await expect(page.locator('.qr-brand svg')).toHaveCount(realTargets.length);
     if (pendingTargets.length > 0) {
       await expect(page.locator('.qr-pending')).toBeVisible();
     } else {
       await expect(page.locator('.qr-pending')).toHaveCount(0);
     }
+  });
+
+  test('cambia de español a inglés con el interruptor sin cambiar de URL', async ({ page }) => {
+    await page.goto(QR_ROUTE);
+
+    // Estado inicial: español
+    await expect(page.locator('.qr-title')).toHaveText('Déjanos tu reseña');
+    await expect(page.locator('.qr-kicker')).toHaveText('Gracias por visitarnos');
+    await expect(page).toHaveTitle(/Reseñas · Google y TripAdvisor · Origen Jacó/);
+    expect(page.url()).toContain(QR_ROUTE);
+
+    // Cambiar a inglés
+    await page.click('.qr-lang-btn[data-lang="en"]');
+    await expect(page.locator('.qr-title')).toHaveText('Leave us a review');
+    await expect(page.locator('.qr-kicker')).toHaveText('Thanks for visiting us');
+    await expect(page).toHaveTitle(/Reviews · Google and TripAdvisor · Origen Jacó/);
+    expect(page.url()).toContain(QR_ROUTE); // misma URL
+
+    // Volver a español
+    await page.click('.qr-lang-btn[data-lang="es"]');
+    await expect(page.locator('.qr-title')).toHaveText('Déjanos tu reseña');
+    await expect(page.locator('.qr-kicker')).toHaveText('Gracias por visitarnos');
+    await expect(page).toHaveTitle(/Reseñas · Google y TripAdvisor · Origen Jacó/);
+    expect(page.url()).toContain(QR_ROUTE);
   });
 
   test('no está enlazada desde ninguna página del sitio', async ({ request }) => {
