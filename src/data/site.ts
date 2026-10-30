@@ -10,7 +10,8 @@ export const site = {
     'Origen Restaurant: seafood and grill in Jacó, Costa Rica. Fresh Pacific seafood, grilled cuts and signature cocktails.', // T-36
   url: 'https://www.origenjaco.com',
   address: {
-    street: '[Dirección exacta]', // TODO
+    street: 'Plaza Contiguo a la sucursal del BCR, Av. Pastor Díaz, Barrio Santa Lucía.',
+    postalCode: '6111',
     locality: 'Jacó',
     region: 'Puntarenas',
     county: 'Garabito',
