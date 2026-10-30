@@ -142,6 +142,23 @@ const ld = [restaurant, ...(breadcrumb ? [breadcrumb] : []), ...extra];
   <link rel="preload" as="font" type="font/woff2" href="/fonts/jost-400.woff2" crossorigin />
 
   <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+
+  <!-- Google Tag Manager -->
+  <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-KNJRKZCN"></script>
+  <script>
+    (() => {
+      const w = window as unknown as {
+        dataLayer: unknown[];
+        gtag?: (...args: unknown[]) => void;
+      };
+      w.dataLayer = w.dataLayer || [];
+      if (typeof w.gtag !== 'function') {
+        w.gtag = (...args: unknown[]) => w.dataLayer.push(args);
+      }
+      w.gtag?.('js', new Date());
+    })();
+  </script>
+  <!-- Fin Google Tag Manager -->
 </head>
 <body>
   <a href="#contenido" class="sr-only skip-link">{ui.skipLink}</a>
